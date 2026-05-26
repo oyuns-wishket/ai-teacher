@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 개발 기본원리 — 교육자료</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #555;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --orange: #d97706;
+      --orange-light: #fef3c7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --border: #e5e7eb;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero .meta {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: -32px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--accent); }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* Chapters */
+    .chapter {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .chapter-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .chapter h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .chapter-desc {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 36px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--accent-dark);
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* 영어 주석 */
+    .en { display: inline; color: #6366f1; font-weight: 600; }
+    .en-note { font-size: 0.82rem; color: #6b7280; font-weight: 400; font-style: italic; }
+
+    /* 용어 카드 */
+    .term-card {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .term-card .term { font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; }
+    .term-card .meaning { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* 코드 블록 */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 16px 0 24px;
+      position: relative;
+    }
+    pre .lang-label {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #be185d;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    .code-comment { color: #6ee7b7; font-style: italic; }
+    .code-keyword { color: #c084fc; }
+    .code-string { color: #fbbf24; }
+    .code-fn { color: #60a5fa; }
+
+    /* 테이블 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    /* 정보 박스 */
+    .info-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 0.92rem;
+    }
+    .info-box.concept { background: var(--accent-light); border-left: 4px solid var(--accent); }
+    .info-box.warning { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .info-box.danger { background: var(--red-light); border-left: 4px solid var(--red); }
+    .info-box.success { background: var(--green-light); border-left: 4px solid var(--green); }
+    .info-box.insight { background: var(--purple-light); border-left: 4px solid var(--purple); }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    /* 다이어그램 */
+    .diagram {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* 인용문 */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: #f8fafc;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote cite {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* 리스트 */
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+
+    /* 비교 카드 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .compare-card {
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+    .compare-card.before { background: var(--red-light); border-color: #fca5a5; }
+    .compare-card.after { background: var(--green-light); border-color: #6ee7b7; }
+    .compare-card h5 { font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* 파일 트리 */
+    .file-tree {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 16px 0;
+    }
+    .file-tree .folder { color: #60a5fa; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .desc { color: #6ee7b7; font-style: italic; }
+
+    /* 키 카드 그리드 */
+    .key-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .key-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .key-card:hover { border-color: var(--accent); }
+    .key-card h5 {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .key-card h4 {
+      font-size: 1rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .key-card p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+
+    /* 오해/현실 비교 */
+    .myth-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .myth-wrong {
+      padding: 12px 16px;
+      background: var(--red-light);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .myth-right {
+      padding: 12px 16px;
+      background: var(--green-light);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* 소스 목록 */
+    .sources-section {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .sources-section h4 { margin-bottom: 12px; }
+    .sources-section a { color: var(--accent); text-decoration: none; font-size: 0.88rem; }
+    .sources-section a:hover { text-decoration: underline; }
+    .sources-section li { margin-bottom: 4px; }
+    .source-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .source-tag.anthropic { background: var(--accent-light); color: var(--accent-dark); }
+    .source-tag.openai { background: var(--green-light); color: var(--green); }
+    .source-tag.paper { background: var(--purple-light); color: var(--purple); }
+    .source-tag.research { background: #f1f5f9; color: #64748b; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .chapter { padding: 28px 20px; }
+      .hero h1 { font-size: 1.8rem; }
+      .compare-grid, .key-grid { grid-template-columns: 1fr; }
+      .myth-row { grid-template-columns: 1fr; }
+      pre { font-size: 0.8rem; padding: 14px 16px; }
+    }
+
+    @media print {
+      .hero { background: #1e293b !important; -webkit-print-color-adjust: exact; }
+      .chapter { break-inside: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="container">
+    <h1>Agent 개발 기본원리</h1>
+    <p class="subtitle">
+      Claude Code, Codex 등 AI 코딩 에이전트의 핵심 동작 원리부터<br>
+      설정, 비용 최적화, 아키텍처 패턴, 보안까지 — 실무에서 바로 활용할 수 있는 종합 교육자료
+    </p>
+    <p class="meta">2026.05 | Based on Anthropic, OpenAI 공식 문서 및 학술 연구 (arXiv)</p>
+  </div>
+</header>
+
+<!-- ==================== TOC ==================== -->
+<div class="container">
+  <nav class="toc">
+    <h2>목차</h2>
+    <ol>
+      <li><a href="#ch1">Session, Turn, Context Window — 실행 단위 이해</a></li>
+      <li><a href="#ch2">설정 파일 계층 구조</a></li>
+      <li><a href="#ch3">CLAUDE.md &amp; AGENTS.md 작성법</a></li>
+      <li><a href="#ch4">Prompt Cache &amp; 토큰 경제학</a></li>
+      <li><a href="#ch5">Agent 아키텍처 패턴 — ReAct, CoT, Plan-Execute</a></li>
+      <li><a href="#ch6">Hooks &amp; 자동화</a></li>
+      <li><a href="#ch7">Permission &amp; Memory 시스템</a></li>
+      <li><a href="#ch8">Claude Code vs Codex 비교</a></li>
+      <li><a href="#ch9">Anthropic의 효과적인 Agent 구축 원칙</a></li>
+      <li><a href="#ch10">Context Engineering &amp; 도구 설계</a></li>
+      <li><a href="#ch11">Agent 보안 &amp; 샌드박싱</a></li>
+      <li><a href="#ch12">에이전트의 해부학 — 98%는 인프라다</a></li>
+      <li><a href="#ch13">실전 체크리스트 &amp; 흔한 실수</a></li>
+      <li><a href="#ch14">참고자료</a></li>
+    </ol>
+  </nav>
+
+  <!-- ==================== CHAPTER 1 ==================== -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-number">Chapter 1</div>
+    <h2>Session, Turn, Context Window</h2>
+    <p class="chapter-desc">Agent가 동작하는 기본 실행 단위를 이해합니다.</p>
+
+    <p>AI 코딩 에이전트를 사용할 때 가장 먼저 이해해야 할 것은 <strong>실행 단위</strong>입니다. 모든 에이전트는 Session, Turn, Context Window라는 세 가지 계층 위에서 동작합니다.</p>
+
+    <div class="diagram">
+Session <span class="en-note">(claude 실행 ~ 종료)</span>
+┌──────────────────────────────────────────────────┐
+│                                                  │
+│  Turn 1: [CLAUDE.md + rules 로드] → 질문 → 응답  │
+│  Turn 2: [CLAUDE.md + rules 로드] → 질문 → 응답  │
+│  Turn 3: [CLAUDE.md + rules 로드] → 질문 → 응답  │
+│  ...                                             │
+│  (컨텍스트 가득 차면 → 자동 Compaction)            │
+│                                                  │
+└──────────────────────────────────────────────────┘</div>
+
+    <table>
+      <thead><tr><th>개념</th><th>설명</th><th>비유</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Session</strong></td>
+          <td><code>claude</code> 명령어 실행부터 종료까지의 전체 단위. 대화 컨텍스트가 유지되는 범위.</td>
+          <td>브라우저 탭 하나를 여는 것</td>
+        </tr>
+        <tr>
+          <td><strong>Turn</strong></td>
+          <td>사용자 메시지 1개 + Claude 응답 1개 = 1턴. CLAUDE.md와 rules가 <strong>매 턴</strong> 주입됨.</td>
+          <td>채팅에서 한 번 주고받기</td>
+        </tr>
+        <tr>
+          <td><strong>Context Window</strong></td>
+          <td>Claude가 한 번에 "볼 수 있는" 텍스트 총량 (약 200K 토큰). 시스템 프롬프트, 대화 히스토리, 파일 내용 등이 모두 들어감.</td>
+          <td>책상 위 작업 공간의 크기</td>
+        </tr>
+        <tr>
+          <td><strong>Compaction</strong></td>
+          <td>컨텍스트가 가득 차면 이전 대화를 자동 요약해서 압축. 세부 정보가 유실될 수 있음.</td>
+          <td>책상이 꽉 차면 노트를 요약본으로 교체</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box concept">
+      <strong>핵심 포인트</strong>
+      CLAUDE.md와 rules 파일은 "세션에 1회"가 아니라 <strong>"매 턴마다"</strong> 컨텍스트에 주입됩니다. 파일이 길수록 매 턴마다 토큰을 더 소비하며, 이는 곧 비용과 성능에 직결됩니다.
+    </div>
+
+    <div class="info-box warning">
+      <strong>Compaction 주의</strong>
+      자동 요약은 편리하지만 세부 정보가 유실될 수 있습니다. 긴 작업은 중간중간 결과를 파일로 저장하는 습관이 중요합니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 2 ==================== -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-number">Chapter 2</div>
+    <h2>설정 파일 계층 구조</h2>
+    <p class="chapter-desc">에이전트에게 지시를 전달하는 파일들의 우선순위와 역할을 파악합니다.</p>
+
+    <h3>우선순위</h3>
+    <ol>
+      <li><strong>사용자 직접 지시</strong> — 대화 중 입력 (최우선)</li>
+      <li><strong>CLAUDE.md / rules</strong> — 매 턴 로드 (파일 기반 지시)</li>
+      <li><strong>시스템 기본 동작</strong> — Claude의 기본 행동 패턴</li>
+    </ol>
+
+    <h3>파일 위치</h3>
+
+    <div class="file-tree">
+<span class="folder">~/.claude/</span>
+  <span class="file">CLAUDE.md</span>                  <span class="desc">← 글로벌 (모든 프로젝트 공통)</span>
+  <span class="file">settings.json</span>              <span class="desc">← 글로벌 설정 (권한, 환경변수)</span>
+  <span class="folder">projects/&lt;path&gt;/memory/</span>    <span class="desc">← 프로젝트별 메모리 (세션 간 유지)</span>
+
+<span class="folder">&lt;git root&gt;/</span>
+  <span class="file">CLAUDE.md</span>                  <span class="desc">← 프로젝트별 지시 (팀 공유)</span>
+  <span class="folder">.claude/</span>
+    <span class="file">CLAUDE.md</span>                <span class="desc">← 프로젝트별 지시 (대안 경로)</span>
+    <span class="folder">rules/</span><span class="file">*.md</span>              <span class="desc">← 규칙 파일들 (전부 매 턴 로드)</span>
+    <span class="file">settings.json</span>            <span class="desc">← 프로젝트 설정 (git 공유용)</span>
+    <span class="file">settings.local.json</span>      <span class="desc">← 로컬 설정 (gitignore됨)</span></div>
+
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>GLOBAL</h5>
+        <h4>~/.claude/CLAUDE.md</h4>
+        <p>모든 프로젝트에 적용되는 개인 설정. 코딩 스타일, 선호 언어, 공통 컨벤션 등을 기록.</p>
+      </div>
+      <div class="key-card">
+        <h5>PROJECT</h5>
+        <h4>&lt;git root&gt;/CLAUDE.md</h4>
+        <p>프로젝트 전용 설정. 빌드 명령어, 아키텍처 요약, 팀 컨벤션. <strong>git에 커밋하여 팀과 공유.</strong></p>
+      </div>
+      <div class="key-card">
+        <h5>RULES</h5>
+        <h4>.claude/rules/*.md</h4>
+        <p>카테고리별 규칙 파일. 모든 파일이 <strong>매 턴 전부</strong> 로드되므로 간결하게 유지.</p>
+      </div>
+      <div class="key-card">
+        <h5>LOCAL</h5>
+        <h4>.claude/settings.local.json</h4>
+        <p>개인용 로컬 설정. API 키, 개인 환경변수 등. <strong>.gitignore에 추가</strong>하여 공유 방지.</p>
+      </div>
+    </div>
+
+    <div class="info-box danger">
+      <strong>Git Root 기준</strong>
+      서브디렉토리에서 Claude를 실행해도 <strong>git root의 CLAUDE.md만</strong> 읽습니다. 중간 경로의 CLAUDE.md는 무시됩니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 3 ==================== -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-number">Chapter 3</div>
+    <h2>CLAUDE.md &amp; AGENTS.md 작성법</h2>
+    <p class="chapter-desc">에이전트에게 효과적으로 지시하는 파일 작성 원칙</p>
+
+    <p>Anthropic과 OpenAI 모두 <strong>"사람이 직접 작성한 지시 파일이 LLM이 생성한 것보다 약 4%p 더 높은 성능을 보인다"</strong>는 실험 결과를 공유하고 있습니다. 자동 생성에 의존하지 말고, 직접 핵심만 기록하세요.</p>
+
+    <blockquote>
+      "각 줄마다 스스로 물어보세요: '이걸 제거하면 Claude가 실수할까?' 아니라면, 지우세요. 비대한 CLAUDE.md는 오히려 실제 지시를 무시하게 만듭니다."
+      <cite>— Anthropic, Claude Code Best Practices</cite>
+    </blockquote>
+
+    <div class="compare-grid">
+      <div class="compare-card after">
+        <h5>써야 하는 것</h5>
+        <ul>
+          <li>빌드/테스트 명령어 (<code>npm run dev</code>, <code>pytest</code>)</li>
+          <li>프로젝트 컨벤션 (네이밍, 코드 스타일)</li>
+          <li>아키텍처 요약 (주요 디렉토리 역할)</li>
+          <li>자주 쓰는 외부 서비스/API 정보</li>
+          <li>팀 워크플로우와 PR 규칙</li>
+        </ul>
+      </div>
+      <div class="compare-card before">
+        <h5>쓰면 안 되는 것</h5>
+        <ul>
+          <li>코드에서 파악 가능한 것 (파일 구조, 의존성)</li>
+          <li>지나치게 긴 설명 (매 턴 토큰 소비)</li>
+          <li>일시적 작업 내용 (이건 memory 사용)</li>
+          <li>LLM이 자동 생성한 템플릿 그대로</li>
+          <li>git history에서 알 수 있는 정보</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <strong>경험 법칙</strong>
+      CLAUDE.md는 <strong>500줄 이하</strong>, MEMORY.md는 <strong>200줄 이하</strong>로 유지하세요. <code>/init</code> 명령어로 초기 파일을 생성한 후, 점진적으로 다듬어가는 것이 좋습니다.
+    </div>
+
+    <p><strong>AGENTS.md (OpenAI Codex)</strong>도 동일한 원칙이 적용됩니다. 다만 Codex는 <strong>태스크형(fire-and-forget)</strong> 구조이므로, 대화보다는 <strong>명확한 지시</strong> 스타일로 작성하는 것이 효과적입니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 4 ==================== -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-number">Chapter 4</div>
+    <h2>Prompt Cache &amp; 토큰 경제학</h2>
+    <p class="chapter-desc">비용을 좌우하는 캐싱 메커니즘과 토큰 최적화 전략</p>
+
+    <p>AI 에이전트의 비용 대부분은 <strong>입력 토큰</strong>에서 발생합니다. CLAUDE.md, rules, 대화 히스토리가 매 턴 전송되기 때문입니다. Anthropic의 Prompt Cache는 이 비용을 <strong>최대 90%까지 절감</strong>할 수 있습니다.</p>
+
+    <div class="diagram">
+ Turn 1           Turn 2           Turn 3         (5분 침묵)       Turn N
+┌──────┐  ───→  ┌──────┐  ───→  ┌──────┐  ───→  ┌──────┐  ───→  ┌──────┐
+│전체   │       │캐시   │       │캐시   │       │캐시   │       │전체   │
+│과금   │       │적중   │       │적중   │       │만료   │       │과금   │
+│      │       │90%할인│       │90%할인│       │      │       │      │
+└──────┘       └──────┘       └──────┘       └──────┘       └──────┘</div>
+
+    <table>
+      <thead><tr><th>항목</th><th>수치</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td><strong>캐시 TTL</strong></td><td>5분</td><td>마지막 사용 후 5분 내 재사용 시 캐시 적중</td></tr>
+        <tr><td><strong>캐시 적중 할인</strong></td><td>90%</td><td>입력 토큰 비용이 1/10로 감소</td></tr>
+        <tr><td><strong>코드 토큰 밀도</strong></td><td>2.5~3 token/word</td><td>일반 텍스트보다 2~3배 더 많은 토큰 소비</td></tr>
+        <tr><td><strong>JSON 토큰 밀도</strong></td><td>3~5 token/word</td><td>구조화 데이터는 토큰 소비가 가장 큼</td></tr>
+        <tr><td><strong>멀티에이전트 오버헤드</strong></td><td>4~15x</td><td>최적화 없이 멀티에이전트 사용 시 비용 폭증</td></tr>
+        <tr><td><strong>평균 프롬프트 길이 (2024→2026)</strong></td><td>~1,500 → ~6,000 토큰</td><td>에이전틱 워크플로우로 인해 4x 증가</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box warning">
+      <strong>"Lost in the Middle" 문제</strong>
+      2026년 4월 테스트 결과, 모든 LLM 모델에서 <strong>컨텍스트 중간에 위치한 정보의 정확도가 10~25% 하락</strong>하는 현상이 확인되었습니다. 중요한 지시는 CLAUDE.md의 <strong>상단 또는 하단</strong>에 배치하세요.
+    </div>
+
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>STRATEGY 1</h5>
+        <h4>CLAUDE.md 간결하게 유지</h4>
+        <p>매 턴 전송되므로 짧을수록 비용 절감. 500줄 이하 권장.</p>
+      </div>
+      <div class="key-card">
+        <h5>STRATEGY 2</h5>
+        <h4>대화 간격 5분 이내</h4>
+        <p>캐시 TTL 내에 다음 질문을 하면 90% 할인 유지.</p>
+      </div>
+      <div class="key-card">
+        <h5>STRATEGY 3</h5>
+        <h4>불필요한 파일 읽기 최소화</h4>
+        <p>큰 파일을 통째로 읽으면 컨텍스트를 소비. 필요한 부분만.</p>
+      </div>
+      <div class="key-card">
+        <h5>STRATEGY 4</h5>
+        <h4>정적 프리픽스 보존</h4>
+        <p>프롬프트 앞부분은 변경하지 마세요. 캐시 적중률의 핵심.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 5 ==================== -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-number">Chapter 5</div>
+    <h2>Agent 아키텍처 패턴</h2>
+    <p class="chapter-desc">LLM 에이전트의 주요 동작 패턴과 설계 원칙 — ReAct, CoT, Plan-Execute</p>
+
+    <p>현대 AI 에이전트는 단순한 Q&amp;A를 넘어 <strong>추론(Reasoning)과 행동(Acting)을 반복</strong>하는 구조로 동작합니다. 2023년 Yao et al.의 ReAct 논문 이후, 이 패턴은 사실상 업계 표준이 되었습니다.</p>
+
+    <div class="term-card">
+      <div class="term">ReAct Pattern <span class="en-note">— Reasoning + Acting. Yao et al., Princeton/Google, 2023</span></div>
+      <div class="meaning">LLM이 추론과 행동을 교차 수행하는 프레임워크. Thought → Action → Observation 루프를 반복하며 환각(hallucination)과 오류 전파를 줄입니다.</div>
+    </div>
+
+    <div class="diagram">
+┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
+│ Thought  │ ──→ │ Action   │ ──→ │Observation│ ──→ │ Thought  │ ──→ ...
+│ (추론)   │     │(도구 실행)│     │(결과 관찰)│     │ (재추론) │
+└──────────┘     └──────────┘     └──────────┘     └──────────┘</div>
+
+    <p>Claude Code가 파일을 읽고, 코드를 수정하고, 테스트를 돌리는 과정이 바로 이 <strong>Thought → Action → Observation</strong> 루프입니다.</p>
+
+    <table>
+      <thead><tr><th>패턴</th><th>동작 방식</th><th>적합한 상황</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ReAct</strong></td><td>추론과 행동을 교대로 반복. "생각 → 실행 → 관찰" 루프.</td><td>일반적인 코딩 작업, 디버깅, 탐색적 작업</td></tr>
+        <tr><td><strong>Chain-of-Thought</strong></td><td>단계별로 추론을 전개한 후 최종 답변 도출.</td><td>복잡한 논리 분석, 설계 결정, 코드 리뷰</td></tr>
+        <tr><td><strong>Plan-then-Execute</strong></td><td>먼저 전체 계획을 수립하고, 별도의 실행기가 단계별 수행.</td><td>대규모 리팩토링, 멀티파일 변경</td></tr>
+        <tr><td><strong>Prompt Chaining</strong></td><td>하나의 출력을 다음 프롬프트의 입력으로 연결.</td><td>데이터 파이프라인, 단계적 변환</td></tr>
+        <tr><td><strong>Orchestrator-Worker</strong></td><td>오케스트레이터가 작업 분배, 워커들이 병렬 수행.</td><td>독립적인 멀티파일 작업</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box insight">
+      <strong>Augmented LLM — Agent의 기본 구성 요소</strong>
+      에이전트 시스템의 기본 빌딩 블록은 <strong>Retrieval(정보 검색) + LLM(추론 엔진) + Tools(도구 실행)</strong>로 구성된 "증강된 LLM"입니다. 여기에 Memory, Context, Instructions가 추가되어 에이전트로 완성됩니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 6 ==================== -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-number">Chapter 6</div>
+    <h2>Hooks &amp; 자동화</h2>
+    <p class="chapter-desc">특정 시점에 자동으로 스크립트를 실행하는 Hook 시스템</p>
+
+    <p>Hooks는 CLAUDE.md와 달리 <strong>"권고"가 아닌 "결정론적(deterministic)" 실행</strong>입니다. 특정 이벤트가 발생하면 지정된 쉘 명령어가 반드시 실행됩니다.</p>
+
+    <pre><code><span class="lang-label">JSON</span>
+{
+  <span class="code-string">"hooks"</span>: {
+    <span class="code-string">"SessionStart"</span>: [
+      { <span class="code-string">"command"</span>: <span class="code-string">"echo 'Session started at $(date)'"</span> }
+    ],
+    <span class="code-string">"UserPromptSubmit"</span>: [
+      { <span class="code-string">"command"</span>: <span class="code-string">"echo 'Turn received'"</span> }
+    ],
+    <span class="code-string">"PostToolCall"</span>: [
+      {
+        <span class="code-string">"matcher"</span>: <span class="code-string">"Write"</span>,
+        <span class="code-string">"command"</span>: <span class="code-string">"npx prettier --write $CLAUDE_FILE_PATH"</span>
+      }
+    ]
+  }
+}</code></pre>
+
+    <table>
+      <thead><tr><th>Hook</th><th>실행 시점</th><th>실행 횟수</th><th>용도 예시</th></tr></thead>
+      <tbody>
+        <tr><td><code>SessionStart</code></td><td>세션 시작 시</td><td>세션당 1회</td><td>환경 체크, 컨텍스트 주입</td></tr>
+        <tr><td><code>UserPromptSubmit</code></td><td>사용자 입력 시</td><td>매 턴</td><td>키워드 감지, 로깅</td></tr>
+        <tr><td><code>PreToolCall</code></td><td>도구 실행 전</td><td>매 호출</td><td>위험 명령 차단</td></tr>
+        <tr><td><code>PostToolCall</code></td><td>도구 실행 후</td><td>매 호출</td><td>자동 린트, 포맷팅</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box success">
+      <strong>CLAUDE.md vs Hooks</strong>
+      "코드 저장 후 항상 prettier를 돌려줘"라고 CLAUDE.md에 쓰면 <strong>가끔 무시될 수 있지만</strong>, Hook으로 설정하면 <strong>100% 실행이 보장</strong>됩니다. 반드시 실행되어야 하는 것은 Hook으로 설정하세요.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 7 ==================== -->
+  <section class="chapter" id="ch7">
+    <div class="chapter-number">Chapter 7</div>
+    <h2>Permission &amp; Memory 시스템</h2>
+    <p class="chapter-desc">권한 관리로 프롬프트 줄이기, 메모리로 세션 간 기억 유지하기</p>
+
+    <h3>Permission 모델</h3>
+    <p>자주 쓰는 안전한 명령어를 <strong>allowlist</strong>에 등록하면 매번 허용 프롬프트가 뜨지 않습니다.</p>
+
+    <pre><code><span class="lang-label">JSON</span>
+{
+  <span class="code-string">"permissions"</span>: {
+    <span class="code-string">"allow"</span>: [
+      <span class="code-string">"Read"</span>,
+      <span class="code-string">"Bash(npm run *)"</span>,
+      <span class="code-string">"Bash(git status)"</span>,
+      <span class="code-string">"Bash(git diff *)"</span>,
+      <span class="code-string">"Bash(npx prettier *)"</span>
+    ]
+  }
+}</code></pre>
+
+    <div class="info-box success">
+      <strong>꿀팁</strong>
+      <code>/fewer-permission-prompts</code> 명령어를 실행하면 사용 패턴을 분석하여 최적의 allowlist를 자동 추천해줍니다.
+    </div>
+
+    <h3>Memory 시스템</h3>
+    <p>Memory는 <strong>세션을 넘어서 유지되는 기억</strong>입니다. Claude가 스스로 읽고 쓰는 파일 기반 시스템입니다.</p>
+
+    <div class="file-tree">
+<span class="folder">~/.claude/projects/&lt;path&gt;/memory/</span>
+  <span class="file">MEMORY.md</span>           <span class="desc">← 인덱스 (매 턴 로드, 200줄 이내)</span>
+  <span class="file">user_role.md</span>        <span class="desc">← 개별 메모리 (필요 시 로드)</span>
+  <span class="file">feedback_style.md</span>   <span class="desc">← 피드백 메모리</span>
+  <span class="file">project_context.md</span>  <span class="desc">← 프로젝트 메모리</span></div>
+
+    <table>
+      <thead><tr><th>Memory 유형</th><th>용도</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td><strong>user</strong></td><td>사용자 역할, 선호도, 지식 수준</td><td>"시니어 백엔드 개발자, Go 전문"</td></tr>
+        <tr><td><strong>feedback</strong></td><td>사용자가 준 피드백과 교정</td><td>"테스트에서 DB 목킹하지 말 것"</td></tr>
+        <tr><td><strong>project</strong></td><td>프로젝트 진행 상황, 목표</td><td>"3/5 이후 머지 프리즈"</td></tr>
+        <tr><td><strong>reference</strong></td><td>외부 시스템 위치 정보</td><td>"버그 트래킹은 Linear INGEST"</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 8 ==================== -->
+  <section class="chapter" id="ch8">
+    <div class="chapter-number">Chapter 8</div>
+    <h2>Claude Code vs Codex 비교</h2>
+    <p class="chapter-desc">두 주요 AI 코딩 에이전트의 구조적 차이점</p>
+
+    <table>
+      <thead><tr><th>항목</th><th>Claude Code</th><th>Codex (OpenAI)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>설정 파일</strong></td><td>CLAUDE.md</td><td>AGENTS.md</td></tr>
+        <tr><td><strong>실행 환경</strong></td><td>로컬 머신 직접</td><td>샌드박스 컨테이너</td></tr>
+        <tr><td><strong>파일 접근</strong></td><td>전체 파일시스템</td><td>제한된 샌드박스</td></tr>
+        <tr><td><strong>네트워크</strong></td><td>자유</td><td>기본 차단 (allowlist)</td></tr>
+        <tr><td><strong>동작 모델</strong></td><td>대화형 (interactive)</td><td>태스크형 (fire-and-forget)</td></tr>
+        <tr><td><strong>비용 모델</strong></td><td>토큰 기반</td><td>태스크 기반</td></tr>
+        <tr><td><strong>강점</strong></td><td>실시간 대화, 반복 수정, 탐색적 작업</td><td>독립 작업, 병렬 처리, 명확한 태스크</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box concept">
+      <strong>선택 기준</strong>
+      <strong>대화하면서 함께 코딩</strong>하고 싶다면 → Claude Code.<br>
+      <strong>명확한 작업을 던져놓고</strong> 결과만 받고 싶다면 → Codex.<br>
+      두 도구는 경쟁이 아니라 <strong>보완 관계</strong>입니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 9 ==================== -->
+  <section class="chapter" id="ch9">
+    <div class="chapter-number">Chapter 9</div>
+    <h2>Anthropic의 효과적인 Agent 구축 원칙</h2>
+    <p class="chapter-desc">수십 개 팀과 협업하며 발견한 에이전트 구축 원칙</p>
+
+    <blockquote>
+      "가장 성공적인 구현은 복잡한 프레임워크가 아니라 단순하고 조합 가능한 패턴을 사용한다."
+      <cite>— Anthropic, Building Effective Agents</cite>
+    </blockquote>
+
+    <h3>Workflow vs Agent</h3>
+    <table>
+      <thead><tr><th>구분</th><th>Workflow</th><th>Agent</th></tr></thead>
+      <tbody>
+        <tr><td><strong>정의</strong></td><td>LLM과 도구가 <strong>사전 정의된 코드 경로</strong>로 조율됨</td><td>LLM이 <strong>자체적으로 프로세스와 도구 사용</strong>을 결정</td></tr>
+        <tr><td><strong>제어권</strong></td><td>개발자가 흐름을 설계</td><td>LLM이 동적으로 결정</td></tr>
+        <tr><td><strong>예측 가능성</strong></td><td>높음</td><td>낮음</td></tr>
+        <tr><td><strong>적합한 상황</strong></td><td>반복적이고 예측 가능한 작업</td><td>열린 문제, 탐색적 작업</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5가지 Workflow 패턴</h3>
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>PATTERN 1</h5>
+        <h4>Prompt Chaining</h4>
+        <p>작업을 여러 단계로 나누고, 이전 출력을 다음 입력으로 연결. 각 단계에서 품질 게이트 가능.</p>
+      </div>
+      <div class="key-card">
+        <h5>PATTERN 2</h5>
+        <h4>Routing</h4>
+        <p>입력을 분류하고 적절한 전문 처리기로 라우팅. 관심사의 분리.</p>
+      </div>
+      <div class="key-card">
+        <h5>PATTERN 3</h5>
+        <h4>Parallelization</h4>
+        <p>독립적인 서브태스크를 동시에 실행하고 결과를 합산. 속도와 효율성.</p>
+      </div>
+      <div class="key-card">
+        <h5>PATTERN 4</h5>
+        <h4>Orchestrator-Workers</h4>
+        <p>중앙 오케스트레이터가 작업 분배, 워커들이 수행. 프로덕션의 약 70% 차지.</p>
+      </div>
+      <div class="key-card">
+        <h5>PATTERN 5</h5>
+        <h4>Evaluator-Optimizer</h4>
+        <p>생성기가 결과를 만들고 평가기가 피드백. 반복적 개선 루프.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 10 ==================== -->
+  <section class="chapter" id="ch10">
+    <div class="chapter-number">Chapter 10</div>
+    <h2>Context Engineering &amp; 도구 설계</h2>
+    <p class="chapter-desc">Prompt Engineering을 넘어서는 새로운 패러다임</p>
+
+    <p>Anthropic은 2025년 공식 블로그에서 <strong>"Context Engineering"</strong>이라는 개념을 제시했습니다. 단순히 프롬프트를 잘 쓰는 것을 넘어, 에이전트에게 전달되는 전체 컨텍스트를 엔지니어링하는 것이 핵심입니다.</p>
+
+    <blockquote>
+      "원하는 결과의 가능성을 최대화하는 최소한의 고신호(high-signal) 토큰 집합을 찾아라."
+      <cite>— Anthropic, Effective Context Engineering for AI Agents</cite>
+    </blockquote>
+
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>PRINCIPLE 1</h5>
+        <h4>Context Rot 현상</h4>
+        <p>토큰 수가 증가하면 성능이 오히려 저하됩니다. 더 많이 넣는다고 더 좋은 게 아닙니다.</p>
+      </div>
+      <div class="key-card">
+        <h5>PRINCIPLE 2</h5>
+        <h4>Just-In-Time 로딩</h4>
+        <p>경량 식별자만 유지하고 런타임에 도구로 동적 로드. 미리 모든 것을 넣지 마세요.</p>
+      </div>
+      <div class="key-card">
+        <h5>PRINCIPLE 3</h5>
+        <h4>Lost in the Middle</h4>
+        <p>LLM은 프롬프트의 시작과 끝 정보를 중간보다 잘 기억합니다.</p>
+      </div>
+      <div class="key-card">
+        <h5>PRINCIPLE 4</h5>
+        <h4>Sub-Agent 분리</h4>
+        <p>전문 에이전트가 깨끗한 컨텍스트로 집중 작업 수행 후, 압축 요약만 반환.</p>
+      </div>
+    </div>
+
+    <h3>도구(Tool) 설계 원칙</h3>
+
+    <blockquote>
+      "에이전트-컴퓨터 인터페이스에 인간-컴퓨터 인터페이스만큼의 노력을 투자하라."
+      <cite>— Anthropic, Effective Context Engineering</cite>
+    </blockquote>
+
+    <ul>
+      <li>도구 기능 간 <strong>겹침 최소화</strong> — 모호성이 감소하면 정확도 향상</li>
+      <li>각 도구는 <strong>자체 완결적</strong>이고 오류에 강건하게 — 명확한 단일 목적</li>
+      <li>서술적이고 <strong>모호하지 않은</strong> 입력 파라미터 정의</li>
+      <li>도구 집합 <strong>비대화 방지</strong> — 너무 많은 도구는 결정 모호성을 유발</li>
+      <li>모델의 인지 부하를 줄이는 형식 설계</li>
+    </ul>
+  </section>
+
+  <!-- ==================== CHAPTER 11 ==================== -->
+  <section class="chapter" id="ch11">
+    <div class="chapter-number">Chapter 11</div>
+    <h2>Agent 보안 &amp; 샌드박싱</h2>
+    <p class="chapter-desc">에이전트 시스템의 보안 계층과 권한 격리 원칙</p>
+
+    <div class="info-box danger">
+      <strong>82.4%의 LLM이 "동료 에이전트"의 악성 도구 호출을 그대로 실행</strong>
+      멀티에이전트 시스템에서 한 에이전트가 손상되면, 다른 에이전트들이 악성 명령을 필터링 없이 실행할 수 있습니다. OpenAI는 "가드레일을 계층적 방어 메커니즘으로 생각하라"고 권고합니다.
+    </div>
+
+    <table>
+      <thead><tr><th>보안 영역</th><th>Claude Code</th><th>Codex</th></tr></thead>
+      <tbody>
+        <tr><td><strong>실행 환경</strong></td><td>로컬 머신 직접 실행</td><td>샌드박스 (macOS: Seatbelt, Linux: bubblewrap)</td></tr>
+        <tr><td><strong>권한 모드</strong></td><td>7가지 권한 모드 + ML 분류기</td><td>read-only / workspace-write / danger-full</td></tr>
+        <tr><td><strong>파일 보호</strong></td><td>allowlist 기반 명령어 제어</td><td><code>.git/</code>, <code>.codex/</code> 쓰기 원천 차단</td></tr>
+        <tr><td><strong>네트워크</strong></td><td>제한 없음</td><td>deny-by-default, 명시적 allowlist</td></tr>
+        <tr><td><strong>MCP 도구</strong></td><td>내장 도구와 동일 권한 체계</td><td>MCP 도구는 샌드박싱 미적용 — 자체 가드레일 필요</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box success">
+      <strong>실전 보안 원칙</strong>
+      <ul style="margin:0; padding-left:20px;">
+        <li>최소 권한 원칙 (Principle of Least Privilege) 항상 적용</li>
+        <li>MCP 서버 도구는 별도의 위협 모델 적용 필요</li>
+        <li>멀티에이전트에서 에이전트 간 출력도 <strong>신뢰하지 않는 입력</strong>으로 취급</li>
+        <li><code>.git/</code> hooks를 통한 코드 인젝션 경로 주의</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 12 ==================== -->
+  <section class="chapter" id="ch12">
+    <div class="chapter-number">Chapter 12</div>
+    <h2>에이전트의 해부학 — 98%는 인프라다</h2>
+    <p class="chapter-desc">2026년 학술 논문이 밝힌 Claude Code의 실제 구조</p>
+
+    <div class="term-card">
+      <div class="term">Dive into Claude Code <span class="en-note">— Liu et al., arXiv 2604.14228, 2026.04</span></div>
+      <div class="meaning">Claude Code의 소스 코드를 분석한 학술 논문. 에이전트 코드의 98.4%는 인프라이며, 핵심 루프는 단순한 while문이라는 사실을 밝혔습니다.</div>
+    </div>
+
+    <pre><code><span class="lang-label">Pseudo</span>
+<span class="code-comment">// 에이전트의 핵심 = 단순한 while 루프 (전체의 ~1.6%)</span>
+<span class="code-keyword">while</span> (task_not_complete) {
+  response = <span class="code-fn">llm.generate</span>(context)      <span class="code-comment">// 모델 호출</span>
+  <span class="code-keyword">if</span> (response.has_tool_call) {
+    result = <span class="code-fn">execute_tool</span>(response)    <span class="code-comment">// 도구 실행</span>
+    context.<span class="code-fn">append</span>(result)              <span class="code-comment">// 결과 추가</span>
+  }
+}
+
+<span class="code-comment">// 나머지 98.4% = 이 루프를 둘러싼 인프라</span>
+<span class="code-comment">// ├─ 권한 시스템 (7가지 모드 + ML 분류기)</span>
+<span class="code-comment">// ├─ 컴팩션 파이프라인 (5계층 자동 압축)</span>
+<span class="code-comment">// ├─ 메모리 관리 (3계층 아키텍처)</span>
+<span class="code-comment">// ├─ 안전 장치 (위험 명령 감지/차단)</span>
+<span class="code-comment">// ├─ 도구 오케스트레이션 (병렬 실행, 재시도)</span>
+<span class="code-comment">// ├─ 캐싱 레이어 (프롬프트 캐시, 파일 캐시)</span>
+<span class="code-comment">// └─ 사용자 인터페이스 (터미널 렌더링, 승인 UX)</span></code></pre>
+
+    <div class="info-box insight">
+      <strong>논문의 핵심 결론</strong>
+      "기반 모델의 추론 능력이 수렴하면, 차별화 요소는 모델이 아니라 <strong>모델 주변의 결정론적 엔지니어링 하네스(harness)</strong>가 된다." 5가지 인간 가치가 13가지 설계 원칙을 이끈다고 분석했습니다.
+    </div>
+
+    <h3>개발자가 반드시 알아야 할 핵심 5가지</h3>
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>KEY 1</h5>
+        <h4>단순하게 시작하라</h4>
+        <p>프레임워크 전에 직접 API 호출부터. 복잡성은 측정된 필요에 의해서만 추가.</p>
+      </div>
+      <div class="key-card">
+        <h5>KEY 2</h5>
+        <h4>컨텍스트는 유한한 자원</h4>
+        <p>Context Rot, Lost in the Middle을 이해하고 JIT 로딩 + 컴팩션 전략 필수.</p>
+      </div>
+      <div class="key-card">
+        <h5>KEY 3</h5>
+        <h4>98%는 인프라다</h4>
+        <p>에이전트 루프는 단순하지만, 주변 시스템(권한/안전/메모리/캐싱)이 진짜 차별화 요소.</p>
+      </div>
+      <div class="key-card">
+        <h5>KEY 4</h5>
+        <h4>캐싱은 게임 체인저</h4>
+        <p>정적 프리픽스 보존으로 90%까지 비용 절감 가능.</p>
+      </div>
+      <div class="key-card">
+        <h5>KEY 5</h5>
+        <h4>도구 설계 = 에이전트 품질</h4>
+        <p>겹치지 않고, 자체 완결적이며, 명확한 도구가 성능을 결정.</p>
+      </div>
+    </div>
+
+    <h3>토큰 경제학 변화 추이</h3>
+    <table>
+      <thead><tr><th>지표</th><th>2024</th><th>2025~2026</th><th>변화</th></tr></thead>
+      <tbody>
+        <tr><td><strong>평균 프롬프트 길이</strong></td><td>~1,500 토큰</td><td>~6,000 토큰</td><td>4x 증가</td></tr>
+        <tr><td><strong>에이전트 API 호출량</strong></td><td>챗봇 대비 1x</td><td>3~10x</td><td>비용 비례 증가</td></tr>
+        <tr><td><strong>캐싱 적용 시 절감</strong></td><td>50%</td><td>60~90%</td><td>필수 최적화</td></tr>
+        <tr><td><strong>멀티에이전트 오버헤드</strong></td><td>측정 미비</td><td>4~15x</td><td>설계 주의 필요</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 13 ==================== -->
+  <section class="chapter" id="ch13">
+    <div class="chapter-number">Chapter 13</div>
+    <h2>실전 체크리스트 &amp; 흔한 실수</h2>
+    <p class="chapter-desc">프로젝트 시작 전 확인할 것들과 많은 사람들이 빠지는 함정</p>
+
+    <h3>세팅 체크리스트</h3>
+    <ul>
+      <li>CLAUDE.md 작성 (500줄 이내, 빌드/테스트 명령어 + 컨벤션)</li>
+      <li><code>.claude/rules/</code> 에 핵심 규칙 분리 (카테고리별 파일)</li>
+      <li><code>settings.json</code>에 자주 쓰는 명령어 allowlist 추가</li>
+      <li><code>settings.local.json</code>에 개인 환경변수 설정 (.gitignore됨)</li>
+      <li>팀 공유용 <code>settings.json</code>은 git에 커밋</li>
+      <li>hooks로 린트/포맷 자동화 (PostToolCall 활용)</li>
+      <li>memory는 자연스럽게 축적 (강제로 채우지 않기)</li>
+      <li><code>/init</code> 으로 초기 CLAUDE.md 생성 후 점진적 개선</li>
+    </ul>
+
+    <h3>흔한 오해와 현실</h3>
+
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "CLAUDE.md는 세션 시작 시 한 번만 읽힌다"</div>
+      <div class="myth-right">&#x2713; <strong>매 턴마다</strong> 읽힘 → 길수록 매 턴 비용 증가</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "rules 파일은 필요할 때만 선택적으로 로드"</div>
+      <div class="myth-right">&#x2713; rules/ 디렉토리의 <strong>모든 파일이 매 턴 전부 로드</strong></div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "서브디렉토리에 CLAUDE.md 두면 읽힌다"</div>
+      <div class="myth-right">&#x2713; <strong>git root의 CLAUDE.md만</strong> 읽음, 중간 경로 무시</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "memory에 모든 것을 저장하면 좋다"</div>
+      <div class="myth-right">&#x2713; MEMORY.md는 매 턴 로드 → <strong>200줄 이내</strong> 유지 필수</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "세션 종료해도 대화가 유지된다"</div>
+      <div class="myth-right">&#x2713; 세션 종료 = 컨텍스트 소멸. <strong>memory만 유지</strong></div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "Compaction은 손실 없이 안전하다"</div>
+      <div class="myth-right">&#x2713; 요약이므로 <strong>세부 정보 유실 가능</strong> → 중간 결과 파일 저장 권장</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "캐시는 항상 작동한다"</div>
+      <div class="myth-right">&#x2713; <strong>5분 TTL</strong> — 대화 간격이 길면 캐시 미스로 전액 과금</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "LLM이 생성한 CLAUDE.md가 더 완벽하다"</div>
+      <div class="myth-right">&#x2713; 사람이 직접 작성한 것이 <strong>약 4%p 더 높은 성능</strong>을 보임</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "멀티에이전트가 항상 더 좋다"</div>
+      <div class="myth-right">&#x2713; 최적화 없이 <strong>4~15x 비용 증가</strong>. 단일 에이전트로 시작 권장</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "에이전트 간 출력은 신뢰할 수 있다"</div>
+      <div class="myth-right">&#x2713; <strong>82.4%가 악성 도구 호출 그대로 실행</strong> — 검증 필요</div>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 14 ==================== -->
+  <section class="chapter" id="ch14">
+    <div class="chapter-number">Chapter 14</div>
+    <h2>참고자료</h2>
+    <p class="chapter-desc">본 교육자료에서 참고한 공식 문서, 학술 논문, 리서치</p>
+
+    <div class="sources-section">
+      <h4>공식 문서</h4>
+      <ul>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Building Effective AI Agents</a> — 공식 에이전트 구축 가이드, 5가지 워크플로우 패턴</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Effective Context Engineering for AI Agents</a> — Context Engineering 핵심 원칙</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Best Practices for Claude Code</a> — CLAUDE.md 작성법, 설정 파일 구조</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank">Demystifying Evals for AI Agents</a> — 에이전트 평가 방법론</li>
+        <li><span class="source-tag openai">OpenAI</span> <a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank">A Practical Guide to Building Agents</a> — 3단계 접근법</li>
+        <li><span class="source-tag openai">OpenAI</span> <a href="https://developers.openai.com/codex/guides/agents-md" target="_blank">Custom Instructions with AGENTS.md</a> — Codex 설정 공식 가이드</li>
+        <li><span class="source-tag openai">OpenAI</span> <a href="https://developers.openai.com/codex/concepts/sandboxing" target="_blank">Codex Sandboxing</a> — Seatbelt/bubblewrap 기반 샌드박스 아키텍처</li>
+        <li><span class="source-tag openai">OpenAI</span> <a href="https://openai.com/index/harness-engineering/" target="_blank">Harness Engineering: Leveraging Codex</a> — 에이전트 우선 개발 환경 구축</li>
+      </ul>
+    </div>
+
+    <div class="sources-section" style="margin-top:16px;">
+      <h4>학술 논문</h4>
+      <ul>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2604.14228" target="_blank">Dive into Claude Code: The Design Space of AI Agent Systems</a> (Liu et al., 2026) — 98.4% 인프라, 5가지 인간 가치, 13가지 설계 원칙</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2210.03629" target="_blank">ReAct: Synergizing Reasoning and Acting</a> (Yao et al., 2023) — ReAct 패턴 원논문</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/pdf/2601.03328" target="_blank">Multi-Agent LLM Systems Survey</a> (2025) — 멀티에이전트 오케스트레이션 패턴</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/pdf/2601.06007" target="_blank">Prompt Caching for Agentic Tasks</a> (2025) — 에이전트 캐싱 전략, 60~80% 비용 절감</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/pdf/2509.08646" target="_blank">Architecting Resilient LLM Agents</a> (2025) — Plan-then-Execute 패턴과 보안</li>
+      </ul>
+    </div>
+
+    <div class="sources-section" style="margin-top:16px;">
+      <h4>리서치 &amp; 커뮤니티</h4>
+      <ul>
+        <li><span class="source-tag research">Research</span> <a href="https://zylos.ai/research/2026-02-19-ai-agent-cost-optimization-token-economics" target="_blank">AI Agent Cost Optimization &amp; Token Economics</a> (Zylos, 2026)</li>
+        <li><span class="source-tag research">Research</span> <a href="https://redis.io/blog/llm-token-optimization-speed-up-apps/" target="_blank">LLM Token Optimization: Cut Costs &amp; Latency</a> (Redis, 2026)</li>
+        <li><span class="source-tag research">Research</span> <a href="https://www.oligo.security/academy/llm-security-in-2025-risks-examples-and-best-practices" target="_blank">LLM Security: Risks &amp; Best Practices</a> (Oligo, 2025)</li>
+        <li><span class="source-tag research">Research</span> <a href="https://www.humanlayer.dev/blog/writing-a-good-claude-md" target="_blank">Writing a Good CLAUDE.md</a> (HumanLayer)</li>
+        <li><span class="source-tag research">Research</span> <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank">Claude Code Best Practice</a> (GitHub 커뮤니티)</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

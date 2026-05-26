@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent 하네스 엔지니어링: Hook 완전 정복</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #555;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --orange: #d97706;
+      --orange-light: #fef3c7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --border: #e5e7eb;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+      --annotation: #6366f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero .meta {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: -32px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--accent); }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* Chapters */
+    .chapter {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .chapter-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .chapter h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .chapter-desc {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 36px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--accent-dark);
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* 영어 주석 */
+    .en {
+      display: inline;
+      color: var(--annotation);
+      font-weight: 600;
+    }
+    .en-note {
+      font-size: 0.82rem;
+      color: #6b7280;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* 용어 카드 */
+    .term-card {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .term-card .term { font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; }
+    .term-card .meaning { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* 코드 블록 */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 16px 0 24px;
+      position: relative;
+    }
+    pre .lang-label {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #be185d;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    /* 코드 내 주석 강조 */
+    .code-comment { color: #6ee7b7; font-style: italic; }
+    .code-keyword { color: #c084fc; }
+    .code-string { color: #fbbf24; }
+    .code-fn { color: #60a5fa; }
+    .code-type { color: #34d399; }
+
+    /* 비교 테이블 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    /* 정보 박스 */
+    .info-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 0.92rem;
+    }
+    .info-box.concept {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+    }
+    .info-box.warning {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+    }
+    .info-box.danger {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+    }
+    .info-box.success {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+    }
+    .info-box.insight {
+      background: var(--purple-light);
+      border-left: 4px solid var(--purple);
+    }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    /* 다이어그램 */
+    .diagram {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* 인용문 */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: #f8fafc;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote cite {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* 리스트 */
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+
+    /* 비교 카드 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .compare-card {
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+    .compare-card.before { background: var(--red-light); border-color: #fca5a5; }
+    .compare-card.after { background: var(--green-light); border-color: #6ee7b7; }
+    .compare-card h5 { font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* 스텝 가이드 */
+    .step {
+      display: flex;
+      gap: 16px;
+      margin: 20px 0;
+      align-items: flex-start;
+    }
+    .step-number {
+      background: var(--accent);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content { flex: 1; }
+
+    /* 파일 트리 */
+    .file-tree {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 16px 0;
+    }
+    .file-tree .folder { color: #60a5fa; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .desc { color: #6ee7b7; font-style: italic; }
+
+    /* 소스 목록 */
+    .sources {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .sources h4 { margin-bottom: 12px; }
+    .sources a { color: var(--accent); text-decoration: none; font-size: 0.88rem; }
+    .sources a:hover { text-decoration: underline; }
+    .sources li { margin-bottom: 4px; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .chapter { padding: 28px 20px; }
+      .hero h1 { font-size: 1.8rem; }
+      .compare-grid { grid-template-columns: 1fr; }
+      pre { font-size: 0.8rem; padding: 14px 16px; }
+    }
+
+    /* 프린트 */
+    @media print {
+      .hero { background: #1e293b !important; -webkit-print-color-adjust: exact; }
+      .chapter { break-inside: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="container">
+    <h1>AI Agent 하네스 엔지니어링<br>Hook 완전 정복</h1>
+    <p class="subtitle">
+      에이전트 프레임워크의 핵심 제어 메커니즘인 Hook의 개념부터 Next.js 실전 구현까지,
+      실무에서 바로 활용할 수 있는 종합 교육자료
+    </p>
+    <p class="meta">2026.05 | Based on Anthropic, OpenAI, Vercel, LangChain 공식 문서 및 학술 연구</p>
+  </div>
+</header>
+
+<!-- ==================== TOC ==================== -->
+<div class="container">
+  <nav class="toc">
+    <h2>목차</h2>
+    <ol>
+      <li><a href="#ch1">하네스 엔지니어링 기초 — 왜 Hook인가?</a></li>
+      <li><a href="#ch2">Hook의 핵심 원리 — 확률적 준수 vs 결정론적 강제</a></li>
+      <li><a href="#ch3">Hook의 분류와 3계층 아키텍처</a></li>
+      <li><a href="#ch4">주요 프레임워크별 Hook 시스템 상세</a></li>
+      <li><a href="#ch5">Next.js + Vercel AI SDK에서의 Hook 구성</a></li>
+      <li><a href="#ch6">실전 구현 예시 — Next.js 프로젝트 기준</a></li>
+      <li><a href="#ch7">Anti-Pattern과 Best Practice</a></li>
+      <li><a href="#ch8">학술 연구 동향과 보안 고려사항</a></li>
+      <li><a href="#ch9">참고자료</a></li>
+    </ol>
+  </nav>
+
+  <!-- ==================== CHAPTER 1 ==================== -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-number">Chapter 1</div>
+    <h2>하네스 엔지니어링 기초 — 왜 Hook인가?</h2>
+    <p class="chapter-desc">AI Agent를 감싸는 제어 구조의 본질과, Hook이 왜 필수적인 구성 요소인지를 이해합니다.</p>
+
+    <h3>1.1 하네스(Harness)란 무엇인가</h3>
+
+    <div class="term-card">
+      <div class="term">Harness <span class="en-note">— 직역: 마구(말을 제어하는 장비). AI 맥락: 모델을 감싸서 제어하는 전체 인프라</span></div>
+      <div class="meaning">AI 모델이 에이전트로서 기능할 수 있도록 감싸는 전체 시스템. 시스템 프롬프트, 도구 정의, 인프라, 오케스트레이션 로직, 제약 조건 등을 모두 포함합니다.</div>
+    </div>
+
+    <blockquote>
+      "Agent = Model + Harness. If you're not the model, you're the harness."
+      <cite>— Viv Trivedy, AI 엔지니어. Martin Fowler 팀의 Birgitta Bockeler가 재인용</cite>
+    </blockquote>
+
+    <p>
+      이 공식이 의미하는 바는 명확합니다. AI 에이전트는 LLM 모델 하나만으로 완성되지 않습니다.
+      모델을 <strong>어떤 맥락에서</strong>, <strong>어떤 도구와 함께</strong>, <strong>어떤 제약 아래에서</strong> 실행하느냐가
+      에이전트의 품질을 결정합니다. 이 "나머지 전부"를 하네스라고 부릅니다.
+    </p>
+
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────┐
+│                    Agent Harness                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌────────────────┐  │
+│  │ System       │  │ Tools       │  │ Constraints    │  │
+│  │ Prompt       │  │ (함수/API)  │  │ (규칙/제약)    │  │
+│  └──────┬──────┘  └──────┬──────┘  └───────┬────────┘  │
+│         │                │                  │           │
+│         ▼                ▼                  ▼           │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │              ◆ Hook Layer ◆                     │    │
+│  │   PreToolUse │ PostToolUse │ OnFinish │ ...     │    │
+│  └─────────────────────┬───────────────────────────┘    │
+│                        │                                │
+│                        ▼                                │
+│              ┌──────────────────┐                       │
+│              │   LLM Model     │                       │
+│              │  (GPT, Claude,  │                       │
+│              │   Gemini ...)   │                       │
+│              └──────────────────┘                       │
+│                                                         │
+│  ┌──────────────┐  ┌───────────┐  ┌────────────────┐  │
+│  │ Orchestration │  │ Memory/   │  │ Observability  │  │
+│  │ (오케스트레이션)│  │ State     │  │ (관측 가능성)  │  │
+│  └──────────────┘  └───────────┘  └────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+    </div>
+
+    <h3>1.2 왜 2026년은 "하네스의 해"인가</h3>
+
+    <p>
+      2025년까지는 <strong>더 좋은 모델</strong>을 만드는 것이 경쟁의 핵심이었습니다.
+      하지만 GPT-4o, Claude Sonnet, Gemini Pro 등 주요 모델의 성능이 수렴하면서,
+      차별화의 축이 이동했습니다.
+    </p>
+
+    <blockquote>
+      "The model is commodity. The harness is moat(해자)."
+      <cite>— Aakash Gupta, 프로덕트 전략가</cite>
+    </blockquote>
+
+    <div class="term-card">
+      <div class="term">Moat <span class="en-note">— 직역: 해자(성을 둘러싼 물길). 비즈니스 맥락: 경쟁자가 쉽게 따라올 수 없는 구조적 경쟁 우위</span></div>
+      <div class="meaning">모델은 누구나 API로 접근 가능하지만, 수천 시간의 엔지니어링이 투입된 하네스는 쉽게 복제할 수 없다는 의미입니다.</div>
+    </div>
+
+    <p>
+      실제로 Terminal Bench 벤치마크에서, <strong>동일한 모델</strong>이 하네스 설정(Hook 구성 포함)만 바꿔서
+      <strong>30위에서 5위로 상승</strong>한 사례가 보고되었습니다(Addy Osmani, Google Chrome 팀).
+      모델을 바꾸지 않고도, 하네스만으로 극적인 성능 차이를 만들 수 있다는 실증입니다.
+    </p>
+
+    <h3>1.3 Hook의 위치와 역할</h3>
+
+    <p>
+      하네스 구성 요소 중에서 <span class="en">Hook</span><span class="en-note">(직역: 갈고리. 실행 흐름의 특정 지점에 "걸어두는" 사용자 정의 로직)</span>은
+      <strong>에이전트 실행 라이프사이클의 특정 지점에서 자동으로 실행되는 사용자 정의 로직</strong>입니다.
+    </p>
+
+    <p>소프트웨어 개발에서 Hook 개념은 새롭지 않습니다:</p>
+
+    <table>
+      <thead>
+        <tr><th>영역</th><th>Hook 예시</th><th>하는 일</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Git</td>
+          <td><code>pre-commit</code>, <code>pre-push</code></td>
+          <td>커밋/푸시 전에 린트, 테스트 자동 실행</td>
+        </tr>
+        <tr>
+          <td>React</td>
+          <td><code>useEffect</code>, <code>useState</code></td>
+          <td>컴포넌트 라이프사이클에 사이드 이펙트 연결</td>
+        </tr>
+        <tr>
+          <td>Webpack</td>
+          <td>Tapable Hooks</td>
+          <td>빌드 파이프라인의 각 단계에 플러그인 로직 삽입</td>
+        </tr>
+        <tr>
+          <td>Next.js</td>
+          <td><code>middleware.ts</code></td>
+          <td>라우트 처리 전에 인증, 리다이렉트, 로깅 등 수행</td>
+        </tr>
+        <tr>
+          <td><strong>AI Agent</strong></td>
+          <td><code>PreToolUse</code>, <code>onStepFinish</code></td>
+          <td><strong>에이전트가 도구를 호출하기 전/후에 검증, 차단, 로깅</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      AI 에이전트의 Hook은 이 전통적 개념을 확장하여, <strong>비결정론적(확률적)인 LLM의 행동</strong>을
+      <strong>결정론적인 시스템 제약</strong>으로 통제하는 핵심 메커니즘으로 자리잡았습니다.
+    </p>
+  </section>
+
+  <!-- ==================== CHAPTER 2 ==================== -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-number">Chapter 2</div>
+    <h2>Hook의 핵심 원리 — 확률적 준수 vs 결정론적 강제</h2>
+    <p class="chapter-desc">Hook이 단순한 콜백을 넘어 왜 "엔지니어링 패러다임"이 되는지, 그 사상적 기반을 깊이 이해합니다.</p>
+
+    <h3>2.1 두 가지 준수 모델</h3>
+
+    <div class="term-card">
+      <div class="term">Probabilistic Compliance <span class="en-note">— 확률적 준수. 모델이 지시를 "아마도" 따를 것이라는 기대에 의존하는 방식</span></div>
+      <div class="meaning">프롬프트로 "이렇게 해라"고 지시하는 방식. 모델이 대부분 따르지만, 100% 보장되지 않습니다.</div>
+    </div>
+
+    <div class="term-card">
+      <div class="term">Deterministic Enforcement <span class="en-note">— 결정론적 강제. 시스템 수준에서 위반 자체를 물리적으로 불가능하게 만드는 방식</span></div>
+      <div class="meaning">Hook이나 하드코딩된 검증으로 제약을 강제하는 방식. 모델이 무엇을 시도하든, 위반은 실행 전에 차단됩니다.</div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <h5>확률적 준수 (프롬프트만 사용)</h5>
+        <pre><code>시스템 프롬프트:
+"절대로 rm -rf 명령을 실행하지 마세요.
+프로덕션 데이터베이스에 DROP TABLE을
+실행하지 마세요."
+
+→ 모델이 99% 따르지만,
+  1%의 실패가 치명적일 수 있음
+→ 컨텍스트가 길어지면 "잊어버림"
+→ Prompt Injection으로 우회 가능</code></pre>
+      </div>
+      <div class="compare-card after">
+        <h5>결정론적 강제 (Hook 사용)</h5>
+        <pre><code>PreToolUse Hook:
+if (command.includes("rm -rf")) {
+  return { decision: "deny" };
+}
+if (command.includes("DROP TABLE")) {
+  return { decision: "deny" };
+}
+
+→ 모델이 무엇을 시도하든 100% 차단
+→ 컨텍스트 길이와 무관
+→ Prompt Injection을 무력화</code></pre>
+      </div>
+    </div>
+
+    <div class="info-box concept">
+      <strong>핵심 통찰</strong>
+      "I told the agent to do X(에이전트에게 X를 하라고 말했다)" vs
+      "The system enforces X(시스템이 X를 강제한다)" —
+      이 차이가 프로덕션 환경에서의 신뢰성을 결정합니다.
+      Hook은 <strong>기대(expectation)</strong>를 <strong>보장(guarantee)</strong>으로 전환합니다.
+    </div>
+
+    <h3>2.2 왜 프롬프트만으로는 부족한가</h3>
+
+    <p>2025년 Robust Intelligence의 연구에 따르면:</p>
+    <ul>
+      <li>프로덕션 LLM 애플리케이션의 <strong>78%</strong>가 최소 1가지 프롬프트 인젝션에 취약</li>
+      <li>멀티 스텝 워크플로에서 단계당 85% 정확도라도, 10단계를 거치면 전체 성공률은 <strong>0.85^10 ≈ 20%</strong></li>
+      <li>컨텍스트 윈도우에만 의존한 상태 유지는 <strong>단계당 약 2%씩 상태가 손실</strong>됨</li>
+    </ul>
+
+    <div class="info-box danger">
+      <strong>실제 사고 사례 — Replit DROP DATABASE</strong>
+      에이전트에게 "데이터베이스를 수정하지 마라"는 지시가 있었지만, 에이전트는 <code>DROP DATABASE</code>를 실행했습니다.
+      승인 게이트(Approval Gate) 없이 완전한 자율성을 부여한 것이 원인이었습니다.
+      이것이 <span class="en">All-or-Nothing Autonomy</span><span class="en-note">(전부 아니면 전무 자율성)</span> Anti-Pattern의 대표 사례입니다.
+    </div>
+
+    <h3>2.3 Martin Fowler 팀의 제어 분류 — Guides와 Sensors</h3>
+
+    <p>
+      Martin Fowler 팀의 Birgitta Bockeler는 하네스의 제어를 두 가지로 분류합니다:
+    </p>
+
+    <div class="term-card">
+      <div class="term">Guides (Feedforward) <span class="en-note">— 가이드(사전 제어). 에이전트가 행동하기 전에 방향을 잡아주는 제어</span></div>
+      <div class="meaning">에이전트의 행동을 예측하고, 행동 전에 조향(steer)하는 메커니즘. 예: 시스템 프롬프트, 규칙 파일, PreToolUse Hook</div>
+    </div>
+
+    <div class="term-card">
+      <div class="term">Sensors (Feedback) <span class="en-note">— 센서(사후 피드백). 에이전트가 행동한 후에 관찰하고 교정하는 제어</span></div>
+      <div class="meaning">에이전트의 행동 후 결과를 관찰하고 자기 교정을 유도하는 메커니즘. 예: PostToolUse Hook, 테스트 실행, 린트 체크</div>
+    </div>
+
+    <p>각 제어는 다시 <strong>Computational(결정론적)</strong>과 <strong>Inferential(AI 기반)</strong>로 나뉩니다:</p>
+
+    <table>
+      <thead>
+        <tr><th></th><th>Computational<br><span class="en-note">결정론적, 규칙 기반</span></th><th>Inferential<br><span class="en-note">AI 기반, 추론적</span></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Guide<br>(사전)</strong></td>
+          <td>린터, 타입 체커, 규칙 파일<br><code>PreToolUse</code> command hook</td>
+          <td>AI 기반 코드 리뷰<br><code>PreToolUse</code> prompt/agent hook</td>
+        </tr>
+        <tr>
+          <td><strong>Sensor<br>(사후)</strong></td>
+          <td>테스트 실행, CI 파이프라인<br><code>PostToolUse</code> command hook</td>
+          <td>AI 기반 출력 검증<br>Evaluator-agent 패턴</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2.4 인간의 역할 재정의</h3>
+
+    <blockquote>
+      "Humans steer. Agents execute."<br>
+      (인간이 방향을 잡고, 에이전트가 실행한다.)
+      <cite>— Ryan Lopopolo, OpenAI</cite>
+    </blockquote>
+
+    <p>
+      하네스 엔지니어링 관점에서 인간의 역할은 <strong>"직접 코드를 작성하는 사람"</strong>에서
+      <strong>"하네스를 설계하고 조율하는 사람"</strong>으로 전환됩니다.
+      문제가 발생할 때마다 모델을 탓하는 대신, 하네스(특히 Hook)를 개선하는 것이 올바른 접근입니다.
+    </p>
+
+    <div class="info-box insight">
+      <strong>The Ratchet Pattern (래칫 패턴)</strong>
+      <span class="en-note">— 래칫: 한 방향으로만 회전하는 톱니바퀴. "한번 개선하면 절대 퇴보하지 않는" 패턴을 비유</span><br>
+      Addy Osmani(Google)가 제시한 핵심 개발 방법론입니다:<br><br>
+      <strong>1)</strong> 에이전트가 실수를 함 (예: 주석 처리된 테스트를 커밋)<br>
+      <strong>2)</strong> 규칙 파일에 지침 추가 → 확률적 준수<br>
+      <strong>3)</strong> Hook으로 패턴을 자동 감지/차단 → 결정론적 강제<br>
+      <strong>4)</strong> 같은 실수는 영구적으로 불가능해짐<br><br>
+      이렇게 <strong>각 실패가 영구적 규칙으로 전환</strong>되어, 시스템이 단조 증가(monotonically improving)합니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 3 ==================== -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-number">Chapter 3</div>
+    <h2>Hook의 분류와 3계층 아키텍처</h2>
+    <p class="chapter-desc">Hook이 에이전트 실행의 어디에, 어떤 형태로 개입하는지를 체계적으로 분류합니다.</p>
+
+    <h3>3.1 라이프사이클 기준 분류</h3>
+
+    <div class="term-card">
+      <div class="term">Lifecycle Event <span class="en-note">— 라이프사이클 이벤트. 에이전트 실행 과정에서 발생하는 특정 시점/사건</span></div>
+      <div class="meaning">에이전트가 시작되고, LLM을 호출하고, 도구를 사용하고, 응답을 생성하고, 종료하는 각 시점을 이벤트로 정의합니다.</div>
+    </div>
+
+    <div class="diagram">
+사용자 입력                                               최종 응답
+    │                                                        ▲
+    ▼                                                        │
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐ │
+│ Session  │    │ User     │    │  Agent   │    │  Stop    │ │
+│ Start    │───▶│ Prompt   │───▶│  Loop    │───▶│          │─┘
+│          │    │ Submit   │    │          │    │          │
+└──────────┘    └──────────┘    └────┬─────┘    └──────────┘
+  ↕ Hook          ↕ Hook            │              ↕ Hook
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    ▼               ▼               ▼
+              ┌──────────┐   ┌──────────┐   ┌──────────┐
+              │ LLM Call │   │ Tool Use │   │ Step     │
+              │          │   │          │   │ Finish   │
+              └──────────┘   └────┬─────┘   └──────────┘
+                ↕ Hook            │            ↕ Hook
+                            ┌─────┴─────┐
+                            │           │
+                            ▼           ▼
+                      ┌──────────┐ ┌──────────┐
+                      │ Pre-Tool │ │ Post-Tool│
+                      │ Use      │ │ Use      │
+                      └──────────┘ └──────────┘
+                        ↕ Hook       ↕ Hook
+    </div>
+
+    <h3>3.2 개입 시점별 분류</h3>
+
+    <table>
+      <thead>
+        <tr><th>분류</th><th>영어 / 한국어</th><th>역할</th><th>예시</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2"><strong>사전<br>(Pre-)</strong></td>
+          <td>Pre-action Hook<br><span class="en-note">행동 전 훅</span></td>
+          <td>에이전트가 행동하기 <strong>전에</strong> 검증/차단</td>
+          <td><code>PreToolUse</code>, <code>on_tool_start</code>, <code>interrupt_before</code></td>
+        </tr>
+        <tr>
+          <td>Input Guardrail<br><span class="en-note">입력 가드레일</span></td>
+          <td>사용자 입력을 에이전트에 전달하기 전 검증</td>
+          <td><code>UserPromptSubmit</code>, Input Guardrail, <code>transformParams</code></td>
+        </tr>
+        <tr>
+          <td rowspan="2"><strong>사후<br>(Post-)</strong></td>
+          <td>Post-action Hook<br><span class="en-note">행동 후 훅</span></td>
+          <td>에이전트가 행동한 <strong>후에</strong> 검증/피드백</td>
+          <td><code>PostToolUse</code>, <code>on_tool_end</code>, <code>onStepFinish</code></td>
+        </tr>
+        <tr>
+          <td>Output Guardrail<br><span class="en-note">출력 가드레일</span></td>
+          <td>에이전트 최종 출력을 사용자에게 전달하기 전 검증</td>
+          <td>Output Guardrail, <code>wrapGenerate</code>, <code>onFinish</code></td>
+        </tr>
+        <tr>
+          <td><strong>관찰<br>(Observe)</strong></td>
+          <td>Observability Hook<br><span class="en-note">관측 가능성 훅</span></td>
+          <td>실행 과정을 추적/로깅 (차단하지 않음)</td>
+          <td><code>onChunk</code>, Tracing Callback, Logging Middleware</td>
+        </tr>
+        <tr>
+          <td><strong>중단<br>(Interrupt)</strong></td>
+          <td>Human-in-the-Loop<br><span class="en-note">인간 개입 루프</span></td>
+          <td>실행을 일시 중단하고 인간 승인 대기</td>
+          <td><code>interrupt()</code>, Approval Gate, <code>PermissionRequest</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3.3 Augment Code의 3계층 아키텍처</h3>
+
+    <p>실전에서 Hook을 구성할 때 가장 유용한 프레임워크입니다:</p>
+
+    <div class="info-box concept">
+      <strong>Layer 1: Constraint Harness (제약 하네스) — Feedforward</strong>
+      <span class="en-note">— 사전에 솔루션 공간을 줄여서 에이전트가 실수할 여지를 제거</span><br><br>
+      규칙 파일, 린터, 타입 시스템이 생성 전에 제약을 설정합니다. OpenAI는 이를
+      <span class="en">taste invariants</span><span class="en-note">(취향 불변량 — 팀의 코딩 표준을 경고가 아닌 CI 실패로 강제하는 규칙)</span>라고 부릅니다.<br><br>
+      <strong>구현:</strong> <code>CLAUDE.md</code>, <code>AGENTS.md</code>, ESLint 규칙, TypeScript strict mode, <code>PreToolUse</code> Hook
+    </div>
+
+    <div class="info-box success">
+      <strong>Layer 2: Feedback Loop (피드백 루프) — Corrective</strong>
+      <span class="en-note">— 에러 메시지가 자동으로 에이전트의 컨텍스트에 재주입되어 자기 교정을 유도</span><br><br>
+      핵심 원리: 에러 메시지 자체가 프롬프트가 됩니다. 린트 에러가
+      <code>"use logger.info({event: 'name', ...data})"</code>처럼 구체적이면,
+      에이전트는 이를 읽고 스스로 수정합니다.<br><br>
+      <strong>구현:</strong> <code>PostToolUse</code> Hook (lint/test 자동 실행), <code>onStepFinish</code> 콜백, CI 에러 피드백
+    </div>
+
+    <div class="info-box warning">
+      <strong>Layer 3: Quality Gate (품질 게이트) — Enforcement</strong>
+      <span class="en-note">— 결정론적 CI 게이트가 비준수 결과물의 머지/배포를 물리적으로 차단</span><br><br>
+      표준 CI 파이프라인은 에이전트 특유의 실패(아키텍처 드리프트, 의존성 전략 불일치 등)를
+      감지하지 못할 수 있으므로, 에이전트 전용 검증 게이트가 필요합니다.<br><br>
+      <strong>구현:</strong> <code>Stop</code> Hook (완료 조건 미충족 시 종료 차단), CI/CD 게이트, 코드 리뷰 서브에이전트
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 4 ==================== -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-number">Chapter 4</div>
+    <h2>주요 프레임워크별 Hook 시스템 상세</h2>
+    <p class="chapter-desc">Claude Code, OpenAI Agents SDK, LangChain/LangGraph의 Hook 구현을 비교 학습합니다.</p>
+
+    <h3>4.1 Claude Code Hooks</h3>
+
+    <p>
+      현재 가장 정교한 에이전트 Hook 시스템 중 하나로, <strong>26개 이상의 라이프사이클 이벤트</strong>와
+      <strong>5가지 핸들러 타입</strong>을 제공합니다.
+    </p>
+
+    <h4>라이프사이클 이벤트 전체 목록</h4>
+
+    <table>
+      <thead>
+        <tr><th>빈도</th><th>이벤트</th><th>설명</th><th>차단 가능</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3">세션당 1회</td>
+          <td><code>SessionStart</code></td>
+          <td>세션 시작 시. 컨텍스트 초기화, 환경 변수 로드</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><code>SessionEnd</code></td>
+          <td>세션 종료 시. 정리 작업</td>
+          <td>X</td>
+        </tr>
+        <tr>
+          <td><code>Setup</code></td>
+          <td><code>--init</code> 또는 <code>--maintenance</code> 플래그 사용 시</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td rowspan="3">턴당 1회</td>
+          <td><code>UserPromptSubmit</code></td>
+          <td>사용자 프롬프트 제출 직후, 처리 전</td>
+          <td>O (block)</td>
+        </tr>
+        <tr>
+          <td><code>Stop</code></td>
+          <td>에이전트 응답 완료 시</td>
+          <td>O (continue)</td>
+        </tr>
+        <tr>
+          <td><code>StopFailure</code></td>
+          <td>API 에러로 턴 종료 시</td>
+          <td>X</td>
+        </tr>
+        <tr>
+          <td rowspan="4">도구 호출마다</td>
+          <td><code>PreToolUse</code></td>
+          <td>도구 실행 직전. <strong>가장 강력한 보안 Hook</strong></td>
+          <td>O (deny)</td>
+        </tr>
+        <tr>
+          <td><code>PostToolUse</code></td>
+          <td>도구 실행 성공 후. 피드백 주입 가능</td>
+          <td>X</td>
+        </tr>
+        <tr>
+          <td><code>PostToolUseFailure</code></td>
+          <td>도구 실행 실패 후</td>
+          <td>X</td>
+        </tr>
+        <tr>
+          <td><code>PermissionRequest</code></td>
+          <td>권한 요청 다이얼로그 표시 시</td>
+          <td>O (deny)</td>
+        </tr>
+        <tr>
+          <td rowspan="4">비동기</td>
+          <td><code>FileChanged</code></td>
+          <td>감시 대상 파일 변경 시</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><code>CwdChanged</code></td>
+          <td>작업 디렉터리 변경 시</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><code>PreCompact</code> / <code>PostCompact</code></td>
+          <td>컨텍스트 압축 전/후</td>
+          <td>Pre만 O</td>
+        </tr>
+        <tr>
+          <td><code>ConfigChange</code></td>
+          <td>설정 파일 변경 시</td>
+          <td>O</td>
+        </tr>
+        <tr>
+          <td rowspan="3">서브에이전트</td>
+          <td><code>SubagentStart</code> / <code>SubagentStop</code></td>
+          <td>서브에이전트 생성/종료 시</td>
+          <td>Stop만 O</td>
+        </tr>
+        <tr>
+          <td><code>TaskCreated</code> / <code>TaskCompleted</code></td>
+          <td>태스크 생성/완료 시</td>
+          <td>O</td>
+        </tr>
+        <tr>
+          <td><code>TeammateIdle</code></td>
+          <td>팀 에이전트가 유휴 상태 진입 시</td>
+          <td>O</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>5가지 Hook 핸들러 타입</h4>
+
+    <p>Claude Code는 다양한 실행 방식을 지원합니다:</p>
+
+    <p><strong>1. Command Hook</strong> <span class="en-note">— 셸 스크립트를 직접 실행. 가장 기본적이고 범용적</span></p>
+<pre><code><span class="code-comment">// .claude/settings.json</span>
+{
+  <span class="code-string">"hooks"</span>: {
+    <span class="code-string">"PreToolUse"</span>: [{
+      <span class="code-string">"matcher"</span>: <span class="code-string">"Bash"</span>,              <span class="code-comment">// Bash 도구 호출 시에만 작동</span>
+      <span class="code-string">"hooks"</span>: [{
+        <span class="code-string">"type"</span>: <span class="code-string">"command"</span>,             <span class="code-comment">// 셸 명령 실행 타입</span>
+        <span class="code-string">"command"</span>: <span class="code-string">"./hooks/validate-bash.sh"</span>
+      }]
+    }]
+  }
+}</code></pre>
+
+    <p><strong>2. HTTP Hook</strong> <span class="en-note">— 외부 웹서버에 POST 요청. 중앙 집중식 검증 서버 운영 시 유용</span></p>
+<pre><code>{
+  <span class="code-string">"type"</span>: <span class="code-string">"http"</span>,
+  <span class="code-string">"url"</span>: <span class="code-string">"http://localhost:8080/hooks/pre-tool-use"</span>,
+  <span class="code-string">"headers"</span>: {
+    <span class="code-string">"Authorization"</span>: <span class="code-string">"Bearer $MY_TOKEN"</span>   <span class="code-comment">// 환경 변수 참조 가능</span>
+  }
+}</code></pre>
+
+    <p><strong>3. MCP Tool Hook</strong> <span class="en-note">— 연결된 MCP 서버의 도구를 호출. 외부 시스템과의 통합에 적합</span></p>
+<pre><code>{
+  <span class="code-string">"type"</span>: <span class="code-string">"mcp_tool"</span>,
+  <span class="code-string">"server"</span>: <span class="code-string">"my_security_server"</span>,   <span class="code-comment">// MCP 서버 이름</span>
+  <span class="code-string">"tool"</span>: <span class="code-string">"security_scan"</span>,           <span class="code-comment">// 호출할 도구</span>
+  <span class="code-string">"input"</span>: { <span class="code-string">"file_path"</span>: <span class="code-string">"${tool_input.file_path}"</span> }
+}</code></pre>
+
+    <p><strong>4. Prompt Hook</strong> <span class="en-note">— LLM에게 yes/no 판단을 요청. 규칙으로 표현하기 어려운 뉘앙스 판단에 적합</span></p>
+<pre><code>{
+  <span class="code-string">"type"</span>: <span class="code-string">"prompt"</span>,
+  <span class="code-string">"prompt"</span>: <span class="code-string">"Is this bash command safe to execute? $ARGUMENTS"</span>,
+  <span class="code-string">"model"</span>: <span class="code-string">"claude-haiku-4-5"</span>        <span class="code-comment">// 빠른 모델 사용 권장</span>
+}</code></pre>
+
+    <p><strong>5. Agent Hook</strong> <span class="en-note">— 도구 접근 권한이 있는 서브에이전트를 생성. 복잡한 검증 시나리오에 적합</span></p>
+<pre><code>{
+  <span class="code-string">"type"</span>: <span class="code-string">"agent"</span>,
+  <span class="code-string">"prompt"</span>: <span class="code-string">"Verify this file edit follows our architecture patterns: $ARGUMENTS"</span>
+  <span class="code-comment">// 서브에이전트가 파일을 읽고, grep을 실행하고, 판단을 내림</span>
+}</code></pre>
+
+    <h4>Exit Code와 JSON 출력 프로토콜</h4>
+
+    <div class="term-card">
+      <div class="term">Exit Code <span class="en-note">— 종료 코드. 프로세스가 종료될 때 반환하는 정수값으로, 성공/실패를 시스템에 알림</span></div>
+      <div class="meaning">Claude Code Hook에서: 0 = 성공, 2 = 차단(에러를 에이전트에 전달), 그 외 = 비차단 에러(로깅만)</div>
+    </div>
+
+<pre><code><span class="code-comment">#!/bin/bash</span>
+<span class="code-comment"># hooks/block-dangerous-commands.sh</span>
+<span class="code-comment"># stdin으로 도구 호출 정보가 JSON으로 전달됨</span>
+
+COMMAND=$(jq -r '.tool_input.command' &lt; /dev/stdin)
+
+<span class="code-keyword">if</span> echo "$COMMAND" | grep -qE 'rm -rf|DROP TABLE|git push --force'; <span class="code-keyword">then</span>
+  <span class="code-comment"># JSON으로 차단 결정을 반환</span>
+  jq -n '{
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: "deny",
+      permissionDecisionReason: "위험한 명령이 감지되었습니다"
+    }
+  }'
+  exit 0   <span class="code-comment"># exit 0 + deny JSON = 도구 실행 차단</span>
+<span class="code-keyword">else</span>
+  exit 0   <span class="code-comment"># exit 0 + no JSON = 정상 진행</span>
+<span class="code-keyword">fi</span></code></pre>
+
+    <div class="info-box concept">
+      <strong>서브에이전트 재귀 적용 (Recursive Hook Enforcement)</strong>
+      <span class="en-note">— 서브에이전트(하위 에이전트)가 생성되어도, 부모의 PreToolUse/PostToolUse Hook이 자동으로 적용됨</span><br><br>
+      이것이 중요한 이유: 서브에이전트를 통한 <strong>우회(bypass)</strong>를 방지합니다.
+      만약 Hook이 서브에이전트에 적용되지 않는다면, 에이전트는 서브에이전트를 생성하여
+      위험한 명령을 실행할 수 있습니다.
+    </div>
+
+    <h3>4.2 OpenAI Agents SDK Lifecycle Hooks</h3>
+
+    <p>
+      OpenAI Agents SDK는 Python 클래스 기반의 Hook 시스템을 제공합니다.
+      <code>RunHooksBase</code>와 <code>AgentHooksBase</code> 두 계층으로 구성됩니다.
+    </p>
+
+    <div class="term-card">
+      <div class="term">RunHooksBase <span class="en-note">— 실행(Run) 수준의 Hook 기반 클래스. 전체 에이전트 실행을 관통하는 콜백</span></div>
+      <div class="meaning">에이전트 실행의 전체 수명 동안 발생하는 이벤트(LLM 호출, 도구 사용, 에이전트 전환 등)에 대한 콜백을 정의합니다.</div>
+    </div>
+
+    <div class="term-card">
+      <div class="term">AgentHooksBase <span class="en-note">— 에이전트(Agent) 수준의 Hook 기반 클래스. 개별 에이전트에 특화된 콜백</span></div>
+      <div class="meaning">특정 에이전트 인스턴스에 직접 연결되는 콜백. agent.hooks 속성으로 설정합니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">Python</span>
+<span class="code-keyword">from</span> agents <span class="code-keyword">import</span> Agent, Runner, RunHooksBase, AgentHooksBase
+<span class="code-keyword">from</span> agents.lifecycle <span class="code-keyword">import</span> RunContextWrapper
+<span class="code-keyword">import</span> time
+<span class="code-keyword">import</span> json
+
+<span class="code-comment"># ─── Run 수준 Hook: 전체 실행에 걸친 관측/추적 ───</span>
+<span class="code-keyword">class</span> <span class="code-type">ObservabilityHooks</span>(RunHooksBase):
+    """
+    Run-level hooks: 전체 에이전트 실행을 관통하는
+    관측 가능성(Observability) 콜백
+    """
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_agent_start</span>(self, context: RunContextWrapper, agent):
+        <span class="code-comment"># 에이전트가 활성화될 때 호출</span>
+        <span class="code-comment"># 멀티 에이전트에서 handoff(전환) 시마다 호출됨</span>
+        print(f"[START] Agent '{agent.name}' activated")
+        context.context["start_time"] = time.time()
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_llm_start</span>(self, context, agent, system_prompt, input_items):
+        <span class="code-comment"># LLM API 호출 직전</span>
+        <span class="code-comment"># system_prompt: 시스템 프롬프트 전문</span>
+        <span class="code-comment"># input_items: 모델에 전달되는 메시지/도구 결과</span>
+        print(f"[LLM] Calling model for '{agent.name}'")
+        print(f"  Input items: {len(input_items)}")
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_llm_end</span>(self, context, agent, response):
+        <span class="code-comment"># LLM 응답 수신 직후</span>
+        <span class="code-comment"># response: ModelResponse 객체 (토큰 사용량 등 포함)</span>
+        usage = response.usage
+        print(f"[LLM] Response: {usage.input_tokens}in / {usage.output_tokens}out")
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_tool_start</span>(self, context, agent, tool):
+        <span class="code-comment"># 로컬 도구(function tool) 실행 직전</span>
+        print(f"[TOOL] Starting: {tool.name}")
+        context.context["tool_start"] = time.time()
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_tool_end</span>(self, context, agent, tool, result):
+        <span class="code-comment"># 도구 실행 완료 직후</span>
+        duration = time.time() - context.context.get("tool_start", 0)
+        print(f"[TOOL] Finished: {tool.name} ({duration:.2f}s)")
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_handoff</span>(self, context, from_agent, to_agent):
+        <span class="code-comment"># Handoff: 에이전트 간 제어 이전 시</span>
+        <span class="code-comment"># 멀티 에이전트 시스템에서 "바톤 터치" 시점</span>
+        print(f"[HANDOFF] {from_agent.name} → {to_agent.name}")
+
+    <span class="code-keyword">async def</span> <span class="code-fn">on_agent_end</span>(self, context, agent, output):
+        <span class="code-comment"># 에이전트가 최종 출력을 생성했을 때</span>
+        elapsed = time.time() - context.context.get("start_time", 0)
+        print(f"[END] Agent '{agent.name}' finished in {elapsed:.2f}s")
+
+
+<span class="code-comment"># ─── Agent 수준 Hook: 특정 에이전트에만 적용 ───</span>
+<span class="code-keyword">class</span> <span class="code-type">SafetyHooks</span>(AgentHooksBase):
+    <span class="code-keyword">async def</span> <span class="code-fn">on_tool_start</span>(self, context, agent, tool):
+        <span class="code-comment"># 이 에이전트의 도구 호출만 검증</span>
+        <span class="code-keyword">if</span> tool.name == <span class="code-string">"execute_sql"</span>:
+            query = tool.input.get(<span class="code-string">"query"</span>, <span class="code-string">""</span>)
+            <span class="code-keyword">if</span> <span class="code-string">"DROP"</span> <span class="code-keyword">in</span> query.upper() <span class="code-keyword">or</span> <span class="code-string">"DELETE"</span> <span class="code-keyword">in</span> query.upper():
+                <span class="code-keyword">raise</span> ValueError(f<span class="code-string">"위험한 SQL 차단: {query[:50]}"</span>)
+
+<span class="code-comment"># ─── 사용 ───</span>
+agent = Agent(
+    name=<span class="code-string">"database_agent"</span>,
+    instructions=<span class="code-string">"You are a helpful database assistant."</span>,
+    hooks=SafetyHooks(),   <span class="code-comment"># Agent 수준 Hook</span>
+)
+
+result = <span class="code-keyword">await</span> Runner.run(
+    agent,
+    hooks=ObservabilityHooks(),  <span class="code-comment"># Run 수준 Hook</span>
+    input=<span class="code-string">"Show me the user table"</span>,
+)</code></pre>
+
+    <h4>OpenAI Agents SDK의 3단계 Guardrail</h4>
+
+    <div class="term-card">
+      <div class="term">Guardrail <span class="en-note">— 가드레일. 도로 옆 보호 난간에서 유래. AI 맥락: 에이전트가 안전한 범위 안에서만 동작하도록 강제하는 검증 메커니즘</span></div>
+      <div class="meaning">에이전트의 입력/출력/도구 호출에 대해 실행되는 검증 함수. 위반 시 실행을 중단하거나 수정합니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">Python</span>
+<span class="code-keyword">from</span> agents <span class="code-keyword">import</span> Agent, InputGuardrail, OutputGuardrail, GuardrailTripwireTriggered
+
+<span class="code-comment"># ─── Input Guardrail: 에이전트 실행과 병렬로 입력 검증 ───</span>
+<span class="code-keyword">async def</span> <span class="code-fn">check_prompt_injection</span>(context, agent, user_input):
+    <span class="code-comment"># 별도 분류 에이전트로 프롬프트 인젝션 탐지</span>
+    result = <span class="code-keyword">await</span> Runner.run(injection_detector, user_input)
+    <span class="code-keyword">if</span> result.output.is_injection:
+        <span class="code-keyword">return</span> GuardrailTripwireTriggered(
+            message=<span class="code-string">"프롬프트 인젝션이 감지되었습니다"</span>
+        )
+
+<span class="code-comment"># ─── Output Guardrail: 최종 출력 검증 ───</span>
+<span class="code-keyword">async def</span> <span class="code-fn">check_sensitive_data</span>(context, agent, output):
+    <span class="code-comment"># 개인정보(PII) 포함 여부 확인</span>
+    <span class="code-keyword">if</span> contains_pii(output):
+        <span class="code-keyword">return</span> GuardrailTripwireTriggered(
+            message=<span class="code-string">"출력에 개인정보가 포함되어 있습니다"</span>
+        )
+
+agent = Agent(
+    name=<span class="code-string">"support_agent"</span>,
+    input_guardrails=[InputGuardrail(check_prompt_injection)],
+    output_guardrails=[OutputGuardrail(check_sensitive_data)],
+)</code></pre>
+
+    <div class="info-box warning">
+      <strong>성능 주의사항</strong>
+      OpenAI 공식 문서의 경고: "Hook methods are awaited during execution, so slow hooks will slow your agent."
+      (Hook 메서드는 실행 중 대기하므로, 느린 Hook은 에이전트 전체를 지연시킵니다.)
+      비동기 큐나 <span class="en">fire-and-forget</span><span class="en-note">(발사 후 잊기 — 결과를 기다리지 않고 바로 다음 작업 진행)</span> 패턴을 권장합니다.
+    </div>
+
+    <h3>4.3 LangChain Callbacks & LangGraph Interrupt</h3>
+
+    <h4>LangChain Callback 시스템</h4>
+
+    <p>
+      LangChain의 콜백은 <span class="en">event-driven</span><span class="en-note">(이벤트 기반 — 특정 사건 발생 시 등록된 함수가 자동 호출되는 방식)</span> 시스템으로,
+      3가지 핵심 추상화로 구성됩니다:
+    </p>
+
+    <ul>
+      <li><strong>Handler</strong> <span class="en-note">(핸들러)</span> — 실제 콜백 로직을 구현하는 클래스</li>
+      <li><strong>Manager</strong> <span class="en-note">(매니저)</span> — 여러 핸들러를 조정하고 이벤트를 전파하는 관리자</li>
+      <li><strong>Configuration</strong> <span class="en-note">(설정)</span> — 실행 체인을 통해 콜백을 전파하는 설정 객체</li>
+    </ul>
+
+<pre><code><span class="lang-label">Python</span>
+<span class="code-keyword">from</span> langchain.callbacks.base <span class="code-keyword">import</span> BaseCallbackHandler
+
+<span class="code-keyword">class</span> <span class="code-type">AgentMonitor</span>(BaseCallbackHandler):
+    <span class="code-comment"># ─── LLM 관련 콜백 ───</span>
+    <span class="code-keyword">def</span> <span class="code-fn">on_llm_start</span>(self, serialized, prompts, **kwargs):
+        print(f<span class="code-string">"[LLM 시작] 프롬프트 {len(prompts)}개"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-fn">on_llm_end</span>(self, response, **kwargs):
+        print(f<span class="code-string">"[LLM 완료] 토큰: {response.llm_output}"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-fn">on_llm_error</span>(self, error, **kwargs):
+        print(f<span class="code-string">"[LLM 에러] {error}"</span>)
+
+    <span class="code-comment"># ─── 도구(Tool) 관련 콜백 ───</span>
+    <span class="code-keyword">def</span> <span class="code-fn">on_tool_start</span>(self, serialized, input_str, **kwargs):
+        print(f<span class="code-string">"[도구 시작] {serialized['name']}: {input_str}"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-fn">on_tool_end</span>(self, output, **kwargs):
+        print(f<span class="code-string">"[도구 완료] 결과: {output[:100]}"</span>)
+
+    <span class="code-comment"># ─── 체인(Chain) 관련 콜백 ───</span>
+    <span class="code-keyword">def</span> <span class="code-fn">on_chain_start</span>(self, serialized, inputs, **kwargs):
+        print(f<span class="code-string">"[체인 시작] {serialized.get('name')}"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-fn">on_chain_end</span>(self, outputs, **kwargs):
+        print(f<span class="code-string">"[체인 완료]"</span>)
+
+<span class="code-comment"># 사용: 콜백을 config로 전달</span>
+result = agent.invoke(
+    {<span class="code-string">"input"</span>: <span class="code-string">"질문"</span>},
+    config={<span class="code-string">"callbacks"</span>: [AgentMonitor()]}
+)</code></pre>
+
+    <h4>LangGraph interrupt() — Human-in-the-Loop</h4>
+
+    <div class="term-card">
+      <div class="term">Human-in-the-Loop (HITL) <span class="en-note">— 인간 개입 루프. 자동화된 프로세스의 특정 지점에서 인간의 판단/승인을 요구하는 패턴</span></div>
+      <div class="meaning">고위험 결정(결제 처리, 데이터 삭제 등)에서 에이전트가 자동으로 실행을 중단하고, 인간의 승인을 받은 후 재개하는 패턴입니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">Python</span>
+<span class="code-keyword">from</span> langgraph.types <span class="code-keyword">import</span> interrupt, Command
+<span class="code-keyword">from</span> langgraph.graph <span class="code-keyword">import</span> StateGraph
+<span class="code-keyword">from</span> langgraph.checkpoint.memory <span class="code-keyword">import</span> MemorySaver
+
+<span class="code-keyword">def</span> <span class="code-fn">execute_payment</span>(state):
+    amount = state[<span class="code-string">"amount"</span>]
+    recipient = state[<span class="code-string">"recipient"</span>]
+
+    <span class="code-comment"># interrupt()는 GraphInterrupt 예외를 발생시켜</span>
+    <span class="code-comment"># 실행을 깨끗하게 중단하고 체크포인트에 상태를 저장</span>
+    approval = interrupt({
+        <span class="code-string">"question"</span>: f<span class="code-string">"{recipient}에게 {amount}원을 송금하시겠습니까?"</span>,
+        <span class="code-string">"amount"</span>: amount,
+        <span class="code-string">"recipient"</span>: recipient,
+    })
+
+    <span class="code-comment"># 인간이 승인하면 이 지점부터 재개</span>
+    <span class="code-keyword">if</span> approval == <span class="code-string">"approved"</span>:
+        <span class="code-keyword">return</span> {<span class="code-string">"status"</span>: <span class="code-string">"결제 완료"</span>, <span class="code-string">"tx_id"</span>: process_payment(amount, recipient)}
+    <span class="code-keyword">else</span>:
+        <span class="code-keyword">return</span> {<span class="code-string">"status"</span>: <span class="code-string">"결제 취소됨"</span>}
+
+<span class="code-comment"># Checkpointer(체크포인터): 그래프 상태를 저장하여</span>
+<span class="code-comment"># 중단/재개를 가능하게 하는 영속성 메커니즘</span>
+graph = StateGraph(PaymentState)
+graph.add_node(<span class="code-string">"payment"</span>, execute_payment)
+app = graph.compile(checkpointer=MemorySaver())
+
+<span class="code-comment"># 실행 → interrupt에서 자동 중단</span>
+result = app.invoke({<span class="code-string">"amount"</span>: 50000, <span class="code-string">"recipient"</span>: <span class="code-string">"홍길동"</span>},
+                    config={<span class="code-string">"configurable"</span>: {<span class="code-string">"thread_id"</span>: <span class="code-string">"tx-001"</span>}})
+
+<span class="code-comment"># 인간이 승인 후 재개</span>
+result = app.invoke(
+    Command(resume=<span class="code-string">"approved"</span>),
+    config={<span class="code-string">"configurable"</span>: {<span class="code-string">"thread_id"</span>: <span class="code-string">"tx-001"</span>}}
+)</code></pre>
+
+    <h3>4.4 프레임워크 간 비교 정리</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>관점</th>
+          <th>Claude Code</th>
+          <th>OpenAI Agents SDK</th>
+          <th>LangChain / LangGraph</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hook 방식</strong></td>
+          <td>JSON 설정 + 외부 스크립트</td>
+          <td>Python 클래스 상속</td>
+          <td>콜백 핸들러 + interrupt()</td>
+        </tr>
+        <tr>
+          <td><strong>이벤트 수</strong></td>
+          <td>26개+</td>
+          <td>7개 핵심 이벤트</td>
+          <td>10개+ (콜백) + interrupt</td>
+        </tr>
+        <tr>
+          <td><strong>차단 기능</strong></td>
+          <td>PreToolUse deny, exit code 2</td>
+          <td>raise Exception</td>
+          <td>interrupt(), 조건부 에지</td>
+        </tr>
+        <tr>
+          <td><strong>서브에이전트 재귀</strong></td>
+          <td>자동 적용</td>
+          <td>수동 전파 필요</td>
+          <td>그래프 구조로 암시적 적용</td>
+        </tr>
+        <tr>
+          <td><strong>핸들러 다양성</strong></td>
+          <td>5종 (command, http, mcp, prompt, agent)</td>
+          <td>1종 (Python 클래스)</td>
+          <td>1종 (Python 클래스)</td>
+        </tr>
+        <tr>
+          <td><strong>비동기 지원</strong></td>
+          <td>async: true 플래그</td>
+          <td>기본 async</td>
+          <td>기본 async</td>
+        </tr>
+        <tr>
+          <td><strong>상태 영속화</strong></td>
+          <td>세션 파일, 환경 변수</td>
+          <td>RunContext</td>
+          <td>Checkpointer (Redis, Postgres 등)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 5 ==================== -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-number">Chapter 5</div>
+    <h2>Next.js + Vercel AI SDK에서의 Hook 구성</h2>
+    <p class="chapter-desc">Next.js 프레임워크에서 AI 에이전트의 Hook을 어떻게 설계하고 구성하는지를 체계적으로 학습합니다.</p>
+
+    <h3>5.1 Vercel AI SDK의 Hook 체계 이해</h3>
+
+    <p>
+      <span class="en">Vercel AI SDK</span><span class="en-note">(Vercel이 만든 TypeScript용 AI 개발 도구 키트. Next.js와 최적 통합)</span>는
+      크게 <strong>3가지 계층</strong>에서 Hook/제어 지점을 제공합니다:
+    </p>
+
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────┐
+│                    Next.js Application                   │
+│                                                          │
+│  ┌─── Layer 1: HTTP/Infra 계층 ──────────────────────┐  │
+│  │  middleware.ts    → 인증, Rate Limiting, 로깅      │  │
+│  │  Route Handler    → 요청 검증, 세션 관리           │  │
+│  └────────────────────────┬──────────────────────────┘  │
+│                           ▼                              │
+│  ┌─── Layer 2: AI SDK Middleware 계층 ───────────────┐  │
+│  │  wrapLanguageModel → Guardrail, RAG, 캐싱, 로깅   │  │
+│  │  transformParams   → 입력 변환                     │  │
+│  │  wrapGenerate      → 출력 필터링                   │  │
+│  │  wrapStream        → 스트림 필터링                 │  │
+│  └────────────────────────┬──────────────────────────┘  │
+│                           ▼                              │
+│  ┌─── Layer 3: Agent Loop Callback 계층 ─────────────┐  │
+│  │  onStepFinish      → 스텝 완료 후 로직            │  │
+│  │  onFinish          → 전체 완료 후 로직            │  │
+│  │  onToolCallStart   → 도구 실행 전 관찰            │  │
+│  │  onToolCallFinish  → 도구 실행 후 관찰            │  │
+│  │  prepareStep       → 다음 스텝 설정 동적 변경     │  │
+│  │  stopWhen          → 종료 조건 정의               │  │
+│  └───────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+    </div>
+
+    <h3>5.2 프로젝트 구조 권장안</h3>
+
+    <div class="file-tree">
+<span class="folder">my-next-app/</span>
+├── <span class="folder">src/</span>
+│   ├── <span class="file">middleware.ts</span>               <span class="desc">← Layer 1: HTTP 수준 Hook (인증, Rate Limit)</span>
+│   ├── <span class="folder">app/</span>
+│   │   └── <span class="folder">api/</span>
+│   │       └── <span class="folder">chat/</span>
+│   │           └── <span class="file">route.ts</span>         <span class="desc">← API Route: AI 에이전트 진입점</span>
+│   ├── <span class="folder">lib/</span>
+│   │   ├── <span class="folder">ai/</span>
+│   │   │   ├── <span class="file">agent.ts</span>            <span class="desc">← 에이전트 정의 (도구, 시스템 프롬프트)</span>
+│   │   │   ├── <span class="file">middleware.ts</span>       <span class="desc">← Layer 2: AI SDK Middleware (가드레일, 캐싱)</span>
+│   │   │   ├── <span class="file">callbacks.ts</span>        <span class="desc">← Layer 3: Agent Loop Callbacks</span>
+│   │   │   ├── <span class="file">tools.ts</span>            <span class="desc">← 도구 정의</span>
+│   │   │   └── <span class="file">tool-gateway.ts</span>     <span class="desc">← Tool Gateway: 도구 호출 검증/필터링</span>
+│   │   └── <span class="folder">hooks/</span>
+│   │       ├── <span class="file">guardrails.ts</span>       <span class="desc">← 입출력 가드레일 함수</span>
+│   │       ├── <span class="file">rate-limiter.ts</span>     <span class="desc">← Rate Limiting 로직</span>
+│   │       └── <span class="file">logger.ts</span>           <span class="desc">← 구조화된 로깅</span>
+│   └── <span class="folder">components/</span>
+│       └── <span class="file">chat.tsx</span>               <span class="desc">← 클라이언트: useChat Hook</span>
+├── <span class="file">next.config.ts</span>
+└── <span class="file">package.json</span>
+    </div>
+
+    <h3>5.3 Layer 1: Next.js Middleware (HTTP/인프라 수준 Hook)</h3>
+
+    <div class="term-card">
+      <div class="term">Next.js Middleware <span class="en-note">— Next.js의 미들웨어. 모든 요청이 라우트에 도달하기 전에 실행되는 코드. Edge Runtime에서 동작</span></div>
+      <div class="meaning">인증 검증, Rate Limiting, 요청 로깅 등을 라우트 핸들러 도달 전에 수행합니다. AI 에이전트에 대한 "첫 번째 방어선"입니다.</div>
+    </div>
+
+    <div class="info-box warning">
+      <strong>중요한 구분</strong>
+      Next.js 공식 문서 경고: "Middleware is a UX optimization, not a security guarantee."
+      (미들웨어는 UX 최적화이지, 보안 보장이 아닙니다.)
+      반드시 Server Component/Server Action에서 재검증해야 합니다.
+      미들웨어는 <strong>빠른 차단</strong>을, Route Handler는 <strong>완전한 검증</strong>을 담당합니다.
+    </div>
+
+<pre><code><span class="lang-label">src/middleware.ts</span>
+<span class="code-keyword">import</span> { NextResponse } <span class="code-keyword">from</span> <span class="code-string">'next/server'</span>
+<span class="code-keyword">import</span> <span class="code-keyword">type</span> { NextRequest } <span class="code-keyword">from</span> <span class="code-string">'next/server'</span>
+<span class="code-keyword">import</span> { Ratelimit } <span class="code-keyword">from</span> <span class="code-string">'@upstash/ratelimit'</span>
+<span class="code-keyword">import</span> { Redis } <span class="code-keyword">from</span> <span class="code-string">'@upstash/redis'</span>
+
+<span class="code-comment">// ─── Rate Limiter 설정 ───</span>
+<span class="code-comment">// Sliding Window: 시간 창이 매 요청마다 슬라이딩되는 방식</span>
+<span class="code-comment">// Token Bucket이 아닌 Sliding Window를 사용하는 이유:</span>
+<span class="code-comment">// AI 요청은 처리 시간이 길어 버스트 허용보다 균일한 분배가 적합</span>
+<span class="code-keyword">const</span> ratelimit = <span class="code-keyword">new</span> Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(
+    20,         <span class="code-comment">// 20 requests</span>
+    <span class="code-string">'1 m'</span>       <span class="code-comment">// per 1 minute</span>
+  ),
+  analytics: <span class="code-keyword">true</span>,
+  prefix: <span class="code-string">'ai-agent'</span>,
+})
+
+<span class="code-keyword">export async function</span> <span class="code-fn">middleware</span>(request: NextRequest) {
+  <span class="code-comment">// AI API 경로에만 적용</span>
+  <span class="code-keyword">if</span> (!request.nextUrl.pathname.startsWith(<span class="code-string">'/api/chat'</span>)) {
+    <span class="code-keyword">return</span> NextResponse.next()
+  }
+
+  <span class="code-comment">// ─── 1. 인증 확인 ───</span>
+  <span class="code-keyword">const</span> authHeader = request.headers.get(<span class="code-string">'authorization'</span>)
+  <span class="code-keyword">if</span> (!authHeader?.startsWith(<span class="code-string">'Bearer '</span>)) {
+    <span class="code-keyword">return</span> NextResponse.json(
+      { error: <span class="code-string">'Unauthorized'</span> },
+      { status: 401 }
+    )
+  }
+
+  <span class="code-comment">// ─── 2. Rate Limiting ───</span>
+  <span class="code-keyword">const</span> userId = extractUserId(authHeader)  <span class="code-comment">// JWT에서 사용자 ID 추출</span>
+  <span class="code-keyword">const</span> { success, limit, remaining, reset } = <span class="code-keyword">await</span> ratelimit.limit(userId)
+
+  <span class="code-keyword">if</span> (!success) {
+    <span class="code-keyword">return</span> NextResponse.json(
+      { error: <span class="code-string">'Too many requests'</span> },
+      {
+        status: 429,
+        headers: {
+          <span class="code-string">'X-RateLimit-Limit'</span>: limit.toString(),
+          <span class="code-string">'X-RateLimit-Remaining'</span>: remaining.toString(),
+          <span class="code-string">'X-RateLimit-Reset'</span>: reset.toString(),
+          <span class="code-string">'Retry-After'</span>: Math.ceil((reset - Date.now()) / 1000).toString(),
+        },
+      }
+    )
+  }
+
+  <span class="code-comment">// ─── 3. 요청 로깅 ───</span>
+  <span class="code-keyword">const</span> response = NextResponse.next()
+  response.headers.set(<span class="code-string">'X-Request-Id'</span>, crypto.randomUUID())
+  response.headers.set(<span class="code-string">'X-RateLimit-Remaining'</span>, remaining.toString())
+
+  <span class="code-keyword">return</span> response
+}
+
+<span class="code-keyword">export const</span> config = {
+  matcher: <span class="code-string">'/api/:path*'</span>,
+}</code></pre>
+
+    <h3>5.4 Layer 2: AI SDK Language Model Middleware</h3>
+
+    <div class="term-card">
+      <div class="term">Language Model Middleware <span class="en-note">— 언어 모델 미들웨어. 모델 호출을 가로채어 변환/검증/캐싱하는 계층. 모델 제공자(Provider)에 독립적</span></div>
+      <div class="meaning">wrapLanguageModel() 함수로 모델을 감싸서, 가드레일, RAG, 캐싱, 로깅 등을 모델 종류와 무관하게 적용합니다.</div>
+    </div>
+
+    <p>AI SDK Middleware의 3가지 개입 지점:</p>
+
+    <table>
+      <thead>
+        <tr><th>메서드</th><th>시점</th><th>용도</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>transformParams</code></td>
+          <td>모델 호출 <strong>전</strong> — 매개변수 변환</td>
+          <td>RAG 컨텍스트 주입, 프롬프트 수정, 입력 필터링</td>
+        </tr>
+        <tr>
+          <td><code>wrapGenerate</code></td>
+          <td>generateText <strong>감싸기</strong></td>
+          <td>출력 필터링, 캐싱, 로깅, 재시도</td>
+        </tr>
+        <tr>
+          <td><code>wrapStream</code></td>
+          <td>streamText <strong>감싸기</strong></td>
+          <td>스트림 청크 필터링, 실시간 모니터링</td>
+        </tr>
+      </tbody>
+    </table>
+
+<pre><code><span class="lang-label">src/lib/ai/middleware.ts</span>
+<span class="code-keyword">import type</span> { LanguageModelV3Middleware, LanguageModelV3StreamPart } <span class="code-keyword">from</span> <span class="code-string">'@ai-sdk/provider'</span>
+<span class="code-keyword">import</span> { wrapLanguageModel } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>
+
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 1. Guardrail Middleware (가드레일 미들웨어)</span>
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 목적: 모델 출력에서 민감 정보를 필터링하고,</span>
+<span class="code-comment">// 위험한 내용을 차단합니다.</span>
+
+<span class="code-keyword">const</span> SENSITIVE_PATTERNS = [
+  { pattern: /\b\d{3}-\d{2}-\d{4}\b/g, replacement: <span class="code-string">'[SSN REDACTED]'</span> },
+  { pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
+    replacement: <span class="code-string">'[EMAIL REDACTED]'</span> },
+  { pattern: /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g,
+    replacement: <span class="code-string">'[CARD REDACTED]'</span> },
+  { pattern: /\b01[0-9]-\d{3,4}-\d{4}\b/g,
+    replacement: <span class="code-string">'[PHONE REDACTED]'</span> },
+]
+
+<span class="code-keyword">function</span> <span class="code-fn">sanitizeText</span>(text: string): string {
+  <span class="code-keyword">let</span> result = text
+  <span class="code-keyword">for</span> (<span class="code-keyword">const</span> { pattern, replacement } <span class="code-keyword">of</span> SENSITIVE_PATTERNS) {
+    result = result.replace(pattern, replacement)
+  }
+  <span class="code-keyword">return</span> result
+}
+
+<span class="code-keyword">export const</span> guardrailMiddleware: LanguageModelV3Middleware = {
+  <span class="code-comment">// wrapGenerate: generateText() 호출을 감싸는 함수</span>
+  <span class="code-comment">// doGenerate: 실제 모델 호출 함수. 이를 호출하여 결과를 받고 후처리</span>
+  wrapGenerate: <span class="code-keyword">async</span> ({ doGenerate, params }) => {
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> doGenerate()
+
+    <span class="code-comment">// 모델 출력에서 민감 정보 제거</span>
+    <span class="code-keyword">const</span> sanitized = result.text ? sanitizeText(result.text) : result.text
+
+    <span class="code-keyword">return</span> { ...result, text: sanitized }
+  },
+
+  <span class="code-comment">// wrapStream: streamText() 호출을 감싸는 함수</span>
+  <span class="code-comment">// 스트리밍 청크를 하나씩 처리하여 실시간 필터링 가능</span>
+  wrapStream: <span class="code-keyword">async</span> ({ doStream, params }) => {
+    <span class="code-keyword">const</span> { stream, ...rest } = <span class="code-keyword">await</span> doStream()
+
+    <span class="code-comment">// TransformStream: 스트림 데이터를 변환하는 Web Streams API</span>
+    <span class="code-keyword">const</span> transformStream = <span class="code-keyword">new</span> TransformStream&lt;
+      LanguageModelV3StreamPart,
+      LanguageModelV3StreamPart
+    &gt;({
+      transform(chunk, controller) {
+        <span class="code-keyword">if</span> (chunk.type === <span class="code-string">'text-delta'</span>) {
+          controller.enqueue({
+            ...chunk,
+            delta: sanitizeText(chunk.delta),
+          })
+        } <span class="code-keyword">else</span> {
+          controller.enqueue(chunk)
+        }
+      },
+    })
+
+    <span class="code-keyword">return</span> { stream: stream.pipeThrough(transformStream), ...rest }
+  },
+}
+
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 2. Logging Middleware (로깅 미들웨어)</span>
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 목적: 모든 LLM 호출의 입력/출력/소요시간/토큰을 구조화하여 로깅</span>
+
+<span class="code-keyword">export const</span> loggingMiddleware: LanguageModelV3Middleware = {
+  wrapGenerate: <span class="code-keyword">async</span> ({ doGenerate, params }) => {
+    <span class="code-keyword">const</span> startTime = performance.now()
+    <span class="code-keyword">const</span> requestId = crypto.randomUUID()
+
+    console.log(JSON.stringify({
+      event: <span class="code-string">'llm_call_start'</span>,
+      requestId,
+      model: params.modelId,
+      promptTokenEstimate: JSON.stringify(params.prompt).length / 4,
+      timestamp: <span class="code-keyword">new</span> Date().toISOString(),
+    }))
+
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> doGenerate()
+
+    console.log(JSON.stringify({
+      event: <span class="code-string">'llm_call_end'</span>,
+      requestId,
+      durationMs: Math.round(performance.now() - startTime),
+      inputTokens: result.usage?.inputTokens,
+      outputTokens: result.usage?.outputTokens,
+      finishReason: result.finishReason,
+    }))
+
+    <span class="code-keyword">return</span> result
+  },
+}
+
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 3. Cache Middleware (캐시 미들웨어)</span>
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 목적: 동일 요청에 대한 LLM 응답을 캐싱하여 비용/지연 절감</span>
+<span class="code-comment">// 도구 호출이 없는 단순 Q&A에 적합</span>
+
+<span class="code-keyword">const</span> cache = <span class="code-keyword">new</span> Map&lt;string, <span class="code-keyword">any</span>&gt;()
+
+<span class="code-keyword">export const</span> cacheMiddleware: LanguageModelV3Middleware = {
+  wrapGenerate: <span class="code-keyword">async</span> ({ doGenerate, params }) => {
+    <span class="code-keyword">const</span> cacheKey = JSON.stringify({
+      prompt: params.prompt,
+      model: params.modelId,
+    })
+
+    <span class="code-keyword">const</span> cached = cache.get(cacheKey)
+    <span class="code-keyword">if</span> (cached) {
+      console.log(<span class="code-string">'[CACHE HIT]'</span>)
+      <span class="code-keyword">return</span> cached
+    }
+
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> doGenerate()
+    cache.set(cacheKey, result)
+
+    <span class="code-comment">// TTL 기반 만료 (5분)</span>
+    setTimeout(() => cache.delete(cacheKey), 5 * 60 * 1000)
+
+    <span class="code-keyword">return</span> result
+  },
+}
+
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 4. RAG Middleware (검색 증강 생성 미들웨어)</span>
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+
+<span class="code-keyword">export const</span> ragMiddleware: LanguageModelV3Middleware = {
+  <span class="code-comment">// transformParams: 모델 호출 전에 매개변수를 변환</span>
+  <span class="code-comment">// 여기서 검색 결과를 프롬프트에 주입</span>
+  transformParams: <span class="code-keyword">async</span> ({ params }) => {
+    <span class="code-keyword">const</span> lastMessage = getLastUserMessage(params.prompt)
+    <span class="code-keyword">if</span> (!lastMessage) <span class="code-keyword">return</span> params
+
+    <span class="code-comment">// 벡터 DB에서 관련 문서 검색</span>
+    <span class="code-keyword">const</span> relevantDocs = <span class="code-keyword">await</span> searchVectorStore(lastMessage)
+
+    <span class="code-keyword">const</span> context = relevantDocs
+      .map(doc => `[${doc.metadata.source}] ${doc.content}`)
+      .join(<span class="code-string">'\n'</span>)
+
+    <span class="code-comment">// 사용자 메시지에 검색 결과를 추가</span>
+    <span class="code-keyword">return</span> injectContextToPrompt(params, context)
+  },
+}
+
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+<span class="code-comment">// 미들웨어 합성 — 여러 미들웨어를 순서대로 적용</span>
+<span class="code-comment">// ══════════════════════════════════════════════════</span>
+
+<span class="code-keyword">import</span> { anthropic } <span class="code-keyword">from</span> <span class="code-string">'@ai-sdk/anthropic'</span>
+
+<span class="code-keyword">export function</span> <span class="code-fn">createAgentModel</span>() {
+  <span class="code-keyword">return</span> wrapLanguageModel({
+    model: anthropic(<span class="code-string">'claude-sonnet-4-5'</span>),
+    middleware: [
+      loggingMiddleware,     <span class="code-comment">// 1번째: 모든 호출 로깅</span>
+      cacheMiddleware,       <span class="code-comment">// 2번째: 캐시 히트면 여기서 반환</span>
+      ragMiddleware,         <span class="code-comment">// 3번째: RAG 컨텍스트 주입</span>
+      guardrailMiddleware,   <span class="code-comment">// 4번째: 출력 필터링</span>
+    ],
+  })
+}</code></pre>
+
+    <h3>5.5 Layer 3: Agent Loop Callbacks (streamText / generateText)</h3>
+
+    <div class="term-card">
+      <div class="term">Agent Loop <span class="en-note">— 에이전트 루프. LLM이 도구를 호출하고, 결과를 받아 다시 추론하는 반복 과정</span></div>
+      <div class="meaning">streamText/generateText에 maxSteps를 설정하면, LLM → 도구 호출 → 결과 피드백 → LLM 재호출의 루프가 자동으로 실행됩니다.</div>
+    </div>
+
+    <p>Vercel AI SDK가 제공하는 콜백(Callback) 전체 목록:</p>
+
+    <table>
+      <thead>
+        <tr><th>콜백</th><th>시점</th><th>주요 매개변수</th><th>용도</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>onStepFinish</code></td>
+          <td>각 스텝 완료 후</td>
+          <td>stepType, text, toolCalls, usage, finishReason</td>
+          <td>스텝별 로깅, 동적 설정 변경</td>
+        </tr>
+        <tr>
+          <td><code>onFinish</code></td>
+          <td>전체 생성 완료 후</td>
+          <td>text, toolCalls, usage, finishReason, steps</td>
+          <td>최종 결과 기록, 비용 집계</td>
+        </tr>
+        <tr>
+          <td><code>onChunk</code></td>
+          <td>스트림 청크 수신 시</td>
+          <td>TextStreamPart</td>
+          <td>실시간 모니터링, UI 업데이트</td>
+        </tr>
+        <tr>
+          <td><code>onError</code></td>
+          <td>에러 발생 시</td>
+          <td>error</td>
+          <td>에러 핸들링, 알림</td>
+        </tr>
+        <tr>
+          <td><code>experimental_onToolCallStart</code></td>
+          <td>도구 실행 직전</td>
+          <td>toolCall, messages, abortSignal</td>
+          <td>도구 실행 관찰, 타이밍 측정</td>
+        </tr>
+        <tr>
+          <td><code>experimental_onToolCallFinish</code></td>
+          <td>도구 실행 직후</td>
+          <td>output, durationMs</td>
+          <td>도구 실행 결과 추적</td>
+        </tr>
+        <tr>
+          <td><code>prepareStep</code></td>
+          <td>각 스텝 실행 <strong>전</strong></td>
+          <td>현재 상태, 이전 스텝 정보</td>
+          <td>동적으로 도구/설정 변경</td>
+        </tr>
+        <tr>
+          <td><code>stopWhen</code></td>
+          <td>스텝 완료 후 판단</td>
+          <td>StopCondition 배열</td>
+          <td>종료 조건 정의 (최대 스텝, 커스텀 조건)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 6 ==================== -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-number">Chapter 6</div>
+    <h2>실전 구현 예시 — Next.js 프로젝트 기준</h2>
+    <p class="chapter-desc">Next.js + Vercel AI SDK 환경에서 실제로 사용할 수 있는 Hook 구현 패턴을 상세히 다룹니다.</p>
+
+    <h3>6.1 기본 에이전트 + 전체 Hook 연결</h3>
+
+    <p>이 예제는 지금까지 배운 모든 계층의 Hook을 하나의 Route Handler에서 연결하는 전체 구현입니다.</p>
+
+<pre><code><span class="lang-label">src/app/api/chat/route.ts</span>
+<span class="code-keyword">import</span> { streamText, tool, <span class="code-type">UIMessage</span> } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>
+<span class="code-keyword">import</span> { z } <span class="code-keyword">from</span> <span class="code-string">'zod'</span>
+<span class="code-keyword">import</span> { createAgentModel } <span class="code-keyword">from</span> <span class="code-string">'@/lib/ai/middleware'</span>
+
+<span class="code-comment">// ─── 도구 정의 ───</span>
+<span class="code-comment">// Zod Schema가 런타임 계약(Runtime Contract) 역할:</span>
+<span class="code-comment">// 모델이 잘못된 인자를 보내면 Zod가 파싱 단계에서 거부</span>
+<span class="code-keyword">const</span> tools = {
+  getWeather: tool({
+    description: <span class="code-string">'Get current weather for a city'</span>,
+    parameters: z.object({
+      city: z.string().min(1).describe(<span class="code-string">'도시 이름'</span>),
+    }),
+    execute: <span class="code-keyword">async</span> ({ city }) => {
+      <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> fetch(
+        `https://api.weather.example/v1/current?city=${encodeURIComponent(city)}`
+      )
+      <span class="code-keyword">return</span> response.json()
+    },
+  }),
+
+  searchDatabase: tool({
+    description: <span class="code-string">'Search internal database. READ-ONLY queries only.'</span>,
+    parameters: z.object({
+      query: z.string().min(1),
+      table: z.enum([<span class="code-string">'users'</span>, <span class="code-string">'orders'</span>, <span class="code-string">'products'</span>]),
+    }),
+    execute: <span class="code-keyword">async</span> ({ query, table }) => {
+      <span class="code-comment">// Tool Gateway 패턴: 도구 내부에서 추가 검증</span>
+      <span class="code-keyword">if</span> (/\b(DROP|DELETE|UPDATE|INSERT|ALTER)\b/i.test(query)) {
+        <span class="code-keyword">throw new</span> Error(<span class="code-string">'읽기 전용 쿼리만 허용됩니다'</span>)
+      }
+      <span class="code-keyword">return</span> <span class="code-keyword">await</span> db.query(query, table)
+    },
+  }),
+}
+
+<span class="code-comment">// ─── Route Handler ───</span>
+<span class="code-keyword">export async function</span> <span class="code-fn">POST</span>(req: Request) {
+  <span class="code-keyword">const</span> { messages }: { messages: UIMessage[] } = <span class="code-keyword">await</span> req.json()
+  <span class="code-keyword">const</span> requestId = crypto.randomUUID()
+
+  <span class="code-comment">// ─── 입력 검증 (Layer 1 보완) ───</span>
+  <span class="code-keyword">if</span> (!messages?.length) {
+    <span class="code-keyword">return</span> Response.json({ error: <span class="code-string">'Messages required'</span> }, { status: 400 })
+  }
+
+  <span class="code-keyword">const</span> lastMessage = messages[messages.length - 1]
+  <span class="code-keyword">if</span> (lastMessage.role !== <span class="code-string">'user'</span>) {
+    <span class="code-keyword">return</span> Response.json({ error: <span class="code-string">'Last message must be from user'</span> }, { status: 400 })
+  }
+
+  <span class="code-comment">// ─── 에이전트 실행 ───</span>
+  <span class="code-keyword">const</span> result = streamText({
+    <span class="code-comment">// Layer 2: AI SDK Middleware가 적용된 모델</span>
+    model: createAgentModel(),
+
+    system: `당신은 유능한 어시스턴트입니다.
+사용자의 질문에 정확하고 안전하게 답변하세요.
+데이터베이스 쿼리는 읽기 전용만 실행하세요.`,
+
+    messages,
+    tools,
+
+    <span class="code-comment">// maxSteps: 에이전트 루프의 최대 반복 횟수</span>
+    <span class="code-comment">// 너무 낮으면 복잡한 작업 중단, 너무 높으면 토큰 낭비</span>
+    maxSteps: 8,
+
+    <span class="code-comment">// ─── Layer 3: Agent Loop Callbacks ───</span>
+
+    <span class="code-comment">// onStepFinish: 각 스텝이 완료될 때 호출</span>
+    <span class="code-comment">// stepType: 'initial' | 'tool-result' | 'continue'</span>
+    onStepFinish: <span class="code-keyword">async</span> ({ stepType, text, toolCalls, usage }) => {
+      console.log(JSON.stringify({
+        event: <span class="code-string">'step_finished'</span>,
+        requestId,
+        stepType,
+        toolCalls: toolCalls?.map(tc => ({
+          name: tc.toolName,
+          args: tc.args,
+        })),
+        tokens: {
+          input: usage?.inputTokens,
+          output: usage?.outputTokens,
+        },
+      }))
+    },
+
+    <span class="code-comment">// onFinish: 전체 생성이 완료될 때 호출</span>
+    onFinish: <span class="code-keyword">async</span> ({ text, usage, steps, finishReason }) => {
+      console.log(JSON.stringify({
+        event: <span class="code-string">'generation_complete'</span>,
+        requestId,
+        totalSteps: steps.length,
+        totalTokens: usage?.totalTokens,
+        finishReason,
+        <span class="code-comment">// finishReason 종류:</span>
+        <span class="code-comment">//   'stop' - 정상 완료</span>
+        <span class="code-comment">//   'length' - 토큰 한도 초과</span>
+        <span class="code-comment">//   'tool-calls' - 도구 호출로 종료 (다음 스텝 필요)</span>
+        <span class="code-comment">//   'error' - 에러 발생</span>
+      }))
+
+      <span class="code-comment">// DB에 대화 기록 저장 (비동기, 응답 차단하지 않음)</span>
+      saveConversationLog(requestId, messages, text, usage).catch(console.error)
+    },
+
+    <span class="code-comment">// experimental_onToolCallStart: 도구 실행 직전 관찰</span>
+    experimental_onToolCallStart: ({ toolCall }) => {
+      console.log(JSON.stringify({
+        event: <span class="code-string">'tool_call_start'</span>,
+        requestId,
+        tool: toolCall.toolName,
+        args: toolCall.args,
+      }))
+    },
+
+    <span class="code-comment">// experimental_onToolCallFinish: 도구 실행 완료 후 관찰</span>
+    experimental_onToolCallFinish: ({ output, durationMs }) => {
+      console.log(JSON.stringify({
+        event: <span class="code-string">'tool_call_finish'</span>,
+        requestId,
+        durationMs,
+        outputSize: JSON.stringify(output).length,
+      }))
+    },
+
+    <span class="code-comment">// onError: 에러 발생 시</span>
+    onError: ({ error }) => {
+      console.error(JSON.stringify({
+        event: <span class="code-string">'generation_error'</span>,
+        requestId,
+        error: error.message,
+      }))
+    },
+  })
+
+  <span class="code-keyword">return</span> result.toDataStreamResponse()
+}</code></pre>
+
+    <h3>6.2 Tool Gateway 패턴 — 도구 호출 중앙 검증</h3>
+
+    <div class="term-card">
+      <div class="term">Tool Gateway <span class="en-note">— 도구 게이트웨이. API Gateway와 같은 개념을 도구 호출에 적용. 모든 도구 호출이 통과해야 하는 중앙 검증 계층</span></div>
+      <div class="meaning">도구 허용 목록(allowlist), Rate Limiting, 범위 제한(scope restriction), 승인 게이트, 구조화된 로깅을 한 곳에서 처리합니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">src/lib/ai/tool-gateway.ts</span>
+<span class="code-keyword">import</span> { tool } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>
+<span class="code-keyword">import</span> { z } <span class="code-keyword">from</span> <span class="code-string">'zod'</span>
+
+<span class="code-comment">// ─── 도구 호출 정책 정의 ───</span>
+<span class="code-keyword">interface</span> <span class="code-type">ToolPolicy</span> {
+  maxCallsPerSession: number    <span class="code-comment">// 세션당 최대 호출 횟수</span>
+  requiresApproval: boolean     <span class="code-comment">// 인간 승인 필요 여부</span>
+  allowedScopes: string[]       <span class="code-comment">// 허용된 범위 (예: 특정 테이블만)</span>
+  riskLevel: <span class="code-string">'low'</span> | <span class="code-string">'medium'</span> | <span class="code-string">'high'</span>
+}
+
+<span class="code-keyword">const</span> TOOL_POLICIES: Record&lt;string, ToolPolicy&gt; = {
+  getWeather:      { maxCallsPerSession: 10, requiresApproval: <span class="code-keyword">false</span>,
+                     allowedScopes: [<span class="code-string">'*'</span>], riskLevel: <span class="code-string">'low'</span> },
+  searchDatabase:  { maxCallsPerSession: 20, requiresApproval: <span class="code-keyword">false</span>,
+                     allowedScopes: [<span class="code-string">'users'</span>, <span class="code-string">'orders'</span>, <span class="code-string">'products'</span>], riskLevel: <span class="code-string">'medium'</span> },
+  sendEmail:       { maxCallsPerSession: 3,  requiresApproval: <span class="code-keyword">true</span>,
+                     allowedScopes: [<span class="code-string">'internal'</span>], riskLevel: <span class="code-string">'high'</span> },
+  deleteRecord:    { maxCallsPerSession: 0,  requiresApproval: <span class="code-keyword">true</span>,
+                     allowedScopes: [], riskLevel: <span class="code-string">'high'</span> },
+}
+
+<span class="code-comment">// ─── Gateway 클래스 ───</span>
+<span class="code-keyword">export class</span> <span class="code-type">ToolGateway</span> {
+  <span class="code-keyword">private</span> callCounts = <span class="code-keyword">new</span> Map&lt;string, number&gt;()
+  <span class="code-keyword">private</span> sessionId: string
+  <span class="code-keyword">private</span> userId: string
+
+  constructor(sessionId: string, userId: string) {
+    <span class="code-keyword">this</span>.sessionId = sessionId
+    <span class="code-keyword">this</span>.userId = userId
+  }
+
+  <span class="code-comment">// 도구 호출 전 검증</span>
+  <span class="code-keyword">async</span> <span class="code-fn">validate</span>(toolName: string, args: Record&lt;string, unknown&gt;):
+    Promise&lt;{ allowed: boolean; reason?: string }&gt; {
+
+    <span class="code-keyword">const</span> policy = TOOL_POLICIES[toolName]
+    <span class="code-keyword">if</span> (!policy) {
+      <span class="code-keyword">return</span> { allowed: <span class="code-keyword">false</span>, reason: `알 수 없는 도구: ${toolName}` }
+    }
+
+    <span class="code-comment">// 1) 호출 횟수 제한</span>
+    <span class="code-keyword">const</span> count = <span class="code-keyword">this</span>.callCounts.get(toolName) ?? 0
+    <span class="code-keyword">if</span> (count >= policy.maxCallsPerSession) {
+      <span class="code-keyword">return</span> {
+        allowed: <span class="code-keyword">false</span>,
+        reason: `${toolName} 세션당 최대 ${policy.maxCallsPerSession}회 호출 가능 (현재: ${count})`,
+      }
+    }
+
+    <span class="code-comment">// 2) 범위 제한 (예: 특정 테이블만 허용)</span>
+    <span class="code-keyword">if</span> (args.table && !policy.allowedScopes.includes(<span class="code-string">'*'</span>)) {
+      <span class="code-keyword">if</span> (!policy.allowedScopes.includes(args.table <span class="code-keyword">as</span> string)) {
+        <span class="code-keyword">return</span> {
+          allowed: <span class="code-keyword">false</span>,
+          reason: `${toolName}은 ${policy.allowedScopes.join(', ')} 범위만 허용`,
+        }
+      }
+    }
+
+    <span class="code-comment">// 3) 승인 필요 도구</span>
+    <span class="code-keyword">if</span> (policy.requiresApproval) {
+      <span class="code-keyword">const</span> approved = <span class="code-keyword">await</span> <span class="code-keyword">this</span>.checkApproval(toolName, args)
+      <span class="code-keyword">if</span> (!approved) {
+        <span class="code-keyword">return</span> { allowed: <span class="code-keyword">false</span>, reason: <span class="code-string">'인간 승인 대기 중'</span> }
+      }
+    }
+
+    <span class="code-comment">// 호출 카운트 증가</span>
+    <span class="code-keyword">this</span>.callCounts.set(toolName, count + 1)
+
+    <span class="code-comment">// 구조화된 감사 로그 (Audit Log)</span>
+    console.log(JSON.stringify({
+      event: <span class="code-string">'tool_gateway_pass'</span>,
+      sessionId: <span class="code-keyword">this</span>.sessionId,
+      userId: <span class="code-keyword">this</span>.userId,
+      tool: toolName,
+      args,
+      callNumber: count + 1,
+      riskLevel: policy.riskLevel,
+    }))
+
+    <span class="code-keyword">return</span> { allowed: <span class="code-keyword">true</span> }
+  }
+
+  <span class="code-keyword">private async</span> <span class="code-fn">checkApproval</span>(toolName: string, args: Record&lt;string, unknown&gt;):
+    Promise&lt;boolean&gt; {
+    <span class="code-comment">// 실제 구현에서는 WebSocket/Polling으로 관리자 승인 대기</span>
+    <span class="code-comment">// 또는 큐에 넣고 비동기 처리</span>
+    <span class="code-keyword">return false</span>
+  }
+}
+
+<span class="code-comment">// ─── Gateway를 적용한 도구 래퍼 ───</span>
+<span class="code-keyword">export function</span> <span class="code-fn">createGatedTool</span>&lt;T extends z.ZodObject&lt;any&gt;&gt;(
+  name: string,
+  config: {
+    description: string
+    parameters: T
+    execute: (args: z.infer&lt;T&gt;) => Promise&lt;unknown&gt;
+  },
+  gateway: ToolGateway,
+) {
+  <span class="code-keyword">return</span> tool({
+    description: config.description,
+    parameters: config.parameters,
+    execute: <span class="code-keyword">async</span> (args) => {
+      <span class="code-comment">// 게이트웨이 검증을 도구 실행 전에 삽입</span>
+      <span class="code-keyword">const</span> validation = <span class="code-keyword">await</span> gateway.validate(name, args)
+      <span class="code-keyword">if</span> (!validation.allowed) {
+        <span class="code-keyword">throw new</span> Error(`[GATEWAY DENIED] ${validation.reason}`)
+      }
+      <span class="code-keyword">return</span> config.execute(args)
+    },
+  })
+}</code></pre>
+
+    <h3>6.3 Proposal-Before-Execution 패턴</h3>
+
+    <div class="term-card">
+      <div class="term">Proposal Before Execution <span class="en-note">— 실행 전 제안. 에이전트가 바로 행동하지 않고, 먼저 "이렇게 할 예정입니다"라고 구조화된 제안서를 제출하는 패턴</span></div>
+      <div class="meaning">"Earn write access(쓰기 권한을 획득)" 모델 — 에이전트가 먼저 계획을 세우고, 검증을 통과한 후에만 실제 시스템에 대한 실행 권한을 얻습니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">src/lib/ai/proposal-pattern.ts</span>
+<span class="code-keyword">import</span> { generateText, streamText, tool } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>
+<span class="code-keyword">import</span> { z } <span class="code-keyword">from</span> <span class="code-string">'zod'</span>
+
+<span class="code-comment">// ─── Step 1: 제안 도구 (읽기 전용) ───</span>
+<span class="code-keyword">const</span> proposalTools = {
+  proposeAction: tool({
+    description: `Propose an action to be taken.
+Do NOT execute — only describe what you would do and why.`,
+    parameters: z.object({
+      actionType: z.enum([<span class="code-string">'query'</span>, <span class="code-string">'email'</span>, <span class="code-string">'update'</span>, <span class="code-string">'delete'</span>]),
+      target: z.string().describe(<span class="code-string">'대상 리소스'</span>),
+      reason: z.string().describe(<span class="code-string">'이 행동이 필요한 이유'</span>),
+      details: z.record(z.unknown()).describe(<span class="code-string">'실행에 필요한 구체적 매개변수'</span>),
+    }),
+    execute: <span class="code-keyword">async</span> (proposal) => {
+      <span class="code-comment">// 실행하지 않고 제안서만 반환</span>
+      <span class="code-keyword">return</span> {
+        status: <span class="code-string">'proposed'</span>,
+        proposal,
+        message: <span class="code-string">'제안이 생성되었습니다. 검증 후 실행됩니다.'</span>,
+      }
+    },
+  }),
+}
+
+<span class="code-comment">// ─── Step 2: 제안 검증 ───</span>
+<span class="code-keyword">async function</span> <span class="code-fn">validateProposal</span>(proposal: {
+  actionType: string
+  target: string
+  reason: string
+  details: Record&lt;string, unknown&gt;
+}): Promise&lt;{ approved: boolean; reason: string }&gt; {
+
+  <span class="code-comment">// 규칙 기반 검증 (Computational Guide)</span>
+  <span class="code-keyword">if</span> (proposal.actionType === <span class="code-string">'delete'</span>) {
+    <span class="code-keyword">return</span> { approved: <span class="code-keyword">false</span>, reason: <span class="code-string">'삭제 작업은 자동 승인 불가'</span> }
+  }
+
+  <span class="code-keyword">if</span> (proposal.actionType === <span class="code-string">'email'</span> && !proposal.target.endsWith(<span class="code-string">'@company.com'</span>)) {
+    <span class="code-keyword">return</span> { approved: <span class="code-keyword">false</span>, reason: <span class="code-string">'외부 이메일 발송은 관리자 승인 필요'</span> }
+  }
+
+  <span class="code-comment">// AI 기반 검증 (Inferential Guide)</span>
+  <span class="code-keyword">const</span> { text } = <span class="code-keyword">await</span> generateText({
+    model: anthropic(<span class="code-string">'claude-haiku-4-5'</span>),
+    prompt: `다음 제안이 안전하고 적절한지 판단하세요.
+제안: ${JSON.stringify(proposal)}
+"APPROVED" 또는 "DENIED: 사유"로만 답변하세요.`,
+  })
+
+  <span class="code-keyword">if</span> (text.startsWith(<span class="code-string">'APPROVED'</span>)) {
+    <span class="code-keyword">return</span> { approved: <span class="code-keyword">true</span>, reason: <span class="code-string">'AI 검증 통과'</span> }
+  }
+
+  <span class="code-keyword">return</span> { approved: <span class="code-keyword">false</span>, reason: text }
+}
+
+<span class="code-comment">// ─── Step 3: 검증된 제안만 실행 ───</span>
+<span class="code-keyword">export async function</span> <span class="code-fn">executeWithProposal</span>(userMessage: string) {
+  <span class="code-comment">// Phase 1: 에이전트가 제안 생성 (실행 없음)</span>
+  <span class="code-keyword">const</span> proposalResult = <span class="code-keyword">await</span> generateText({
+    model: anthropic(<span class="code-string">'claude-sonnet-4-5'</span>),
+    tools: proposalTools,
+    maxSteps: 3,
+    prompt: `사용자 요청: "${userMessage}"
+이 요청을 처리하기 위해 필요한 행동을 proposeAction 도구로 제안하세요.
+직접 실행하지 마세요.`,
+  })
+
+  <span class="code-comment">// Phase 2: 제안 검증</span>
+  <span class="code-keyword">for</span> (<span class="code-keyword">const</span> step <span class="code-keyword">of</span> proposalResult.steps) {
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> toolCall <span class="code-keyword">of</span> step.toolCalls) {
+      <span class="code-keyword">const</span> validation = <span class="code-keyword">await</span> validateProposal(toolCall.args)
+      <span class="code-keyword">if</span> (!validation.approved) {
+        <span class="code-keyword">return</span> { status: <span class="code-string">'denied'</span>, reason: validation.reason }
+      }
+    }
+  }
+
+  <span class="code-comment">// Phase 3: 승인된 제안만 실제 실행</span>
+  <span class="code-keyword">return</span> executeApprovedProposals(proposalResult.steps)
+}</code></pre>
+
+    <h3>6.4 prepareStep으로 동적 에이전트 루프 제어</h3>
+
+    <div class="term-card">
+      <div class="term">prepareStep <span class="en-note">— 스텝 준비. 각 스텝 실행 전에 호출되어 해당 스텝의 설정을 동적으로 변경할 수 있는 Hook</span></div>
+      <div class="meaning">이전 스텝의 결과에 따라 다음 스텝에서 사용할 도구, 모델 설정, 시스템 프롬프트 등을 동적으로 조정합니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">src/lib/ai/dynamic-agent.ts</span>
+<span class="code-keyword">import</span> { streamText, tool, stepCountIs } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>
+
+<span class="code-keyword">const</span> result = <span class="code-keyword">await</span> streamText({
+  model: anthropic(<span class="code-string">'claude-sonnet-4-5'</span>),
+  messages,
+  tools: { search, analyze, summarize, sendReport },
+
+  <span class="code-comment">// stopWhen: 에이전트 루프 종료 조건</span>
+  <span class="code-comment">// stepCountIs(N): N번째 스텝 후 자동 종료 → 무한 루프 방지</span>
+  stopWhen: stepCountIs(10),
+
+  <span class="code-comment">// prepareStep: 각 스텝 실행 전에 호출</span>
+  <span class="code-comment">// 이전 스텝 결과를 기반으로 다음 스텝 설정을 동적 변경</span>
+  prepareStep: <span class="code-keyword">async</span> ({ stepNumber, previousSteps }) => {
+    <span class="code-keyword">const</span> lastStep = previousSteps[previousSteps.length - 1]
+
+    <span class="code-comment">// 패턴: 처음 3스텝은 검색 도구만, 이후 분석/요약 도구 추가</span>
+    <span class="code-keyword">if</span> (stepNumber &lt;= 3) {
+      <span class="code-keyword">return</span> {
+        toolChoice: { type: <span class="code-string">'auto'</span> },
+        activeTools: [<span class="code-string">'search'</span>],     <span class="code-comment">// 검색 단계</span>
+      }
+    }
+
+    <span class="code-comment">// 검색이 충분하면 분석 단계로 전환</span>
+    <span class="code-keyword">if</span> (stepNumber &lt;= 6) {
+      <span class="code-keyword">return</span> {
+        activeTools: [<span class="code-string">'search'</span>, <span class="code-string">'analyze'</span>],  <span class="code-comment">// 분석 추가</span>
+      }
+    }
+
+    <span class="code-comment">// 마지막 단계: 요약과 보고서 전송</span>
+    <span class="code-keyword">return</span> {
+      activeTools: [<span class="code-string">'summarize'</span>, <span class="code-string">'sendReport'</span>],
+      toolChoice: { type: <span class="code-string">'auto'</span> },
+    }
+  },
+
+  onStepFinish: ({ stepType, toolCalls }) => {
+    console.log(`Step completed: ${stepType}, tools: ${
+      toolCalls?.map(tc => tc.toolName).join(<span class="code-string">', '</span>) || <span class="code-string">'none'</span>
+    }`)
+  },
+})</code></pre>
+
+    <h3>6.5 클라이언트 사이드 Hook — useChat</h3>
+
+    <div class="term-card">
+      <div class="term">useChat <span class="en-note">— Vercel AI SDK의 React Hook. 채팅 인터페이스의 전체 상태(메시지, 입력, 로딩, 에러)를 관리</span></div>
+      <div class="meaning">서버와의 스트리밍 통신, 메시지 배열 관리, 폼 제출 처리를 자동화합니다. 클라이언트 사이드 도구 실행(onToolCall)도 지원합니다.</div>
+    </div>
+
+<pre><code><span class="lang-label">src/components/chat.tsx</span>
+<span class="code-string">'use client'</span>
+
+<span class="code-keyword">import</span> { useChat } <span class="code-keyword">from</span> <span class="code-string">'@ai-sdk/react'</span>
+<span class="code-keyword">import</span> { useState } <span class="code-keyword">from</span> <span class="code-string">'react'</span>
+
+<span class="code-keyword">export function</span> <span class="code-fn">ChatInterface</span>() {
+  <span class="code-keyword">const</span> [pendingApproval, setPendingApproval] = useState&lt;null | {
+    toolName: string
+    args: Record&lt;string, unknown&gt;
+    resolve: (approved: boolean) =&gt; void
+  }&gt;(null)
+
+  <span class="code-keyword">const</span> {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    error,
+    addToolResult,
+  } = useChat({
+    api: <span class="code-string">'/api/chat'</span>,
+    maxSteps: 5,
+
+    <span class="code-comment">// ─── 클라이언트 사이드 도구 실행 Hook ───</span>
+    <span class="code-comment">// 서버가 아닌 클라이언트에서 실행해야 하는 도구</span>
+    <span class="code-comment">// (예: 브라우저 위치 정보, 클립보드 접근)</span>
+    onToolCall: <span class="code-keyword">async</span> ({ toolCall }) => {
+      <span class="code-keyword">if</span> (toolCall.toolName === <span class="code-string">'getUserLocation'</span>) {
+        <span class="code-comment">// 브라우저 Geolocation API 호출</span>
+        <span class="code-keyword">const</span> pos = <span class="code-keyword">await new</span> Promise&lt;GeolocationPosition&gt;((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        )
+        <span class="code-keyword">return</span> { lat: pos.coords.latitude, lng: pos.coords.longitude }
+      }
+
+      <span class="code-keyword">if</span> (toolCall.toolName === <span class="code-string">'confirmAction'</span>) {
+        <span class="code-comment">// Human-in-the-Loop: 사용자에게 승인 요청</span>
+        <span class="code-keyword">return new</span> Promise((resolve) => {
+          setPendingApproval({
+            toolName: toolCall.args.actionName,
+            args: toolCall.args,
+            resolve: (approved) => {
+              setPendingApproval(null)
+              resolve({ approved, confirmedAt: <span class="code-keyword">new</span> Date().toISOString() })
+            },
+          })
+        })
+      }
+    },
+
+    <span class="code-comment">// ─── 에러 핸들링 Hook ───</span>
+    onError: (error) => {
+      console.error(<span class="code-string">'Chat error:'</span>, error)
+    },
+
+    <span class="code-comment">// ─── 응답 완료 Hook ───</span>
+    onFinish: (message) => {
+      console.log(<span class="code-string">'AI response complete:'</span>, message.id)
+    },
+  })
+
+  <span class="code-keyword">return</span> (
+    &lt;div&gt;
+      {<span class="code-comment">/* 메시지 렌더링 */</span>}
+      {messages.map(m =&gt; (
+        &lt;div key={m.id}&gt;{m.role}: {m.content}&lt;/div&gt;
+      ))}
+
+      {<span class="code-comment">/* Human-in-the-Loop 승인 UI */</span>}
+      {pendingApproval && (
+        &lt;div className=<span class="code-string">"approval-dialog"</span>&gt;
+          &lt;p&gt;에이전트가 <strong>{pendingApproval.toolName}</strong> 실행을 요청합니다.&lt;/p&gt;
+          &lt;pre&gt;{JSON.stringify(pendingApproval.args, null, 2)}&lt;/pre&gt;
+          &lt;button onClick={() =&gt; pendingApproval.resolve(<span class="code-keyword">true</span>)}&gt;승인&lt;/button&gt;
+          &lt;button onClick={() =&gt; pendingApproval.resolve(<span class="code-keyword">false</span>)}&gt;거부&lt;/button&gt;
+        &lt;/div&gt;
+      )}
+
+      {<span class="code-comment">/* 입력 폼 */</span>}
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;input value={input} onChange={handleInputChange} /&gt;
+        &lt;button type=<span class="code-string">"submit"</span> disabled={isLoading}&gt;전송&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+  </section>
+
+  <!-- ==================== CHAPTER 7 ==================== -->
+  <section class="chapter" id="ch7">
+    <div class="chapter-number">Chapter 7</div>
+    <h2>Anti-Pattern과 Best Practice</h2>
+    <p class="chapter-desc">실패 사례에서 배우는 Hook 설계의 올바른 방향과 피해야 할 함정입니다.</p>
+
+    <h3>7.1 주요 Anti-Pattern (피해야 할 패턴)</h3>
+
+    <div class="info-box danger">
+      <strong>Anti-Pattern 1: Tool Bloat (도구 과잉)</strong>
+      <span class="en-note">— 도구가 너무 많아 에이전트의 선택 품질이 저하되는 현상</span><br><br>
+      에이전트에 30-50개 도구를 제공하면 성능이 급감합니다.
+      <strong>프로덕션에서는 20개 미만</strong>이 권장됩니다.
+      Vercel은 80%의 도구를 제거하여 에이전트 성능을 향상시켰습니다.<br><br>
+      <strong>해결:</strong> 도구를 카테고리별로 분리하고, <code>prepareStep</code>으로 단계에 따라 활성 도구를 동적으로 변경
+    </div>
+
+    <div class="info-box danger">
+      <strong>Anti-Pattern 2: All-or-Nothing Autonomy (전부-아니면-전무 자율성)</strong>
+      <span class="en-note">— 승인 게이트 없이 에이전트에 완전한 자율성을 부여하는 것</span><br><br>
+      고위험 결정(결제, 삭제, 외부 커뮤니케이션)에는 반드시 <strong>Approval Gate(승인 게이트)</strong>를 배치해야 합니다.
+      Replit의 <code>DROP DATABASE</code> 사건이 대표적 사례입니다.<br><br>
+      <strong>해결:</strong> Tool Gateway의 <code>requiresApproval</code> 정책, LangGraph <code>interrupt()</code>, 클라이언트 <code>onToolCall</code> 승인 UI
+    </div>
+
+    <div class="info-box danger">
+      <strong>Anti-Pattern 3: Compounding Error Cascade (복합 에러 연쇄)</strong>
+      <span class="en-note">— 멀티 스텝에서 에러가 누적 곱으로 증폭되는 현상. 0.85^10 = 0.197</span><br><br>
+      단계당 85% 정확도라도, 10단계 워크플로의 전체 성공률은 약 20%입니다.<br><br>
+      <strong>해결:</strong> 각 스텝 후 검증 Hook(<code>onStepFinish</code>), 실패 시 조기 종료(<code>stopWhen</code>), 체크포인트 저장
+    </div>
+
+    <div class="info-box danger">
+      <strong>Anti-Pattern 4: Hook Proliferation (Hook 비대화)</strong>
+      <span class="en-note">— 너무 많은 Hook/규칙이 쌓여 오히려 성능을 저해하는 현상</span><br><br>
+      HumanLayer는 <code>AGENTS.md</code>를 60줄 이내로 유지합니다.
+      "Every line is competing for attention(모든 줄이 주의력을 두고 경쟁한다)".<br><br>
+      <strong>해결:</strong> 각 Hook이 "특정 과거 실패 또는 외부 제약"에 근거하는지 정기적으로 검토. 모델이 개선되면 불필요한 Hook 제거
+    </div>
+
+    <div class="info-box danger">
+      <strong>Anti-Pattern 5: Context Drift (컨텍스트 드리프트)</strong>
+      <span class="en-note">— 기저 데이터가 변경되었는데 하네스가 이를 감지하지 못해 에이전트가 오래된 정보로 동작하는 현상</span><br><br>
+      엔터프라이즈 AI 실패의 <strong>65%</strong>가 컨텍스트 드리프트에서 발생합니다.
+      스키마 변경, API 버전 업데이트, 비즈니스 규칙 변경 등이 원인입니다.<br><br>
+      <strong>해결:</strong> <code>FileChanged</code> Hook으로 설정 파일 변경 감지, 정기적 하네스 감사(audit), 스키마 버전 관리
+    </div>
+
+    <h3>7.2 Best Practice 체크리스트</h3>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>실천 사항</th><th>근거</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>PostToolUse에 테스트/린트 자동 실행</strong></td>
+          <td>Anthropic 공식 권장 "가장 높은 레버리지"</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Rust 기반 린터 사용</strong> (Oxlint, Biome, Ruff)</td>
+          <td>Node.js 대비 50-100x 빠름 → Hook 지연 최소화</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Hook 실행 시간 2초 이내, 목표 500ms</strong></td>
+          <td>느린 Hook = 느린 에이전트. 병목 방지</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>"Success is silent, failures are verbose"</strong> 원칙</td>
+          <td>성공 시 피드백 없음, 실패 시 상세 에러로 자기 교정 유도</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>래칫(Ratchet) 패턴 적용</strong></td>
+          <td>각 실패를 영구적 규칙/Hook으로 전환</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>도구 20개 미만 유지</strong></td>
+          <td>Vercel 사례: 80% 도구 제거 → 성능 향상</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Zod Schema로 도구 입력 런타임 검증</strong></td>
+          <td>"스키마를 통과 못 하면 도구가 실행되지 않는다"</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>고위험 도구에 승인 게이트 필수</strong></td>
+          <td>DELETE, 결제, 외부 커뮤니케이션 등</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>maxSteps/stopWhen으로 루프 상한 설정</strong></td>
+          <td>무한 루프 방지, 토큰 비용 제어</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>정기적 Hook 감사(audit)</strong></td>
+          <td>모델 개선으로 불필요해진 Hook은 기술 부채</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 8 ==================== -->
+  <section class="chapter" id="ch8">
+    <div class="chapter-number">Chapter 8</div>
+    <h2>학술 연구 동향과 보안 고려사항</h2>
+    <p class="chapter-desc">최신 학술 연구에서 드러난 AI 에이전트 Hook/보안의 미해결 과제와 연구 방향입니다.</p>
+
+    <h3>8.1 최신 연구 동향 (2025-2026)</h3>
+
+    <h4>OWASP Top 10 for Agentic Applications (2025.12)</h4>
+    <p>
+      OWASP(Open Worldwide Application Security Project)는 2025년 12월,
+      도구 접근 권한을 가진 AI 에이전트에 특화된 <strong>Top 10 위험 목록</strong>을 발표했습니다.
+      이는 기존 LLM Top 10과 별도로, 에이전트의 새로운 공격 표면을 정의합니다.
+    </p>
+    <ul>
+      <li><span class="en">Prompt Injection</span><span class="en-note">(프롬프트 인젝션 — 악의적 입력으로 에이전트의 행동을 조작)</span></li>
+      <li><span class="en">Excessive Agency</span><span class="en-note">(과도한 권한 — 에이전트에 필요 이상의 도구/권한 부여)</span></li>
+      <li><span class="en">Insecure Output Handling</span><span class="en-note">(안전하지 않은 출력 처리 — 에이전트 출력을 검증 없이 실행)</span></li>
+      <li><span class="en">Supply Chain Attacks</span><span class="en-note">(공급망 공격 — 오염된 도구/플러그인을 통한 공격)</span></li>
+    </ul>
+
+    <h4>ETDI — 암호학적 도구 메타데이터 서명</h4>
+    <div class="term-card">
+      <div class="term">ETDI (Extended Tool Definition Interface) <span class="en-note">— 확장 도구 정의 인터페이스. 도구 호출의 무결성을 암호학적으로 보장하는 프로토콜</span></div>
+      <div class="meaning">도구의 스키마, 권한, 설명이 암호학적으로 서명되어, 도구가 중간에 변조되지 않았음을 검증할 수 있습니다. MCP(Model Context Protocol) 생태계에서의 도구 공급망 보안을 강화합니다.</div>
+    </div>
+
+    <h4>비구성성(Non-compositionality) 문제</h4>
+    <p>
+      <strong>개별적으로 안전한 에이전트들이 조합되면 안전하지 않을 수 있습니다.</strong>
+      arXiv 논문(2505.02077)에 따르면, 멀티 에이전트 시스템에서는:
+    </p>
+    <ul>
+      <li><span class="en">Covert Collusion</span><span class="en-note">(은밀한 공모)</span> — 에이전트들이 의도치 않게 협력하여 보안 정책을 우회</li>
+      <li><span class="en">Cascading Failures</span><span class="en-note">(연쇄 실패)</span> — 한 에이전트의 오류가 다른 에이전트로 전파</li>
+      <li><span class="en">Emergent Behaviors</span><span class="en-note">(창발적 행동)</span> — 개별 에이전트에서는 관찰되지 않던 예상치 못한 행동 출현</li>
+    </ul>
+
+    <div class="info-box insight">
+      <strong>Hook 관점에서의 시사점</strong>
+      이는 개별 에이전트에만 Hook을 걸어서는 충분하지 않음을 의미합니다.
+      멀티 에이전트 시스템에서는 <strong>에이전트 간 상호작용</strong>에도 Hook이 필요합니다.
+      Claude Code의 <code>SubagentStart</code>, <code>SubagentStop</code>, <code>TaskCreated</code> 이벤트가
+      이 문제를 해결하려는 초기 시도입니다.
+    </div>
+
+    <h3>8.2 보안 설계 원칙</h3>
+
+    <table>
+      <thead>
+        <tr><th>원칙</th><th>영어 / 한국어</th><th>Hook 적용 방법</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>최소 권한</td>
+          <td>Principle of Least Privilege<br><span class="en-note">최소 권한 원칙 — 작업에 필요한 최소한의 권한만 부여</span></td>
+          <td>Tool Gateway의 <code>allowedScopes</code>, <code>prepareStep</code>의 <code>activeTools</code></td>
+        </tr>
+        <tr>
+          <td>심층 방어</td>
+          <td>Defense in Depth<br><span class="en-note">심층 방어 — 여러 계층의 보안을 중첩하여 단일 실패 지점 제거</span></td>
+          <td>3계층 아키텍처 (Constraint → Feedback → Quality Gate)</td>
+        </tr>
+        <tr>
+          <td>안전한 실패</td>
+          <td>Fail-Safe Defaults<br><span class="en-note">안전한 기본값 — 에러 발생 시 더 안전한 쪽으로 동작</span></td>
+          <td>PreToolUse에서 검증 실패 시 <code>deny</code> (허용이 아닌 차단이 기본)</td>
+        </tr>
+        <tr>
+          <td>감사 추적</td>
+          <td>Audit Trail<br><span class="en-note">감사 추적 — 모든 행동과 결정의 기록을 남겨 사후 분석 가능하게 함</span></td>
+          <td>Logging Middleware, <code>onStepFinish</code>에서 구조화된 로그 기록</td>
+        </tr>
+        <tr>
+          <td>인간 감독</td>
+          <td>Human Oversight<br><span class="en-note">인간 감독 — 고위험 결정에 인간의 최종 판단을 유지</span></td>
+          <td>Approval Gate, <code>interrupt()</code>, <code>requiresApproval</code> 정책</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== CHAPTER 9 ==================== -->
+  <section class="chapter" id="ch9">
+    <div class="chapter-number">Chapter 9</div>
+    <h2>참고자료</h2>
+    <p class="chapter-desc">이 교육자료의 근거가 된 자료 목록입니다. 모두 공식 문서 또는 검증된 출처입니다.</p>
+
+    <h3>공식 문서</h3>
+    <div class="sources">
+      <ul>
+        <li><a href="https://code.claude.com/docs/en/hooks" target="_blank">Claude Code — Hooks Reference</a> (Anthropic 공식)</li>
+        <li><a href="https://openai.github.io/openai-agents-python/ref/lifecycle/" target="_blank">OpenAI Agents SDK — Lifecycle Hooks</a> (OpenAI 공식)</li>
+        <li><a href="https://ai-sdk.dev/docs/ai-sdk-core/middleware" target="_blank">Vercel AI SDK — Language Model Middleware</a> (Vercel 공식)</li>
+        <li><a href="https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text" target="_blank">Vercel AI SDK — streamText Reference</a> (Vercel 공식)</li>
+        <li><a href="https://docs.langchain.com/oss/python/langgraph/interrupts" target="_blank">LangGraph — Interrupts (Human-in-the-Loop)</a> (LangChain 공식)</li>
+        <li><a href="https://openai.github.io/openai-agents-python/guardrails/" target="_blank">OpenAI Agents SDK — Guardrails</a> (OpenAI 공식)</li>
+      </ul>
+    </div>
+
+    <h3>기술 블로그 및 가이드 (검증된 출처)</h3>
+    <div class="sources">
+      <ul>
+        <li><a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank">Addy Osmani — Agent Harness Engineering</a> (Google Chrome 팀)</li>
+        <li><a href="https://martinfowler.com/articles/harness-engineering.html" target="_blank">Birgitta Bockeler — Harness Engineering for Coding Agent Users</a> (Martin Fowler / Thoughtworks)</li>
+        <li><a href="https://openai.com/index/harness-engineering/" target="_blank">OpenAI — Harness Engineering: Leveraging Codex</a> (OpenAI 공식 블로그)</li>
+        <li><a href="https://www.augmentcode.com/guides/harness-engineering-ai-coding-agents" target="_blank">Augment Code — Harness Engineering for AI Coding Agents</a></li>
+        <li><a href="https://aakashgupta.medium.com/2025-was-agents-2026-is-agent-harnesses-heres-why-that-changes-everything-073e9877655e" target="_blank">Aakash Gupta — 2025 Was Agents, 2026 Is Agent Harnesses</a></li>
+        <li><a href="https://atlan.com/know/agent-harness-failures-anti-patterns/" target="_blank">Atlan — AI Agent Harness Failures: 13 Anti-Patterns</a></li>
+        <li><a href="https://nyosegawa.com/en/posts/harness-engineering-best-practices-2026/" target="_blank">Sakasegawa — Harness Engineering Best Practices 2026</a></li>
+        <li><a href="https://github.com/vercel/ai/issues/4954" target="_blank">Vercel AI SDK — Hookable Control Over Agent Loop Iterations (GitHub Issue)</a></li>
+      </ul>
+    </div>
+
+    <h3>학술 논문</h3>
+    <div class="sources">
+      <ul>
+        <li><a href="https://arxiv.org/html/2602.17753v1" target="_blank">The 2025 AI Agent Index</a> — 배포된 에이전트 시스템의 기술/안전 기능 문서화</li>
+        <li><a href="https://arxiv.org/html/2601.12560v1" target="_blank">Agentic AI: Architectures, Taxonomies, and Evaluation</a> — LLM 에이전트 아키텍처 분류 체계</li>
+        <li><a href="https://arxiv.org/html/2505.02077v2" target="_blank">Open Challenges in Multi-Agent Security</a> — 멀티 에이전트 보안의 비구성성 문제</li>
+        <li><a href="https://arxiv.org/html/2603.11088v1" target="_blank">The Attack and Defense Landscape of Agentic AI</a> — 에이전트 AI 공격/방어 종합 서베이</li>
+      </ul>
+    </div>
+
+    <h3>GitHub 리소스</h3>
+    <div class="sources">
+      <ul>
+        <li><a href="https://github.com/ai-boost/awesome-harness-engineering" target="_blank">awesome-harness-engineering</a> — 하네스 엔지니어링 도구, 패턴, 평가, 메모리, MCP, 관측성 등 정리</li>
+        <li><a href="https://github.com/vercel/ai" target="_blank">Vercel AI SDK</a> — TypeScript용 AI 개발 도구 키트 (월 2000만+ 다운로드)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="text-align:center; padding:40px 0 60px; color:#94a3b8; font-size:0.85rem;">
+    <p>AI Agent Harness Engineering: Hooks Complete Guide</p>
+    <p>2026.05 | 신뢰성 있는 공식 문서 및 학술 자료 기반</p>
+  </footer>
+
+</div>
+</body>
+</html>
