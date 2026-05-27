@@ -869,6 +869,401 @@ Next.js 15 기반 대시보드 앱. TypeScript strict, pnpm 패키지 매니저.
     <div class="chapter-number">Chapter 3</div>
     <h2>2계층: Hook 시스템 구축</h2>
     <p class="chapter-desc">프롬프트는 '부탁'이고, Hook은 '법률'입니다. 결정론적 강제의 핵심인 Hook을 직접 만들어봅니다.</p>
+
+    <!-- Section 3.1 -->
+    <h3>3.1 Hook 라이프사이클</h3>
+
+    <p>Hook은 에이전트의 동작 흐름 중 특정 시점에 자동으로 실행되는 코드입니다. 아래 다이어그램은 세션 시작부터 종료까지 각 Hook이 언제 개입하는지를 보여줍니다.</p>
+
+    <div class="diagram">세션 시작
+    │
+SessionStart Hook ──→ 프로젝트 정보 주입
+    │
+사용자 메시지 ──→ 에이전트 판단 ──→ 도구 호출 결정
+                                        │
+                                  PreToolUse Hook
+                                   │          │
+                                 allow       deny ──→ 차단 (도구 실행 안 됨)
+                                   │
+                                도구 실행
+                                   │
+                              PostToolUse Hook ──→ 피드백 (에이전트에 재주입)
+                                   │
+                              결과 반환 ──→ 다음 턴 또는 Stop
+                                                      │
+                                              Notification Hook</div>
+
+    <p><strong>SessionStart</strong>는 세션이 열릴 때 한 번, <strong>PreToolUse</strong>는 도구 실행 직전, <strong>PostToolUse</strong>는 도구 실행 직후, <strong>Notification</strong>은 세션 종료 시 호출됩니다. 이 네 시점을 조합하면 에이전트의 전체 동작을 결정론적으로 제어할 수 있습니다.</p>
+
+    <!-- Section 3.2 -->
+    <h3>3.2 5가지 핸들러 유형</h3>
+
+    <p>Hook이 실행할 수 있는 핸들러<span class="en-note">— Handler. Hook이 트리거될 때 실제로 수행되는 동작의 유형</span>는 5가지입니다.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>유형</th>
+          <th>설명</th>
+          <th>사용 시점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>command</code></td>
+          <td>셸 스크립트 실행</td>
+          <td>린트, 파괴적 명령 차단, 파일 검증</td>
+        </tr>
+        <tr>
+          <td><code>http</code></td>
+          <td>HTTP 엔드포인트 호출</td>
+          <td>외부 서비스 연동, 웹훅 알림</td>
+        </tr>
+        <tr>
+          <td><code>mcp_tool</code></td>
+          <td>MCP 서버의 도구 호출</td>
+          <td>MCP 기반 검증, 외부 시스템 연동</td>
+        </tr>
+        <tr>
+          <td><code>prompt</code></td>
+          <td>LLM에 프롬프트 전달</td>
+          <td>AI 기반 판단 (코드 리뷰 등)</td>
+        </tr>
+        <tr>
+          <td><code>agent</code></td>
+          <td>서브에이전트 실행</td>
+          <td>복잡한 다단계 검증</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 3.3 -->
+    <h3>3.3 settings.json 구조</h3>
+
+    <p>Hook은 <code>~/.claude/settings.json</code> 또는 프로젝트의 <code>.claude/settings.json</code>에 등록합니다. 기본 구조는 다음과 같습니다.</p>
+
+    <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-dangerous.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+    <div class="term-card">
+      <div class="term">matcher <span class="en-note">— 매처. Hook이 실행될 도구를 지정하는 패턴. "Bash"는 Bash 도구에만, "Edit|Write"는 편집/쓰기 도구 둘 다에 적용. 정규식(RegExp) 지원</span></div>
+    </div>
+
+    <p><strong>matcher</strong>는 도구 이름을 매칭하는 패턴입니다. <strong>timeout</strong>은 초 단위로, 시간을 초과하면 Hook이 무시됩니다. <strong>type</strong>은 위 5가지 핸들러 유형 중 하나를 지정합니다.</p>
+
+    <!-- Section 3.4 -->
+    <h3>3.4 실습 3 — 파괴적 명령 차단 Hook</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">3</div>
+        <div class="workshop-title">파괴적 명령 차단 Hook</div>
+      </div>
+      <div class="workshop-goal">목표: rm -rf /, DROP TABLE, git push --force main을 차단하는 PreToolUse Hook 셸 스크립트를 작성합니다.</div>
+
+      <h4>Step A: 파일 생성</h4>
+      <pre><code><span class="lang-label">BASH</span>mkdir -p ~/.claude/hooks
+touch ~/.claude/hooks/block-dangerous.sh
+chmod +x ~/.claude/hooks/block-dangerous.sh</code></pre>
+
+      <h4>Step B: 스크립트 작성</h4>
+      <pre><code><span class="lang-label">BASH</span><span class="code-comment">#!/bin/bash</span>
+<span class="code-comment"># PreToolUse Hook: 파괴적 명령 차단</span>
+<span class="code-comment"># stdin으로 도구 호출 정보가 JSON으로 전달됨</span>
+INPUT=$(cat /dev/stdin)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+if [ -z "$COMMAND" ]; then
+  exit 0
+fi
+
+BLOCKED=""
+
+<span class="code-comment"># rm -rf / 또는 rm -rf ~ (루트/홈 전체 삭제만 차단)</span>
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*\s+)+(-[a-zA-Z]*f[a-zA-Z]*\s+)*(\/$|\/\s|~\/$|~\/\s|~\s*$|\$HOME\/$|\$HOME\s)'; then
+  BLOCKED="rm -rf on root/home directory"
+fi
+
+<span class="code-comment"># rm -rf * (현재 디렉터리 전체 삭제)</span>
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*\s+)+(-[a-zA-Z]*f[a-zA-Z]*\s+)*\*'; then
+  BLOCKED="rm -rf * (전체 삭제)"
+fi
+
+<span class="code-comment"># DROP TABLE / DROP DATABASE</span>
+if echo "$COMMAND" | grep -qiE '\b(DROP\s+(TABLE|DATABASE|SCHEMA))\b'; then
+  BLOCKED="DROP TABLE/DATABASE detected"
+fi
+
+<span class="code-comment"># git push --force to main/master</span>
+if echo "$COMMAND" | grep -qE 'git\s+push\s+.*--force.*\s+(main|master)\b'; then
+  BLOCKED="force push to main/master"
+fi
+if echo "$COMMAND" | grep -qE 'git\s+push\s+-f\s+.*\s+(main|master)\b'; then
+  BLOCKED="force push to main/master"
+fi
+
+<span class="code-comment"># git reset --hard</span>
+if echo "$COMMAND" | grep -qE 'git\s+reset\s+--hard\s+(origin|HEAD~)'; then
+  BLOCKED="git reset --hard (destructive)"
+fi
+
+if [ -n "$BLOCKED" ]; then
+  jq -n --arg reason "$BLOCKED" '{
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: "deny",
+      permissionDecisionReason: ("⛔ 차단됨: " + $reason)
+    }
+  }'
+  exit 0
+fi
+
+exit 0</code></pre>
+
+      <h4>Step C: settings.json에 등록</h4>
+      <p><code>~/.claude/settings.json</code>의 <code>hooks</code> 항목에 아래 내용을 추가합니다.</p>
+      <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-dangerous.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+      <h4>Step D: 검증</h4>
+      <p>Claude Code에서 <code>rm -rf /</code>를 시도해보세요. Hook이 정상적으로 동작하면 "⛔ 차단됨: rm -rf on root/home directory" 메시지와 함께 명령이 차단됩니다.</p>
+
+      <div class="info-box success">
+        <strong>디버깅 팁:</strong> <code>claude --debug</code> 플래그로 실행하면 Hook의 입출력을 실시간으로 확인할 수 있습니다. Hook이 0이 아닌 exit code를 반환하면 에이전트에 에러 피드백이 전달됩니다.
+      </div>
+
+      <div class="info-box danger">
+        <strong>주의:</strong> Hook에서 <code>exit 1</code>을 반환하면 '에러'로 처리되어 에이전트가 재시도할 수 있습니다. '차단'하려면 반드시 <code>exit 0</code> + JSON <code>deny</code> 응답을 사용하세요.
+      </div>
+
+      <span class="output-tag">산출물: ~/.claude/hooks/block-dangerous.sh</span>
+    </div>
+
+    <!-- Section 3.5 -->
+    <h3>3.5 실습 4 — 자동 린트 피드백 Hook</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">4</div>
+        <div class="workshop-title">자동 린트 피드백 Hook</div>
+      </div>
+      <div class="workshop-goal">목표: 파일 수정 후 자동으로 린트/타입체크를 실행하고, 에러를 에이전트에 재주입하여 자동 수정을 유도합니다.</div>
+
+      <h4>Step A: 파일 생성</h4>
+      <pre><code><span class="lang-label">BASH</span>touch ~/.claude/hooks/post-edit-context.sh
+chmod +x ~/.claude/hooks/post-edit-context.sh</code></pre>
+
+      <h4>Step B: 스크립트 작성</h4>
+      <pre><code><span class="lang-label">BASH</span><span class="code-comment">#!/bin/bash</span>
+<span class="code-comment"># PostToolUse Hook: 파일 수정 후 린트 피드백</span>
+INPUT=$(cat /dev/stdin)
+FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+if [ -z "$FILE_PATH" ] || [ ! -f "$FILE_PATH" ]; then
+  exit 0
+fi
+
+EXT="${FILE_PATH##*.}"
+FEEDBACK=""
+
+case "$EXT" in
+  ts|tsx)
+    PROJECT_DIR=$(dirname "$FILE_PATH")
+    while [ "$PROJECT_DIR" != "/" ]; do
+      if [ -f "$PROJECT_DIR/tsconfig.json" ]; then
+        ERRORS=$(cd "$PROJECT_DIR" &amp;&amp; npx --yes tsc --noEmit --pretty false 2&gt;&amp;1 | grep "error TS" | head -5)
+        if [ -n "$ERRORS" ]; then
+          FEEDBACK="TypeScript 에러 발견:\n$ERRORS"
+        fi
+        break
+      fi
+      PROJECT_DIR=$(dirname "$PROJECT_DIR")
+    done
+    ;;
+  py)
+    if command -v ruff &amp;&gt;/dev/null; then
+      ERRORS=$(ruff check "$FILE_PATH" 2&gt;&amp;1 | head -5)
+      if [ -n "$ERRORS" ]; then
+        FEEDBACK="Ruff 린트 에러:\n$ERRORS"
+      fi
+    fi
+    ;;
+esac
+
+if [ -n "$FEEDBACK" ]; then
+  echo "$FEEDBACK"
+  exit 0
+fi
+
+exit 0</code></pre>
+
+      <h4>Step C: settings.json에 등록</h4>
+      <p><code>PostToolUse</code> 이벤트에 등록하며, matcher를 <code>"Edit|Write"</code>로 설정하여 파일 편집/쓰기 도구 모두에 적용합니다.</p>
+      <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/post-edit-context.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+      <div class="info-box concept">
+        <strong>피드백 루프의 핵심:</strong> PostToolUse Hook의 stdout 출력은 에이전트의 다음 턴에 자동으로 주입됩니다. 린트 에러를 출력하면 에이전트가 스스로 인식하고 수정합니다. 사람이 개입하지 않아도 되는 자동 교정 루프<span class="en-note">— Feedback Loop. 출력이 다시 입력으로 돌아가 시스템이 스스로 교정하는 순환 구조</span>입니다.
+      </div>
+
+      <span class="output-tag">산출물: ~/.claude/hooks/post-edit-context.sh</span>
+    </div>
+
+    <!-- Section 3.6 -->
+    <h3>3.6 실습 5 — 세션 컨텍스트 주입 Hook</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">5</div>
+        <div class="workshop-title">세션 컨텍스트 주입 Hook</div>
+      </div>
+      <div class="workshop-goal">목표: 세션 시작 시 현재 프로젝트 정보(git 상태, 패키지 정보)를 자동으로 에이전트에 주입합니다.</div>
+
+      <h4>Step A: 파일 생성</h4>
+      <pre><code><span class="lang-label">BASH</span>touch ~/.claude/hooks/session-context.sh
+chmod +x ~/.claude/hooks/session-context.sh</code></pre>
+
+      <h4>Step B: 스크립트 작성</h4>
+      <pre><code><span class="lang-label">BASH</span><span class="code-comment">#!/bin/bash</span>
+<span class="code-comment"># SessionStart Hook: 세션 시작 시 프로젝트 컨텍스트 주입</span>
+CWD=$(pwd)
+CONTEXT=""
+
+if git rev-parse --is-inside-work-tree &amp;&gt;/dev/null 2&gt;&amp;1; then
+  BRANCH=$(git branch --show-current 2&gt;/dev/null)
+  DIRTY=$(git status --porcelain 2&gt;/dev/null | wc -l | tr -d ' ')
+  LAST_COMMIT=$(git log --oneline -1 2&gt;/dev/null)
+  CONTEXT="Git: branch=$BRANCH, uncommitted=$DIRTY files, last commit: $LAST_COMMIT"
+fi
+
+if [ -f "$CWD/package.json" ]; then
+  PKG_NAME=$(jq -r '.name // "unknown"' "$CWD/package.json" 2&gt;/dev/null)
+  CONTEXT="$CONTEXT | Node project: $PKG_NAME"
+fi
+
+if [ -n "$CONTEXT" ]; then
+  jq -n --arg ctx "$CONTEXT" '{
+    hookSpecificOutput: {
+      hookEventName: "SessionStart",
+      additionalContext: $ctx
+    }
+  }'
+fi
+
+exit 0</code></pre>
+
+      <h4>Step C: settings.json에 등록</h4>
+      <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/session-context.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+      <span class="output-tag">산출물: ~/.claude/hooks/session-context.sh</span>
+    </div>
+
+    <!-- Section 3.7 -->
+    <h3>3.7 완성된 settings.json</h3>
+
+    <p>실습 3~5에서 만든 3개의 Hook을 모두 합치면 다음과 같습니다.</p>
+
+    <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-dangerous.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/post-edit-context.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/session-context.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+    <div class="info-box success">
+      <strong>여기까지 완료하면 3개의 Hook이 동작합니다:</strong> ① 파괴적 명령 차단(PreToolUse) ② 린트 피드백 자동 주입(PostToolUse) ③ 세션 시작 시 프로젝트 정보 주입(SessionStart). 이것만으로도 에이전트의 안전성과 정확성이 크게 향상됩니다.
+    </div>
   </section>
 
   <!-- ==================== CHAPTER 4 ==================== -->
