@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하네스 엔지니어링 실전 워크숍</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #555;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --orange: #d97706;
+      --orange-light: #fef3c7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --border: #e5e7eb;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+      --annotation: #6366f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero .meta {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: -32px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--accent); }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* Chapters */
+    .chapter {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .chapter-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .chapter h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .chapter-desc {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 36px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--accent-dark);
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* 영어 주석 */
+    .en {
+      display: inline;
+      color: var(--annotation);
+      font-weight: 600;
+    }
+    .en-note {
+      font-size: 0.82rem;
+      color: #6b7280;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* 용어 카드 */
+    .term-card {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .term-card .term { font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; }
+    .term-card .meaning { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* 코드 블록 */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 16px 0 24px;
+      position: relative;
+    }
+    pre .lang-label {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #be185d;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    /* 코드 내 주석 강조 */
+    .code-comment { color: #6ee7b7; font-style: italic; }
+    .code-keyword { color: #c084fc; }
+    .code-string { color: #fbbf24; }
+    .code-fn { color: #60a5fa; }
+    .code-type { color: #34d399; }
+
+    /* 비교 테이블 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    /* 정보 박스 */
+    .info-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 0.92rem;
+    }
+    .info-box.concept {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+    }
+    .info-box.warning {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+    }
+    .info-box.danger {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+    }
+    .info-box.success {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+    }
+    .info-box.insight {
+      background: var(--purple-light);
+      border-left: 4px solid var(--purple);
+    }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    /* 다이어그램 */
+    .diagram {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* 인용문 */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: #f8fafc;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote cite {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* 리스트 */
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+
+    /* 비교 카드 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .compare-card {
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+    .compare-card.before { background: var(--red-light); border-color: #fca5a5; }
+    .compare-card.after { background: var(--green-light); border-color: #6ee7b7; }
+    .compare-card h5 { font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* 스텝 가이드 */
+    .step {
+      display: flex;
+      gap: 16px;
+      margin: 20px 0;
+      align-items: flex-start;
+    }
+    .step-number {
+      background: var(--accent);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content { flex: 1; }
+
+    /* 파일 트리 */
+    .file-tree {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 16px 0;
+    }
+    .file-tree .folder { color: #60a5fa; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .desc { color: #6ee7b7; font-style: italic; }
+
+    /* 소스 목록 */
+    .sources {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .sources h4 { margin-bottom: 12px; }
+    .sources a { color: var(--accent); text-decoration: none; font-size: 0.88rem; }
+    .sources a:hover { text-decoration: underline; }
+    .sources li { margin-bottom: 4px; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .chapter { padding: 28px 20px; }
+      .hero h1 { font-size: 1.8rem; }
+      .compare-grid { grid-template-columns: 1fr; }
+      pre { font-size: 0.8rem; padding: 14px 16px; }
+    }
+
+    /* 프린트 */
+    @media print {
+      .hero { background: #1e293b !important; -webkit-print-color-adjust: exact; }
+      .chapter { break-inside: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; }
+    }
+
+    /* 실습 카드 */
+    .workshop-card {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .workshop-card .workshop-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .workshop-card .workshop-number {
+      background: var(--accent);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .workshop-card .workshop-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .workshop-card .workshop-goal {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      padding-left: 48px;
+    }
+
+    /* 워크시트 */
+    .worksheet {
+      background: #fffbeb;
+      border: 2px dashed var(--orange);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .worksheet h4 {
+      color: var(--orange);
+      margin-top: 0;
+    }
+
+    /* 체크리스트 */
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+    .checklist li {
+      padding: 8px 0 8px 32px;
+      position: relative;
+    }
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      font-size: 1.2rem;
+    }
+
+    /* 단계 표시 */
+    .step-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    /* 산출물 태그 */
+    .output-tag {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <h1>하네스 엔지니어링 실전 워크숍</h1>
+    <p class="subtitle">Agent = Model + Harness — 개념부터 실전 세팅까지, 따라하며 완성하는 하네스 구축 가이드</p>
+    <p class="meta">Level 1 · 실전 워크숍 · 7개 실습 포함 · 2026.05</p>
+  </header>
+
+  <!-- ==================== TOC ==================== -->
+  <nav class="toc">
+    <h2>목차</h2>
+    <ol>
+      <li><a href="#ch1">하네스 엔지니어링이란?</a></li>
+      <li><a href="#ch2">1계층: 규칙 파일 세팅 <span style="font-size:0.78rem; background:var(--accent-light); color:var(--accent-dark); padding:2px 8px; border-radius:10px; font-weight:700; margin-left:6px;">실습 2개</span></a></li>
+      <li><a href="#ch3">2계층: Hook 시스템 구축 <span style="font-size:0.78rem; background:var(--accent-light); color:var(--accent-dark); padding:2px 8px; border-radius:10px; font-weight:700; margin-left:6px;">실습 3개</span></a></li>
+      <li><a href="#ch4">3계층: 품질 게이트 <span style="font-size:0.78rem; background:var(--accent-light); color:var(--accent-dark); padding:2px 8px; border-radius:10px; font-weight:700; margin-left:6px;">실습 1개</span></a></li>
+      <li><a href="#ch5">프레임워크별 구현 <span style="font-size:0.78rem; background:var(--accent-light); color:var(--accent-dark); padding:2px 8px; border-radius:10px; font-weight:700; margin-left:6px;">실습 1개</span></a></li>
+      <li><a href="#ch6">실전 사례 분석</a></li>
+      <li><a href="#ch7">안티패턴 &amp; 보안</a></li>
+      <li><a href="#ch8">나만의 하네스 설계</a></li>
+      <li><a href="#ch9">참고자료</a></li>
+    </ol>
+  </nav>
+
+  <!-- ==================== CHAPTER 1 ==================== -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-number">Chapter 1</div>
+    <h2>하네스 엔지니어링이란?</h2>
+    <p class="chapter-desc">모델이 아니라 하네스가 진짜 경쟁력입니다. AI 에이전트를 제어하는 시스템 전체를 설계하는 방법론을 이해합니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 2 ==================== -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-number">Chapter 2</div>
+    <h2>1계층: 규칙 파일 세팅</h2>
+    <p class="chapter-desc">하네스의 첫 번째 계층입니다. CLAUDE.md와 AGENTS.md로 에이전트의 행동 규범을 정의합니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 3 ==================== -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-number">Chapter 3</div>
+    <h2>2계층: Hook 시스템 구축</h2>
+    <p class="chapter-desc">프롬프트는 '부탁'이고, Hook은 '법률'입니다. 결정론적 강제의 핵심인 Hook을 직접 만들어봅니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 4 ==================== -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-number">Chapter 4</div>
+    <h2>3계층: 품질 게이트</h2>
+    <p class="chapter-desc">Hook이 실시간 방어라면, 품질 게이트는 최종 검문소입니다. CI/CD에서 에이전트의 결과물을 자동 검증합니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 5 ==================== -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-number">Chapter 5</div>
+    <h2>프레임워크별 구현</h2>
+    <p class="chapter-desc">Claude Code 외에도 다양한 프레임워크가 하네스를 지원합니다. 각각의 구현 방식을 비교하고, Next.js에서 직접 구현해봅니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 6 ==================== -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-number">Chapter 6</div>
+    <h2>실전 사례 분석</h2>
+    <p class="chapter-desc">대규모 프로덕션에서 하네스를 어떻게 운영하는지, 세 기업의 사례에서 핵심 교훈을 추출합니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 7 ==================== -->
+  <section class="chapter" id="ch7">
+    <div class="chapter-number">Chapter 7</div>
+    <h2>안티패턴 &amp; 보안</h2>
+    <p class="chapter-desc">하네스를 만들 때 흔히 저지르는 실수와, 에이전트 시스템의 보안 위협을 학습합니다.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 8 ==================== -->
+  <section class="chapter" id="ch8">
+    <div class="chapter-number">Chapter 8</div>
+    <h2>나만의 하네스 설계</h2>
+    <p class="chapter-desc">지금까지 배운 모든 것을 자신의 프로젝트에 적용합니다. 워크시트를 채우며 나만의 하네스를 설계하세요.</p>
+  </section>
+
+  <!-- ==================== CHAPTER 9 ==================== -->
+  <section class="chapter" id="ch9">
+    <div class="chapter-number">Chapter 9</div>
+    <h2>참고자료</h2>
+    <p class="chapter-desc">이 교육자료의 근거가 된 자료 목록입니다. 모두 공식 문서 또는 검증된 출처입니다.</p>
+  </section>
+
+  <footer style="text-align:center; padding:40px 0 60px; color:#94a3b8; font-size:0.85rem;">
+    <p>하네스 엔지니어링 실전 워크숍</p>
+    <p>2026.05 | 신뢰성 있는 공식 문서 및 학술 자료 기반</p>
+  </footer>
+</div>
+</body>
+</html>
