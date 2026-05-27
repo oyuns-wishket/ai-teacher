@@ -1938,6 +1938,213 @@ Layer 1 ─── Task Decomposition (큰 작업을 작은 단위로 분할)</di
     <div class="chapter-number">Chapter 8</div>
     <h2>나만의 하네스 설계</h2>
     <p class="chapter-desc">지금까지 배운 모든 것을 자신의 프로젝트에 적용합니다. 워크시트를 채우며 나만의 하네스를 설계하세요.</p>
+
+    <!-- Section 8.1 -->
+    <h3>8.1 워크시트 A — 프로젝트 위험 분류표</h3>
+
+    <div class="worksheet">
+      <h4>워크시트 A: 프로젝트 위험 분류표</h4>
+      <p>아래 표를 복사하여 자신의 프로젝트에 맞게 채워보세요. 각 도구/작업의 위험도를 판단하고, 필요한 차단 방법을 결정합니다.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>도구/작업</th>
+            <th>위험도</th>
+            <th>차단 방법</th>
+            <th>Hook 필요?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>파일 읽기 (Read)</td>
+            <td>Safe</td>
+            <td>—</td>
+            <td>☐</td>
+          </tr>
+          <tr>
+            <td>파일 수정 (Edit/Write)</td>
+            <td>Moderate</td>
+            <td>린트 피드백</td>
+            <td>☑</td>
+          </tr>
+          <tr>
+            <td>셸 명령 (Bash)</td>
+            <td>Moderate~Dangerous</td>
+            <td>파괴적 명령 차단</td>
+            <td>☑</td>
+          </tr>
+          <tr>
+            <td>DB 쿼리</td>
+            <td>Dangerous</td>
+            <td>PreToolUse 차단</td>
+            <td>☑</td>
+          </tr>
+          <tr>
+            <td>git push</td>
+            <td>Dangerous</td>
+            <td>force push 차단</td>
+            <td>☑</td>
+          </tr>
+          <tr>
+            <td>외부 API 호출</td>
+            <td>Dangerous</td>
+            <td>화이트리스트</td>
+            <td>☑</td>
+          </tr>
+          <tr>
+            <td><em>(내 도구 1)</em></td>
+            <td><em>_____</em></td>
+            <td><em>_____</em></td>
+            <td>☐</td>
+          </tr>
+          <tr>
+            <td><em>(내 도구 2)</em></td>
+            <td><em>_____</em></td>
+            <td><em>_____</em></td>
+            <td>☐</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 8.2 -->
+    <h3>8.2 워크시트 B — 3계층 설계 체크리스트</h3>
+
+    <div class="worksheet">
+      <h4>워크시트 B: 3계층 설계 체크리스트</h4>
+      <p>각 항목을 체크하면서 자신의 하네스를 점검하세요.</p>
+
+      <h4 style="color: var(--accent); margin-top: 20px;">1계층 — Constraint Harness (규칙)</h4>
+      <ul class="checklist">
+        <li>CLAUDE.md 작성 완료 (60줄 이내)</li>
+        <li>.claude/rules/ 세부 규칙 분리 완료</li>
+        <li>AGENTS.md 작성 완료 (범용 에이전트 지원)</li>
+        <li>금지사항 목록 명시</li>
+      </ul>
+
+      <h4 style="color: var(--accent); margin-top: 20px;">2계층 — Feedback Loop (Hook)</h4>
+      <ul class="checklist">
+        <li>PreToolUse: 파괴적 명령 차단 Hook 설치</li>
+        <li>PostToolUse: 린트/타입체크 피드백 Hook 설치</li>
+        <li>SessionStart: 프로젝트 컨텍스트 주입 Hook 설치</li>
+        <li>Hook 디버깅 테스트 완료 (<code>claude --debug</code>)</li>
+      </ul>
+
+      <h4 style="color: var(--accent); margin-top: 20px;">3계층 — Quality Gate</h4>
+      <ul class="checklist">
+        <li>CI 파이프라인에 타입체크 추가</li>
+        <li>CI 파이프라인에 린트 추가</li>
+        <li>CI 파이프라인에 테스트 추가</li>
+        <li>PR 필수 체크 설정 (Branch Protection Rules)</li>
+      </ul>
+    </div>
+
+    <!-- Section 8.3 -->
+    <h3>8.3 워크시트 C — CLAUDE.md 초안 템플릿</h3>
+
+    <div class="worksheet">
+      <h4>워크시트 C: CLAUDE.md 초안 템플릿</h4>
+      <p>아래 템플릿을 복사하여 자신의 프로젝트에 맞게 수정하세요.</p>
+      <pre><code><span class="lang-label">MARKDOWN</span># [프로젝트명]
+
+## 빌드/실행
+- `[빌드 명령]` — 빌드
+- `[실행 명령]` — 개발 서버
+- `[테스트 명령]` — 테스트
+
+## 코드 스타일
+- [언어/프레임워크 규칙]
+- [네이밍 규칙]
+- [파일 구조 규칙]
+
+## 금지사항
+- [절대 하면 안 되는 것 1]
+- [절대 하면 안 되는 것 2]
+- [절대 하면 안 되는 것 3]
+
+## 워크플로우
+- [커밋 전 반드시 할 것]
+- [PR 생성 시 규칙]</code></pre>
+    </div>
+
+    <!-- Section 8.4 -->
+    <h3>8.4 워크시트 D — Hook 설정 템플릿</h3>
+
+    <div class="worksheet">
+      <h4>워크시트 D: Hook 설정 템플릿</h4>
+      <p>아래 JSON을 <code>~/.claude/settings.json</code>의 <code>hooks</code> 섹션에 붙여넣고 스크립트 경로를 수정하세요.</p>
+      <pre><code><span class="lang-label">JSON</span>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/[차단-스크립트].sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "[Edit|Write 또는 대상 도구]",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/[피드백-스크립트].sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/[컨텍스트-스크립트].sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+    </div>
+
+    <!-- Section 8.5 -->
+    <h3>8.5 도입 로드맵</h3>
+
+    <h4><span class="step-indicator">Week 1-2</span> MVH (최소 하네스)</h4>
+    <ul>
+      <li>CLAUDE.md + AGENTS.md 작성 (실습 1-2)</li>
+      <li>block-dangerous.sh Hook 설치 (실습 3)</li>
+      <li>Claude Code에서 기본 사용 시작</li>
+      <li>이것만으로 에이전트 안전성 대폭 향상</li>
+    </ul>
+
+    <h4><span class="step-indicator">Week 3-4</span> 피드백 루프</h4>
+    <ul>
+      <li>PostToolUse 린트 피드백 Hook 추가 (실습 4)</li>
+      <li>SessionStart 컨텍스트 주입 Hook 추가 (실습 5)</li>
+      <li>실패 발생 시 래칫 패턴으로 규칙 추가</li>
+      <li>에이전트가 스스로 실수를 교정하는 루프 완성</li>
+    </ul>
+
+    <h4><span class="step-indicator">Week 5+</span> 프로덕션</h4>
+    <ul>
+      <li>CI Quality Gate 구축 (실습 6)</li>
+      <li>팀 공유: AGENTS.md 작성, 공통 Hook 배포</li>
+      <li>정기 하네스 리뷰 (월 1회, 불필요한 Hook 정리)</li>
+      <li>Next.js 프로젝트라면 AI SDK 가드레일 추가 (실습 7)</li>
+    </ul>
+
+    <div class="info-box success">
+      <strong>시작이 반입니다.</strong> Week 1의 CLAUDE.md 하나 + Hook 하나만으로도 에이전트의 안전성이 극적으로 향상됩니다. 완벽한 하네스를 만들려고 기다리지 말고, <strong>MVH(최소 하네스)부터 바로 시작하세요.</strong>
+    </div>
   </section>
 
   <!-- ==================== CHAPTER 9 ==================== -->
