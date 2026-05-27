@@ -1271,6 +1271,148 @@ exit 0</code></pre>
     <div class="chapter-number">Chapter 4</div>
     <h2>3계층: 품질 게이트</h2>
     <p class="chapter-desc">Hook이 실시간 방어라면, 품질 게이트는 최종 검문소입니다. CI/CD에서 에이전트의 결과물을 자동 검증합니다.</p>
+
+    <!-- Section 4.1 -->
+    <h3>4.1 Quality Gate 개념</h3>
+
+    <div class="term-card">
+      <div class="term">Quality Gate <span class="en-note">— 품질 게이트. 소프트웨어가 다음 단계(배포, 머지)로 넘어가기 전에 반드시 통과해야 하는 자동화된 검증 관문</span></div>
+      <div class="meaning">CI에서 타입체크, 린트, 테스트가 모두 통과해야만 PR을 머지할 수 있는 시스템</div>
+    </div>
+
+    <div class="term-card">
+      <div class="term">Proposal-Before-Execution <span class="en-note">— 제안 후 실행 패턴. 에이전트가 먼저 계획을 제안하고, 시스템(또는 사람)이 검증한 뒤에야 실행을 허용하는 안전 패턴</span></div>
+      <div class="meaning">"바로 실행"이 아니라 "제안 → 검증 → 실행" 3단계로 분리</div>
+    </div>
+
+    <p>Hook과 CI 품질 게이트는 서로 다른 시점에 작동하며, 각각의 역할이 있습니다. 아래 표는 세 가지 게이트를 비교합니다.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>게이트</th>
+          <th>시점</th>
+          <th>차단 대상</th>
+          <th>예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PreToolUse Hook</td>
+          <td>도구 실행 전</td>
+          <td>위험한 명령</td>
+          <td><code>rm -rf /</code> 차단</td>
+        </tr>
+        <tr>
+          <td>Stop Hook</td>
+          <td>에이전트 루프 종료 시</td>
+          <td>미완성 결과</td>
+          <td>테스트 미통과 시 계속 작업 지시</td>
+        </tr>
+        <tr>
+          <td>CI Quality Gate</td>
+          <td>PR/커밋 시</td>
+          <td>비준수 코드</td>
+          <td>타입 에러, 린트 실패, 테스트 실패</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box concept">
+      <strong>Defense in Depth</strong><span class="en-note">— 심층 방어. 여러 계층의 보안을 중첩하여 단일 실패 지점을 제거하는 전략</span> — 세 게이트가 겹치는 것이 정상입니다. Hook이 놓친 것을 CI가 잡고, CI가 놓친 것을 코드 리뷰가 잡습니다.
+    </div>
+
+    <!-- Section 4.2 -->
+    <h3>4.2 Tool Gateway 패턴</h3>
+
+    <p>Stripe MCP Toolshed 사례 — 400+ 도구를 관리하면서도 안전성을 유지하는 비결은 중앙 집중식 도구 게이트웨이입니다. 모든 도구 호출을 단일 진입점으로 라우팅하여 허용 목록 확인, 속도 제한, 위험도별 승인을 일관되게 적용합니다.</p>
+
+    <pre><code><span class="lang-label">TYPESCRIPT</span><span class="code-comment">// Tool Gateway: 모든 도구 호출이 이 게이트를 통과</span>
+<span class="code-keyword">function</span> <span class="code-fn">toolGateway</span>(toolCall: ToolCall, context: AgentContext) {
+  <span class="code-comment">// 1. 허용 목록 확인</span>
+  <span class="code-keyword">if</span> (!allowedTools.includes(toolCall.name)) {
+    <span class="code-keyword">return</span> { denied: <span class="code-keyword">true</span>, reason: <span class="code-string">"허용되지 않은 도구"</span> };
+  }
+
+  <span class="code-comment">// 2. Rate Limiting</span>
+  <span class="code-keyword">if</span> (rateLimiter.<span class="code-fn">isExceeded</span>(toolCall.name, context.sessionId)) {
+    <span class="code-keyword">return</span> { denied: <span class="code-keyword">true</span>, reason: <span class="code-string">"호출 횟수 초과"</span> };
+  }
+
+  <span class="code-comment">// 3. 위험도별 승인</span>
+  <span class="code-keyword">const</span> risk = <span class="code-fn">classifyRisk</span>(toolCall);
+  <span class="code-keyword">if</span> (risk === <span class="code-string">"dangerous"</span>) {
+    <span class="code-keyword">return</span> { requiresApproval: <span class="code-keyword">true</span>, reason: <span class="code-string">"고위험 작업"</span> };
+  }
+
+  <span class="code-keyword">return</span> { allowed: <span class="code-keyword">true</span> };
+}</code></pre>
+
+    <div class="term-card">
+      <div class="term">Tool Gateway <span class="en-note">— 도구 게이트웨이. 에이전트의 모든 도구 호출이 통과해야 하는 중앙 검문소. 허용 목록, 속도 제한, 승인 게이트를 한 곳에서 관리</span></div>
+    </div>
+
+    <!-- Section 4.3 -->
+    <h3>4.3 실습 6 — GitHub Actions 품질 게이트</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">6</div>
+        <div class="workshop-title">GitHub Actions 품질 게이트</div>
+      </div>
+      <div class="workshop-goal">목표: 에이전트가 만든 PR을 자동으로 검증하는 CI 파이프라인을 구성합니다.</div>
+
+      <pre><code><span class="lang-label">YAML</span><span class="code-comment"># .github/workflows/agent-qa.yml</span>
+name: Agent QA Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: <span class="code-string">'20'</span>
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint . --max-warnings 0
+
+      - name: Unit Tests
+        run: npm test -- --coverage
+
+      - name: Check for secrets
+        run: |
+          <span class="code-keyword">if</span> grep -rn <span class="code-string">"PRIVATE_KEY\|SECRET_KEY\|password.*="</span> --include=<span class="code-string">"*.ts"</span> --include=<span class="code-string">"*.js"</span> src/; then
+            echo <span class="code-string">"⛔ 하드코딩된 시크릿 발견!"</span>
+            exit 1
+          fi
+
+      - name: Bundle Size Check
+        run: |
+          npm run build
+          SIZE=$(du -sk .next/static | cut -f1)
+          <span class="code-keyword">if</span> [ <span class="code-string">"$SIZE"</span> -gt 500 ]; then
+            echo <span class="code-string">"⚠️ 번들 크기 초과: ${SIZE}KB > 500KB"</span>
+            exit 1
+          fi</code></pre>
+
+      <div class="info-box warning">
+        <strong>핵심 포인트:</strong> GitHub Actions는 에이전트가 직접 수정할 수 없는 영역입니다. 리포지토리 설정에서 <strong>'Require status checks to pass'</strong>를 켜면, 에이전트가 CI를 우회하려 해도 물리적으로 머지가 불가능합니다. 이것이 결정론적 강제<span class="en-note">— Deterministic Enforcement</span>의 진정한 힘입니다.
+      </div>
+
+      <span class="output-tag">산출물: .github/workflows/agent-qa.yml</span>
+    </div>
   </section>
 
   <!-- ==================== CHAPTER 5 ==================== -->
