@@ -348,6 +348,19 @@
     .sources a:hover { text-decoration: underline; }
     .sources li { margin-bottom: 4px; }
 
+    /* 출처 태그 */
+    .source-tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
     /* 반응형 */
     @media (max-width: 768px) {
       .chapter { padding: 28px 20px; }
@@ -2152,6 +2165,83 @@ Layer 1 ─── Task Decomposition (큰 작업을 작은 단위로 분할)</di
     <div class="chapter-number">Chapter 9</div>
     <h2>참고자료</h2>
     <p class="chapter-desc">이 교육자료의 근거가 된 자료 목록입니다. 모두 공식 문서 또는 검증된 출처입니다.</p>
+
+    <div class="sources">
+      <h3>공식 문서</h3>
+      <ul>
+        <li>
+          <a href="https://docs.anthropic.com/en/docs/claude-code/hooks" target="_blank">Claude Code — Hooks Reference</a>
+          <span class="source-tag">Anthropic 공식</span>
+        </li>
+        <li>
+          <a href="https://docs.anthropic.com/en/docs/claude-code/best-practices" target="_blank">Claude Code — Best Practices</a>
+          <span class="source-tag">Anthropic 공식</span>
+        </li>
+        <li>
+          <a href="https://openai.github.io/openai-agents-python/" target="_blank">OpenAI Agents SDK — Documentation</a>
+          <span class="source-tag">OpenAI 공식</span>
+        </li>
+        <li>
+          <a href="https://ai-sdk.dev/docs/ai-sdk-core/middleware" target="_blank">Vercel AI SDK — Language Model Middleware</a>
+          <span class="source-tag">Vercel 공식</span>
+        </li>
+        <li>
+          <a href="https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/" target="_blank">LangGraph — Human-in-the-Loop</a>
+          <span class="source-tag">LangChain 공식</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sources">
+      <h3>기술 블로그 및 가이드</h3>
+      <ul>
+        <li>
+          <a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank">Addy Osmani — Agent Harness Engineering</a> (Google Chrome 팀)
+        </li>
+        <li>
+          <a href="https://martinfowler.com/articles/harness-engineering.html" target="_blank">Birgitta Bockeler — Harness Engineering for Coding Agent Users</a> (Martin Fowler / Thoughtworks)
+        </li>
+        <li>
+          <a href="https://openai.com/index/harness-engineering/" target="_blank">OpenAI — Harness Engineering: Leveraging Codex</a> (OpenAI 공식 블로그)
+        </li>
+        <li>
+          <a href="https://stripe.com/blog/how-we-built-an-ai-agent" target="_blank">Stripe — Building an Agentic System</a> (Stripe Engineering Blog)
+        </li>
+        <li>
+          <a href="https://humanlayer.dev/blog/claudemd" target="_blank">HumanLayer — The Ultimate Guide to CLAUDE.md</a>
+        </li>
+        <li>
+          <a href="https://atlan.com/know/agent-harness-failures-anti-patterns/" target="_blank">Atlan — AI Agent Harness Failures: 13 Anti-Patterns</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sources">
+      <h3>학술 논문</h3>
+      <ul>
+        <li>
+          <a href="https://arxiv.org/abs/2505.02077" target="_blank">Open Challenges in Multi-Agent Security</a> — 멀티 에이전트 보안의 비구성성 문제 (arXiv 2505.02077)
+        </li>
+        <li>
+          <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank">OWASP Top 10 for LLM/Agentic Applications</a> — 에이전트 AI 보안 위협 표준 (2025)
+        </li>
+        <li>
+          Robust Intelligence — Production LLM Vulnerability Study (2025) — 프로덕션 LLM 앱 78% 프롬프트 인젝션 취약
+        </li>
+      </ul>
+    </div>
+
+    <div class="sources">
+      <h3>관련 교육자료</h3>
+      <ul>
+        <li>
+          <a href="01-agent-개발-기본원리.html" target="_blank">01-agent-개발-기본원리</a> — AI 에이전트 개발의 기본 개념, 세팅, 아키텍처 패턴
+        </li>
+        <li>
+          <a href="02-hook-완전정복.html" target="_blank">02-hook-완전정복</a> — Hook 시스템 심화 학습, 프레임워크별 비교, Next.js 구현
+        </li>
+      </ul>
+    </div>
   </section>
 
   <footer style="text-align:center; padding:40px 0 60px; color:#94a3b8; font-size:0.85rem;">
