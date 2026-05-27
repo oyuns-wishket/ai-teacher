@@ -1420,6 +1420,256 @@ jobs:
     <div class="chapter-number">Chapter 5</div>
     <h2>프레임워크별 구현</h2>
     <p class="chapter-desc">Claude Code 외에도 다양한 프레임워크가 하네스를 지원합니다. 각각의 구현 방식을 비교하고, Next.js에서 직접 구현해봅니다.</p>
+
+    <!-- Section 5.1 -->
+    <h3>5.1 4대 프레임워크 비교</h3>
+
+    <p>하네스를 지원하는 대표 프레임워크 4개를 핵심 기능별로 비교합니다. 각 프레임워크는 이벤트 수, 차단 방식, 규칙 파일, 서브에이전트 전파, 인간 개입 방식이 다릅니다.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>Claude Code</th>
+          <th>OpenAI Agents SDK</th>
+          <th>LangGraph</th>
+          <th>Vercel AI SDK</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>이벤트 수</td>
+          <td>26+</td>
+          <td>7</td>
+          <td>10+ + interrupt</td>
+          <td>onStepFinish 등</td>
+        </tr>
+        <tr>
+          <td>차단 방식</td>
+          <td>exit code + JSON deny</td>
+          <td>raise Exception</td>
+          <td>interrupt()</td>
+          <td>stopWhen</td>
+        </tr>
+        <tr>
+          <td>규칙 파일</td>
+          <td>CLAUDE.md, .claude/rules/</td>
+          <td>instructions 파라미터</td>
+          <td>State + config</td>
+          <td>system prompt</td>
+        </tr>
+        <tr>
+          <td>서브에이전트</td>
+          <td>자동 재귀 적용</td>
+          <td>수동 전파</td>
+          <td>그래프 암시적</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>인간 개입</td>
+          <td>Hook deny + Notification</td>
+          <td>Guardrail tripwire</td>
+          <td>interrupt() + resume</td>
+          <td>requiresApproval</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 5.2 -->
+    <h3>5.2 Claude Code — Hook 기반 하네스</h3>
+
+    <p>Claude Code는 규칙 파일(확률적 준수)과 Hook(결정론적 강제)을 조합하여 하네스를 구성합니다. 아래 다이어그램은 각 계층의 역할을 보여줍니다.</p>
+
+    <div class="diagram">┌─ CLAUDE.md / .claude/rules/ ─── 확률적 준수 (지시)
+│
+├─ PreToolUse Hook ──────────── 결정론적 강제 (차단)
+├─ PostToolUse Hook ─────────── 피드백 루프 (교정)
+├─ Stop Hook ────────────────── 품질 게이트 (완료 조건)
+│
+└─ Notification Hook ────────── 외부 알림 (Slack 등)</div>
+
+    <div class="info-box success">
+      <strong>Claude Code의 강점:</strong> 서브에이전트(Agent tool)에도 Hook이 자동으로 재귀 적용됩니다. 메인 에이전트의 보안 정책이 하위 에이전트까지 자동 전파되므로, 별도 설정 없이 일관된 보안 체계가 유지됩니다.
+    </div>
+
+    <!-- Section 5.3 -->
+    <h3>5.3 OpenAI Agents SDK — Guardrails 3계층</h3>
+
+    <p>OpenAI Agents SDK는 입력 가드레일, 출력 가드레일, 라이프사이클 Hook의 3계층으로 에이전트를 제어합니다.</p>
+
+    <pre><code><span class="lang-label">PYTHON</span><span class="code-keyword">from</span> agents <span class="code-keyword">import</span> Agent, InputGuardrail, OutputGuardrail, GuardrailFunctionOutput
+<span class="code-keyword">from</span> agents.lifecycle <span class="code-keyword">import</span> AgentHooksBase
+
+<span class="code-comment"># 1. 입력 가드레일 — 프롬프트 인젝션 탐지</span>
+@input_guardrail
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-fn">check_injection</span>(ctx, agent, input):
+    result = <span class="code-keyword">await</span> Runner.<span class="code-fn">run</span>(injection_detector, input)
+    <span class="code-keyword">return</span> <span class="code-fn">GuardrailFunctionOutput</span>(
+        output_info=result,
+        tripwire_triggered=result.is_injection
+    )
+
+<span class="code-comment"># 2. 출력 가드레일 — 개인정보 유출 방지</span>
+@output_guardrail
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-fn">check_pii</span>(ctx, agent, output):
+    has_pii = <span class="code-fn">detect_pii</span>(output)
+    <span class="code-keyword">return</span> <span class="code-fn">GuardrailFunctionOutput</span>(
+        output_info={<span class="code-string">"has_pii"</span>: has_pii},
+        tripwire_triggered=has_pii
+    )
+
+<span class="code-comment"># 3. 라이프사이클 Hook — 도구 사용 로깅</span>
+<span class="code-keyword">class</span> <span class="code-type">MyHooks</span>(AgentHooksBase):
+    <span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-fn">on_tool_start</span>(self, context, agent, tool):
+        <span class="code-fn">print</span>(f<span class="code-string">"도구 실행: {tool.name}"</span>)
+    <span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-fn">on_tool_end</span>(self, context, agent, tool, result):
+        <span class="code-fn">log_tool_usage</span>(tool.name, result)
+
+agent = <span class="code-fn">Agent</span>(
+    name=<span class="code-string">"my-agent"</span>,
+    input_guardrails=[check_injection],
+    output_guardrails=[check_pii],
+    hooks=<span class="code-fn">MyHooks</span>()
+)</code></pre>
+
+    <div class="term-card">
+      <div class="term">Guardrail <span class="en-note">— 가드레일. 도로의 방호벽처럼, 에이전트의 입출력을 검사하여 위험한 내용이 통과하지 못하게 막는 안전장치</span></div>
+    </div>
+
+    <div class="term-card">
+      <div class="term">Tripwire <span class="en-note">— 트립와이어(작동선). 지뢰의 작동선처럼, 가드레일이 위반을 감지하면 즉시 에이전트 실행을 중단시키는 트리거</span></div>
+    </div>
+
+    <!-- Section 5.4 -->
+    <h3>5.4 LangGraph — interrupt() + Checkpointer</h3>
+
+    <p>LangGraph는 <code>interrupt()</code>로 에이전트 실행을 일시 중단하고, Checkpointer가 상태를 저장하여 나중에 정확히 중단된 지점에서 재개할 수 있습니다.</p>
+
+    <pre><code><span class="lang-label">PYTHON</span><span class="code-keyword">from</span> langgraph.graph <span class="code-keyword">import</span> StateGraph
+<span class="code-keyword">from</span> langgraph.types <span class="code-keyword">import</span> interrupt, Command
+<span class="code-keyword">from</span> langgraph.checkpoint.memory <span class="code-keyword">import</span> MemorySaver
+
+<span class="code-keyword">def</span> <span class="code-fn">dangerous_action</span>(state):
+    <span class="code-comment"># 고위험 작업 전 인간 승인 요청</span>
+    human_response = <span class="code-fn">interrupt</span>({
+        <span class="code-string">"action"</span>: <span class="code-string">"delete_records"</span>,
+        <span class="code-string">"count"</span>: state[<span class="code-string">"record_count"</span>],
+        <span class="code-string">"question"</span>: <span class="code-string">"정말 삭제할까요?"</span>
+    })
+
+    <span class="code-keyword">if</span> human_response[<span class="code-string">"approved"</span>]:
+        <span class="code-keyword">return</span> {<span class="code-string">"result"</span>: <span class="code-fn">perform_delete</span>(state)}
+    <span class="code-keyword">else</span>:
+        <span class="code-keyword">return</span> {<span class="code-string">"result"</span>: <span class="code-string">"사용자가 취소함"</span>}
+
+graph = <span class="code-fn">StateGraph</span>(State)
+graph.<span class="code-fn">add_node</span>(<span class="code-string">"dangerous"</span>, dangerous_action)
+
+<span class="code-comment"># Checkpointer: 중단 지점의 상태를 저장 → 나중에 재개 가능</span>
+app = graph.<span class="code-fn">compile</span>(checkpointer=<span class="code-fn">MemorySaver</span>())</code></pre>
+
+    <div class="term-card">
+      <div class="term">interrupt() <span class="en-note">— 인터럽트. 에이전트 실행을 일시 중단하고 외부(사람)의 입력을 기다리는 LangGraph의 핵심 메커니즘. 체크포인터가 상태를 저장하므로 나중에 정확히 중단된 지점에서 재개 가능</span></div>
+    </div>
+
+    <!-- Section 5.5 -->
+    <h3>5.5 Vercel AI SDK — 3계층 미들웨어</h3>
+
+    <p>Vercel AI SDK는 HTTP, AI 미들웨어, 에이전트 루프의 3계층으로 제어합니다. 각 계층이 서로 다른 수준에서 요청을 가로채고 검증합니다.</p>
+
+    <div class="diagram">┌─ Layer 1: middleware.ts ──────── HTTP 수준 (Rate Limit, 인증)
+├─ Layer 2: wrapLanguageModel ──── AI 미들웨어 (가드레일, RAG, 캐싱)
+└─ Layer 3: streamText callbacks ── 에이전트 루프 (onStepFinish, stopWhen)</div>
+
+    <!-- Section 5.6 -->
+    <h3>5.6 실습 7 — Next.js Route Handler 가드레일 구현</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">7</div>
+        <div class="workshop-title">Next.js Route Handler 가드레일 구현</div>
+      </div>
+      <div class="workshop-goal">목표: Vercel AI SDK의 wrapLanguageModel로 입출력 가드레일을 구현합니다.</div>
+
+      <h4>Step A: AI 미들웨어 작성 — <code>lib/ai/middleware.ts</code></h4>
+      <pre><code><span class="lang-label">TYPESCRIPT</span><span class="code-keyword">import</span> { wrapLanguageModel, <span class="code-keyword">type</span> <span class="code-type">LanguageModelV1Middleware</span> } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>;
+
+<span class="code-keyword">const</span> safetyMiddleware: <span class="code-type">LanguageModelV1Middleware</span> = {
+  <span class="code-comment">// 요청 가로채기 — 입력 가드레일</span>
+  <span class="code-fn">transformParams</span>: <span class="code-keyword">async</span> ({ params }) =&gt; {
+    <span class="code-keyword">const</span> lastMessage = params.prompt.<span class="code-fn">at</span>(-1);
+    <span class="code-keyword">if</span> (lastMessage?.role === <span class="code-string">'user'</span>) {
+      <span class="code-keyword">const</span> text = lastMessage.content
+        .<span class="code-fn">filter</span>(p =&gt; p.type === <span class="code-string">'text'</span>)
+        .<span class="code-fn">map</span>(p =&gt; p.text)
+        .<span class="code-fn">join</span>(<span class="code-string">''</span>);
+
+      <span class="code-comment">// 프롬프트 인젝션 패턴 감지</span>
+      <span class="code-keyword">const</span> injectionPatterns = [
+        /ignore\s+(previous|above)\s+instructions/i,
+        /system\s*:\s*/i,
+        /you\s+are\s+now/i,
+      ];
+      <span class="code-keyword">if</span> (injectionPatterns.<span class="code-fn">some</span>(p =&gt; p.<span class="code-fn">test</span>(text))) {
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-fn">Error</span>(<span class="code-string">'잠재적 프롬프트 인젝션 감지'</span>);
+      }
+    }
+    <span class="code-keyword">return</span> params;
+  },
+
+  <span class="code-comment">// 응답 가로채기 — 출력 가드레일</span>
+  <span class="code-fn">wrapGenerate</span>: <span class="code-keyword">async</span> ({ doGenerate }) =&gt; {
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> <span class="code-fn">doGenerate</span>();
+    <span class="code-keyword">if</span> (result.text) {
+      result.text = <span class="code-fn">maskPII</span>(result.text);
+    }
+    <span class="code-keyword">return</span> result;
+  }
+};
+
+<span class="code-keyword">export</span> { safetyMiddleware };</code></pre>
+
+      <h4>Step B: Route Handler — <code>app/api/chat/route.ts</code></h4>
+      <pre><code><span class="lang-label">TYPESCRIPT</span><span class="code-keyword">import</span> { streamText } <span class="code-keyword">from</span> <span class="code-string">'ai'</span>;
+<span class="code-keyword">import</span> { openai } <span class="code-keyword">from</span> <span class="code-string">'@ai-sdk/openai'</span>;
+<span class="code-keyword">import</span> { safetyMiddleware } <span class="code-keyword">from</span> <span class="code-string">'@/lib/ai/middleware'</span>;
+
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-fn">POST</span>(req: <span class="code-type">Request</span>) {
+  <span class="code-keyword">const</span> { messages } = <span class="code-keyword">await</span> req.<span class="code-fn">json</span>();
+
+  <span class="code-keyword">const</span> wrappedModel = <span class="code-fn">wrapLanguageModel</span>({
+    model: <span class="code-fn">openai</span>(<span class="code-string">'gpt-4o'</span>),
+    middleware: safetyMiddleware,
+  });
+
+  <span class="code-keyword">const</span> result = <span class="code-fn">streamText</span>({
+    model: wrappedModel,
+    messages,
+    maxSteps: 10,
+    <span class="code-fn">onStepFinish</span>: <span class="code-keyword">async</span> ({ stepType, toolCalls }) =&gt; {
+      console.<span class="code-fn">log</span>(<span class="code-string">`Step: ${stepType}, tools: ${toolCalls?.length ?? 0}`</span>);
+    },
+    <span class="code-fn">stopWhen</span>: <span class="code-keyword">async</span> ({ steps }) =&gt; {
+      <span class="code-keyword">return</span> steps.length &gt;= 10;
+    },
+  });
+
+  <span class="code-keyword">return</span> result.<span class="code-fn">toDataStreamResponse</span>();
+}</code></pre>
+
+      <span class="output-tag">산출물: lib/ai/middleware.ts + app/api/chat/route.ts</span>
+    </div>
+
+    <!-- Section 5.7 -->
+    <h3>5.7 프레임워크 선택 가이드</h3>
+
+    <div class="info-box insight">
+      <strong>프레임워크 선택 기준:</strong><br>
+      • Claude Code로 개발하고 있다면 → CLAUDE.md + Hooks (이 워크숍의 실습 1-5)<br>
+      • Python 에이전트를 만든다면 → OpenAI Agents SDK Guardrails 또는 LangGraph interrupt()<br>
+      • Next.js 웹앱에 AI를 넣는다면 → Vercel AI SDK 3계층 (실습 7)<br>
+      • 여러 에이전트를 동시에 쓴다면 → AGENTS.md (범용) + 각 프레임워크 Hook 조합
+    </div>
   </section>
 
   <!-- ==================== CHAPTER 6 ==================== -->
