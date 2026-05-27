@@ -10,7 +10,7 @@
 |---|------|------|----------|
 | 1 | Agent 개발 기본원리 (Session/Turn/Context, 설정, 패턴, 비용) | 완료 | `materials/01-agent-개발-기본원리.html` |
 | 2 | Hook & 하네스 엔지니어링 (결정론적 제어, 프레임워크별 비교) | 완료 | `materials/02-hook-완전정복.html` |
-| 3 | CLAUDE.md / AGENTS.md 실전 작성법 | 미작성 | |
+| 3 | 하네스 엔지니어링 실전 워크숍 (개념~세팅~사례~보안) | 완료 | `materials/03-하네스-엔지니어링-실전-워크숍.html` |
 | 4 | Permission, Memory, Hooks 실전 세팅 | 미작성 | |
 
 ### Level 2: 적용 — "우리 프로젝트에 어떻게 쓰지?"
