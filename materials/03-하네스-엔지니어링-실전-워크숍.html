@@ -1796,6 +1796,141 @@ Layer 1 ─── Task Decomposition (큰 작업을 작은 단위로 분할)</di
     <div class="chapter-number">Chapter 7</div>
     <h2>안티패턴 &amp; 보안</h2>
     <p class="chapter-desc">하네스를 만들 때 흔히 저지르는 실수와, 에이전트 시스템의 보안 위협을 학습합니다.</p>
+
+    <h3>7.1 3대 안티패턴</h3>
+
+    <h4>1. Tool Bloat</h4>
+    <div class="info-box danger">
+      <strong>Anti-Pattern: Tool Bloat<span class="en-note">— 도구 팽창. 에이전트에 너무 많은 도구를 등록하여 선택 정확도가 떨어지는 문제</span></strong>
+      도구를 20개 이상 등록하면 모델의 도구 선택 정확도가 급감합니다. Vercel은 AI SDK의 도구를 <strong>80% 제거</strong>하고 나서야 성능이 개선되었습니다.
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <h5>도구 많을수록 좋다?</h5>
+        <p>42개 도구 등록 → 모델이 잘못된 도구 선택 빈번 → 불필요한 도구 호출로 토큰 낭비 → 사용자 경험 악화</p>
+      </div>
+      <div class="compare-card after">
+        <h5>필요한 도구만 최소한으로</h5>
+        <p>8개 핵심 도구 + prepareStep으로 동적 제공 → 정확한 도구 선택 → 토큰 절약 → 빠른 응답</p>
+      </div>
+    </div>
+
+    <h4>2. All-or-Nothing Autonomy</h4>
+    <div class="info-box danger">
+      <strong>Anti-Pattern: All-or-Nothing Autonomy<span class="en-note">— 전부 아니면 전무 자율성. 에이전트에게 모든 권한을 주거나 아예 안 주는 극단적 접근</span></strong>
+      에이전트에게 모든 권한을 주면 Replit DROP DATABASE 같은 사고가 발생합니다. 반대로 모든 걸 차단하면 에이전트가 아무것도 못 합니다. <strong>중간 단계</strong>(Tiered Permission)가 답입니다.
+    </div>
+
+    <h4>3. Hook Proliferation</h4>
+    <div class="info-box danger">
+      <strong>Anti-Pattern: Hook Proliferation<span class="en-note">— Hook 과잉 증식. 과도한 Hook 추가로 기술 부채가 쌓이는 문제</span></strong>
+      Hook을 30개 이상 만들면 유지보수가 불가능한 기술 부채가 됩니다. AGENTS.md가 60줄 이내를 권장하는 것처럼, Hook도 <strong>핵심 위험만 차단하는 최소 세트</strong>를 유지하세요.
+    </div>
+
+    <h3>7.2 Tiered Permission 설계</h3>
+
+    <div class="term-card">
+      <div class="term">Tiered Permission <span class="en-note">— 단계별 권한. 도구/작업의 위험도에 따라 자동 승인(Safe), 화이트리스트(Moderate), 명시적 승인(Dangerous)의 3단계로 나누는 권한 체계</span></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>단계</th>
+          <th>위험도</th>
+          <th>정책</th>
+          <th>예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Safe</strong></td>
+          <td>낮음</td>
+          <td>자동 승인</td>
+          <td>파일 읽기, grep, git status, git diff</td>
+        </tr>
+        <tr>
+          <td><strong>Moderate</strong></td>
+          <td>중간</td>
+          <td>화이트리스트</td>
+          <td>파일 수정, npm install, git commit</td>
+        </tr>
+        <tr>
+          <td><strong>Dangerous</strong></td>
+          <td>높음</td>
+          <td>명시적 승인 필요</td>
+          <td>파일 삭제, DB 쿼리, git push, 외부 API 호출</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><span class="lang-label">JSON</span><code><span class="code-comment">// Claude Code permission 설정 예시</span>
+{
+  <span class="code-string">"permissions"</span>: {
+    <span class="code-string">"allow"</span>: [
+      <span class="code-string">"Bash(grep:*)"</span>,
+      <span class="code-string">"Bash(git status)"</span>,
+      <span class="code-string">"Bash(git diff)"</span>,
+      <span class="code-string">"Read"</span>,
+      <span class="code-string">"Bash(npm test)"</span>
+    ],
+    <span class="code-string">"deny"</span>: [
+      <span class="code-string">"Bash(rm -rf *)"</span>,
+      <span class="code-string">"Bash(curl * | bash)"</span>
+    ]
+  }
+}</code></pre>
+
+    <h3>7.3 OWASP Top 10 for Agentic Applications</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>위협</th>
+          <th>설명</th>
+          <th>하네스 대응</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Prompt Injection<span class="en-note"> — 프롬프트 인젝션. 악의적 입력으로 에이전트 행동을 조작</span></td>
+          <td>사용자 입력에 숨겨진 명령 삽입</td>
+          <td>입력 가드레일 + wrapLanguageModel</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Excessive Agency<span class="en-note"> — 과도한 대리. 에이전트에 필요 이상의 권한 부여</span></td>
+          <td>불필요한 도구/권한 접근 허용</td>
+          <td>Tiered Permission + Tool Gateway</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Insecure Tool Use<span class="en-note"> — 안전하지 않은 도구 사용</span></td>
+          <td>도구 호출 검증 없이 실행</td>
+          <td>PreToolUse Hook + allowlist</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Improper Output Handling<span class="en-note"> — 부적절한 출력 처리</span></td>
+          <td>에이전트 출력을 검증 없이 사용</td>
+          <td>출력 가드레일 + PostToolUse</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Unbounded Consumption<span class="en-note"> — 무제한 자원 소비</span></td>
+          <td>무한 루프, 과도한 API 호출</td>
+          <td>stopWhen + maxSteps + timeout</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box insight">
+      <strong>멀티 에이전트 비구성성<span class="en-note">— Non-Compositionality. 개별 구성요소가 안전해도 조합하면 전체 시스템은 안전하지 않을 수 있다는 성질</span></strong>
+      (arXiv 2505.02077): 개별 에이전트가 안전해도 조합하면 예측 불가능한 위험이 발생합니다. 에이전트 A가 B에게 위임하고, B가 다시 A에게 위임하는 <strong>무한 위임 루프</strong>가 대표적입니다. 각 에이전트의 하네스가 독립적으로 강제되어야 합니다.
+    </div>
+
   </section>
 
   <!-- ==================== CHAPTER 8 ==================== -->
