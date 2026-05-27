@@ -635,6 +635,233 @@ if (command.includes("DROP TABLE")) {
     <div class="chapter-number">Chapter 2</div>
     <h2>1계층: 규칙 파일 세팅</h2>
     <p class="chapter-desc">하네스의 첫 번째 계층입니다. CLAUDE.md와 AGENTS.md로 에이전트의 행동 규범을 정의합니다.</p>
+
+    <!-- Section 2.1 -->
+    <h3>2.1 CLAUDE.md란?</h3>
+
+    <div class="term-card">
+      <div class="term">CLAUDE.md <span class="en-note">— Claude Code가 세션 시작 시 자동으로 로딩하는 규칙 파일. 에이전트에게 "이 프로젝트에서는 이렇게 행동해라"를 선언하는 문서</span></div>
+      <div class="meaning">빌드 명령, 코드 스타일, 금지사항 등을 한 곳에 정의. 에이전트의 "업무 매뉴얼"</div>
+    </div>
+
+    <p>CLAUDE.md는 계층 구조로 로딩됩니다. 아래 세 레벨이 모두 자동으로 적용되며, 하위 레벨이 상위 레벨을 오버라이드합니다.</p>
+
+    <ol>
+      <li><code>~/.claude/CLAUDE.md</code> — 글로벌 규칙 (모든 프로젝트 공통)</li>
+      <li><code>프로젝트루트/CLAUDE.md</code> — 프로젝트 레벨 규칙</li>
+      <li><code>.claude/rules/*.md</code> — 세부 규칙 파일 (주제별 분리, 자동 로딩)</li>
+    </ol>
+
+    <div class="file-tree">
+<span class="folder">~/.claude/</span>
+├── <span class="file">CLAUDE.md</span>              <span class="desc">← 글로벌 규칙 (모든 프로젝트에 적용)</span>
+├── <span class="file">settings.json</span>          <span class="desc">← Hook, 모델, 권한 설정</span>
+└── <span class="folder">hooks/</span>                <span class="desc">← Hook 스크립트 디렉터리</span>
+
+<span class="folder">my-project/</span>
+├── <span class="file">CLAUDE.md</span>              <span class="desc">← 프로젝트 규칙 (이 프로젝트만 적용)</span>
+├── <span class="folder">.claude/</span>
+│   └── <span class="folder">rules/</span>
+│       ├── <span class="file">testing.md</span>     <span class="desc">← 테스트 규칙</span>
+│       └── <span class="file">style.md</span>       <span class="desc">← 코드 스타일 규칙</span>
+└── <span class="file">AGENTS.md</span>              <span class="desc">← 범용 에이전트 규칙 (모든 AI 에이전트 지원)</span>
+    </div>
+
+    <!-- Section 2.2 -->
+    <h3>2.2 좋은 CLAUDE.md 작성 원칙</h3>
+
+    <ul>
+      <li><strong>60줄 이내 권장</strong> — 300줄 넘으면 토큰 낭비 + 중요 규칙 묻힘 (HumanLayer 가이드)</li>
+      <li><strong>Progressive Disclosure</strong><span class="en-note"> 점진적 공개 — 핵심만 CLAUDE.md에, 세부사항은 rules/로 분리</span></li>
+      <li><strong>구체적 행동 지시</strong> ("TypeScript strict mode 사용" ✅) vs 모호한 지시 ("좋은 코드 작성" ❌)</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <h5>나쁜 CLAUDE.md</h5>
+        <pre style="background:#2d1515; color:#fca5a5; font-size:0.82rem; padding:12px 16px; border-radius:6px; margin:8px 0;"># My Project
+코드를 잘 짜세요.
+테스트를 작성하세요.
+버그 없이 만드세요.
+성능을 신경쓰세요.
+보안에 주의하세요.
+... (300줄 계속)
+
+❌ 모호한 지시
+❌ 300줄 = 토큰 낭비
+❌ 중요한 규칙이 묻힘</pre>
+      </div>
+      <div class="compare-card after">
+        <h5>좋은 CLAUDE.md</h5>
+        <pre style="background:#0f2d1f; color:#6ee7b7; font-size:0.82rem; padding:12px 16px; border-radius:6px; margin:8px 0;"># My App
+
+## 빌드
+pnpm dev / pnpm build
+
+## 스타일
+- TypeScript strict, no `any`
+- Server Components 기본
+
+## 금지
+- console.log 커밋 금지
+- 환경변수 하드코딩 금지
+
+✅ 40줄, 핵심만
+✅ 구체적 행동 지시
+✅ 세부사항은 rules/로</pre>
+      </div>
+    </div>
+
+    <div class="info-box warning">
+      <strong>Anti-Pattern: CLAUDE.md 만능 파일</strong>
+      모든 규칙을 한 파일에 넣으면 토큰 낭비 + 중요한 규칙이 다른 내용에 묻힙니다. HumanLayer 연구에 따르면 <strong>60줄 이내</strong>가 최적입니다. 세부 규칙은 <code>.claude/rules/</code>로 분리하세요.
+    </div>
+
+    <!-- Section 2.3 -->
+    <h3>2.3 실습 1 — 나의 첫 CLAUDE.md</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">1</div>
+        <div class="workshop-title">나의 첫 CLAUDE.md 작성</div>
+      </div>
+      <div class="workshop-goal">목표: 프로젝트에 맞는 CLAUDE.md를 작성하여 에이전트의 기본 행동을 정의합니다.</div>
+
+      <h4>Step A: 빈 템플릿 생성</h4>
+      <pre><code><span class="lang-label">Markdown</span># 프로젝트명
+
+## 빌드/실행
+(빌드 명령어)
+
+## 코드 스타일
+(스타일 규칙)
+
+## 금지사항
+(절대 하면 안 되는 것)</code></pre>
+
+      <h4>Step B: 예시 채우기 (Next.js 프로젝트)</h4>
+      <pre><code><span class="lang-label">Markdown</span># my-app
+
+## 빌드/실행
+- `pnpm dev` — 개발 서버
+- `pnpm build && pnpm start` — 프로덕션
+
+## 코드 스타일
+- TypeScript strict mode
+- 컴포넌트: function 선언, Props 타입 명시
+- 서버 컴포넌트 기본, 'use client' 최소화
+
+## 금지사항
+- `any` 타입 사용 금지
+- console.log 커밋 금지
+- 환경변수 하드코딩 금지</code></pre>
+
+      <h4>Step C: 검증</h4>
+      <p>Claude Code 세션을 시작한 뒤 <code>/status</code> 명령으로 로딩된 컨텍스트를 확인하거나, "CLAUDE.md에 정의된 금지사항이 뭐야?"라고 질문해보세요. 에이전트가 규칙을 정확히 인식하면 성공입니다.</p>
+
+      <span class="output-tag">산출물: 프로젝트루트/CLAUDE.md</span>
+    </div>
+
+    <!-- Section 2.4 -->
+    <h3>2.4 AGENTS.md</h3>
+
+    <div class="term-card">
+      <div class="term">AGENTS.md <span class="en-note">— Linux Foundation이 표준화한 범용 에이전트 지시 파일. Claude Code뿐 아니라 Codex, Gemini 등 다양한 AI 에이전트가 읽을 수 있는 표준 형식</span></div>
+      <div class="meaning">특정 도구에 종속되지 않는 범용 규칙 파일. GitHub에서 60,000+ 레포가 채택</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>CLAUDE.md</th>
+          <th>AGENTS.md</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>대상</td>
+          <td>Claude Code 전용</td>
+          <td>모든 AI 에이전트 (범용)</td>
+        </tr>
+        <tr>
+          <td>표준화</td>
+          <td>Anthropic 자체</td>
+          <td>Linux Foundation</td>
+        </tr>
+        <tr>
+          <td>채택 규모</td>
+          <td>Claude Code 사용자</td>
+          <td>60,000+ GitHub 레포</td>
+        </tr>
+        <tr>
+          <td>위치</td>
+          <td>프로젝트 루트 또는 ~/.claude/</td>
+          <td>프로젝트 루트</td>
+        </tr>
+        <tr>
+          <td>설정 확장</td>
+          <td>.claude/rules/</td>
+          <td>config.toml</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Stripe 조건부 규칙 예시</h4>
+    <pre><code><span class="lang-label">TOML</span># AGENTS.md의 config.toml 확장
+[[rules]]
+pattern = "src/payments/**"
+content = "결제 관련 코드 수정 시 반드시 PCI-DSS 컴플라이언스 검토 후 진행"
+
+[[rules]]
+pattern = "*.test.*"
+content = "테스트 파일은 AAA(Arrange-Act-Assert) 패턴 준수"</code></pre>
+
+    <div class="info-box insight">
+      <strong>Stripe의 파일 경로별 조건부 규칙</strong>
+      Stripe는 파일 경로 패턴별로 다른 규칙을 적용합니다. 결제 코드에는 보안 규칙, 테스트 코드에는 테스트 패턴 규칙. 1,300+ PR/주를 처리하는 <span class="en-note">Minions — 미니언즈. Stripe의 AI 코딩 에이전트 시스템 이름</span> 시스템의 핵심 전략입니다.
+    </div>
+
+    <!-- Section 2.5 -->
+    <h3>2.5 실습 2 — 나의 첫 AGENTS.md</h3>
+
+    <div class="workshop-card">
+      <div class="workshop-header">
+        <div class="workshop-number">2</div>
+        <div class="workshop-title">나의 첫 AGENTS.md 작성</div>
+      </div>
+      <div class="workshop-goal">목표: 도구에 종속되지 않는 범용 에이전트 지시 파일을 작성하여, 어떤 AI 에이전트도 동일한 규칙으로 동작하게 합니다.</div>
+
+      <h4>템플릿</h4>
+      <pre><code><span class="lang-label">Markdown</span># AGENTS.md
+
+## Project Overview
+(프로젝트 설명, 기술 스택, 패키지 매니저)
+
+## Code Standards
+(코드 작성 기준 — 컴포넌트 구조, DB 접근 방식, API 위치 등)
+
+## Tool Restrictions
+(금지된 동작 — 직접 DB 접근, 하드코딩 등)</code></pre>
+
+      <h4>완성 예시 (Next.js 대시보드)</h4>
+      <pre><code><span class="lang-label">Markdown</span># AGENTS.md
+
+## Project Overview
+Next.js 15 기반 대시보드 앱. TypeScript strict, pnpm 패키지 매니저.
+
+## Code Standards
+- Server Components 기본, Client Components는 'use client' 명시
+- DB 접근은 반드시 lib/db.ts의 쿼리 빌더 사용
+- API Route는 app/api/ 하위에만 생성
+
+## Tool Restrictions
+- 프로덕션 DB 직접 접근 금지
+- 외부 API 호출 시 lib/fetch-client.ts 사용
+- 환경변수는 .env.local에만 저장</code></pre>
+
+      <span class="output-tag">산출물: 프로젝트루트/AGENTS.md</span>
+    </div>
   </section>
 
   <!-- ==================== CHAPTER 3 ==================== -->
