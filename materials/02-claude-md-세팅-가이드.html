@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLAUDE.md 세팅 가이드 — 교육자료</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #555;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --orange: #d97706;
+      --orange-light: #fef3c7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --border: #e5e7eb;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero .meta {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: -32px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .toc h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--accent); }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* Chapters */
+    .chapter {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .chapter-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .chapter h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .chapter-desc {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 36px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--accent-dark);
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* 영어 주석 */
+    .en { display: inline; color: #6366f1; font-weight: 600; }
+    .en-note { font-size: 0.82rem; color: #6b7280; font-weight: 400; font-style: italic; }
+
+    /* 용어 카드 */
+    .term-card {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .term-card .term { font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; }
+    .term-card .meaning { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* 코드 블록 */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 16px 0 24px;
+      position: relative;
+    }
+    pre .lang-label {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #be185d;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    .code-comment { color: #6ee7b7; font-style: italic; }
+    .code-keyword { color: #c084fc; }
+    .code-string { color: #fbbf24; }
+    .code-fn { color: #60a5fa; }
+
+    /* 테이블 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    /* 정보 박스 */
+    .info-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 0.92rem;
+    }
+    .info-box.concept { background: var(--accent-light); border-left: 4px solid var(--accent); }
+    .info-box.warning { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .info-box.danger { background: var(--red-light); border-left: 4px solid var(--red); }
+    .info-box.success { background: var(--green-light); border-left: 4px solid var(--green); }
+    .info-box.insight { background: var(--purple-light); border-left: 4px solid var(--purple); }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    /* 다이어그램 */
+    .diagram {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* 인용문 */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: #f8fafc;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote cite {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* 리스트 */
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+
+    /* 비교 카드 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .compare-card {
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+    .compare-card.before { background: var(--red-light); border-color: #fca5a5; }
+    .compare-card.after { background: var(--green-light); border-color: #6ee7b7; }
+    .compare-card h5 { font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* 파일 트리 */
+    .file-tree {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 16px 0;
+    }
+    .file-tree .folder { color: #60a5fa; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .desc { color: #6ee7b7; font-style: italic; }
+
+    /* 키 카드 그리드 */
+    .key-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .key-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .key-card:hover { border-color: var(--accent); }
+    .key-card h5 {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .key-card h4 {
+      font-size: 1rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .key-card p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+
+    /* 오해/현실 비교 */
+    .myth-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .myth-wrong {
+      padding: 12px 16px;
+      background: var(--red-light);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .myth-right {
+      padding: 12px 16px;
+      background: var(--green-light);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* 소스 목록 */
+    .sources-section {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .sources-section h4 { margin-bottom: 12px; }
+    .sources-section a { color: var(--accent); text-decoration: none; font-size: 0.88rem; }
+    .sources-section a:hover { text-decoration: underline; }
+    .sources-section li { margin-bottom: 4px; }
+    .source-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .source-tag.anthropic { background: var(--accent-light); color: var(--accent-dark); }
+    .source-tag.openai { background: var(--green-light); color: var(--green); }
+    .source-tag.paper { background: var(--purple-light); color: var(--purple); }
+    .source-tag.research { background: #f1f5f9; color: #64748b; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .chapter { padding: 28px 20px; }
+      .hero h1 { font-size: 1.8rem; }
+      .compare-grid, .key-grid { grid-template-columns: 1fr; }
+      .myth-row { grid-template-columns: 1fr; }
+      pre { font-size: 0.8rem; padding: 14px 16px; }
+    }
+
+    @media print {
+      .hero { background: #1e293b !important; -webkit-print-color-adjust: exact; }
+      .chapter { break-inside: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="container">
+    <h1>CLAUDE.md 세팅 가이드</h1>
+    <p class="subtitle">
+      어떻게 읽히는가(로딩 원리)부터 어떻게 줄이는가(라인 최적화)까지 —<br>
+      에이전트에게 지시를 전달하는 가장 중요한 파일을 제대로 세팅하는 법
+    </p>
+    <p class="meta">2026.06 | Anthropic 공식 문서 · arXiv 논문 10편 · 프롬프트 캐시 실측 단가 기반</p>
+  </div>
+</header>
+
+<!-- ==================== TOC ==================== -->
+<div class="container">
+  <nav class="toc">
+    <h2>목차</h2>
+    <ol>
+      <li><a href="#ch1">왜 지금 CLAUDE.md가 '대세'인가</a></li>
+      <li><a href="#ch2">로딩 메커니즘 — 어떻게 읽히나</a></li>
+      <li><a href="#ch3">import(@)와 파일 분할</a></li>
+      <li><a href="#ch4">라인 수 최적화 — 왜 짧을수록 좋은가</a></li>
+      <li><a href="#ch5">작성 원칙 — 좋은 예 vs 나쁜 예</a></li>
+      <li><a href="#ch6">안티패턴 9가지</a></li>
+      <li><a href="#ch7">실전 템플릿 (복붙용)</a></li>
+      <li><a href="#ch8">검증과 반복 — 측정하고 개선하기</a></li>
+      <li><a href="#ch9">참고자료</a></li>
+    </ol>
+  </nav>
+
+  <!-- ==================== CHAPTER 1 ==================== -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-number">Chapter 1</div>
+    <h2>왜 지금 CLAUDE.md가 '대세'인가</h2>
+    <p class="chapter-desc">설정 파일이 "있으면 좋은 것"에서 "팀의 인프라"가 된 배경</p>
+
+    <p>LLM은 <strong>세션 사이에 아무것도 기억하지 못합니다</strong>. 메모리 파일이 없으면 매번 같은 스택, 같은 컨벤션, 같은 프로젝트 맥락을 다시 설명해야 합니다. <code>CLAUDE.md</code>는 그 맥락을 <strong>모든 대화에 자동으로 진입시키는 유일한 메커니즘</strong>입니다.</p>
+
+    <blockquote>
+      "CLAUDE.md는 .gitignore에 던져두는 부산물이 아니라 인프라다. 버전 관리되고, PR에서 리뷰되고, 담당자가 있고, 에이전트 동작으로 테스트되어야 한다."
+      <cite>— HumanLayer, Writing a good CLAUDE.md</cite>
+    </blockquote>
+
+    <h3>표준화 타임라인 — 도구를 넘는 컨벤션</h3>
+    <p>2025년 중반까지는 도구마다 형식이 파편화되어 있었습니다(<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.github/copilot-instructions.md</code> …). 오픈소스 메인테이너는 거의 같은 파일을 5개씩 관리해야 했습니다. 그 후 빠르게 수렴했습니다.</p>
+
+    <div class="diagram">
+2025.08            2025.12                    2026.05
+   │                  │                          │
+OpenAI가          Linux Foundation의         AGENTS.md
+AGENTS.md 제안     AAIF가 AGENTS.md 표준 관리   60,000+ repo 채택
+(Google·Cursor·   (OpenAI·Anthropic·Google·    20+ 도구 네이티브
+ Sourcegraph 동참)  AWS·Cloudflare 참여)         지원</div>
+
+    <div class="info-box insight">
+      <strong>실측: 지시 파일은 비용까지 줄인다</strong>
+      10개 저장소·124개 PR을 분석한 2026년 논문(arXiv 2601.20404)에 따르면, AGENTS.md가 존재할 때 에이전트의 <strong>중앙값 실행 시간이 28.6% 감소</strong>하고 <strong>출력 토큰이 16.6% 감소</strong>했으며, 작업 완료율은 동등하게 유지되었습니다. 잘 쓴 지시 파일은 "친절"이 아니라 "효율"입니다.
+    </div>
+
+    <table>
+      <thead><tr><th>형식</th><th>소유/표준</th><th>적용 범위</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AGENTS.md</strong></td><td>Linux Foundation (개방형 표준)</td><td>20+ 도구 (Codex, Cursor, Copilot, Gemini CLI, Aider …)</td></tr>
+        <tr><td><strong>CLAUDE.md</strong></td><td>Anthropic</td><td>Claude Code (4계층 메모리)</td></tr>
+        <tr><td><code>.cursor/rules/*.mdc</code></td><td>Cursor</td><td>Cursor 전용 (glob 스코프)</td></tr>
+        <tr><td><code>.github/copilot-instructions.md</code></td><td>Microsoft</td><td>GitHub Copilot</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box concept">
+      <strong>Claude Code와 AGENTS.md의 관계</strong>
+      Claude Code는 <code>AGENTS.md</code>가 아니라 <code>CLAUDE.md</code>를 읽습니다. 이미 <code>AGENTS.md</code>를 쓰고 있다면, <code>CLAUDE.md</code>에서 <code>@AGENTS.md</code>로 import 하면 두 도구가 같은 지시를 공유합니다(중복 X). 자세한 import 문법은 Chapter 3 참고.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 2 ==================== -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-number">Chapter 2</div>
+    <h2>로딩 메커니즘 — 어떻게 읽히나</h2>
+    <p class="chapter-desc">"어떻게 읽히는지"를 알아야 "어떻게 써야 하는지"가 보입니다. 가장 많이 오해하는 부분.</p>
+
+    <h3>4계층 — 덮어쓰기가 아니라 '이어붙이기'</h3>
+    <p>CLAUDE.md는 4개의 스코프(scope)에 존재할 수 있습니다. 핵심은 <strong>상위 파일을 하위 파일이 덮어쓰지 않는다</strong>는 점입니다. <strong>발견된 모든 파일이 컨텍스트에 그대로 이어붙여(concatenate)집니다.</strong> 로드 순서는 넓은 스코프 → 좁은 스코프이며, 좁은(프로젝트) 지시가 넓은(사용자) 지시보다 <strong>뒤에</strong> 위치합니다.</p>
+
+    <table>
+      <thead><tr><th>스코프</th><th>위치</th><th>공유 범위</th></tr></thead>
+      <tbody>
+        <tr><td><strong>관리 정책<br><span class="en-note">Managed policy</span></strong></td><td>예) macOS <code>/Library/Application Support/ClaudeCode/CLAUDE.md</code></td><td>조직의 모든 사용자 (개인이 제외 불가)</td></tr>
+        <tr><td><strong>사용자<br><span class="en-note">User</span></strong></td><td><code>~/.claude/CLAUDE.md</code></td><td>나 자신 (모든 프로젝트)</td></tr>
+        <tr><td><strong>프로젝트<br><span class="en-note">Project</span></strong></td><td><code>./CLAUDE.md</code> 또는 <code>./.claude/CLAUDE.md</code></td><td>팀 (git으로 공유)</td></tr>
+        <tr><td><strong>로컬<br><span class="en-note">Local</span></strong></td><td><code>./CLAUDE.local.md</code></td><td>나 자신 (현재 프로젝트만, .gitignore 권장)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>상위 디렉토리 재귀 (Recursion)</h3>
+    <p>Claude Code는 현재 작업 디렉토리에서 <strong>위쪽으로 트리를 거슬러 올라가며</strong> CLAUDE.md를 모읍니다. 루트에 가까운 파일이 먼저, 작업 위치에 가까운 파일이 나중에 로드됩니다(= 더 "신선하게" 기억됨).</p>
+
+    <div class="file-tree">
+<span class="comment" style="color:#94a3b8">// foo/bar/ 에서 claude 실행 시 로드 순서</span>
+<span class="folder">foo/</span><span class="file">CLAUDE.md</span>            <span class="desc">← 먼저 로드 (상위)</span>
+<span class="folder">foo/bar/</span><span class="file">CLAUDE.md</span>        <span class="desc">← 나중 로드 (작업 위치)</span>
+<span class="folder">foo/bar/</span><span class="file">CLAUDE.local.md</span>  <span class="desc">← 같은 폴더의 .local 은 맨 마지막</span></div>
+
+    <div class="info-box concept">
+      <strong>서브디렉토리 CLAUDE.md는 '지연 로딩'</strong>
+      작업 위치보다 <em>아래쪽</em> 서브디렉토리에 둔 CLAUDE.md는 실행 시점에는 로드되지 않습니다. Claude가 <strong>그 디렉토리의 파일을 실제로 읽을 때</strong> 함께 주입됩니다(just-in-time). 모노레포에서 모듈별 규칙을 둘 때 유용합니다.
+    </div>
+
+    <h3>언제 주입되나 — 그리고 어디에 주입되나</h3>
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>WHEN</h5>
+        <h4>매 세션 시작 시</h4>
+        <p>CLAUDE.md와 auto memory는 모든 대화 시작 시점에 로드됩니다.</p>
+      </div>
+      <div class="key-card">
+        <h5>AFTER /compact</h5>
+        <h4>컴팩션 후 재주입</h4>
+        <p>프로젝트 루트 CLAUDE.md는 <code>/compact</code> 후 디스크에서 다시 읽어 재주입됩니다(살아남음).</p>
+      </div>
+      <div class="key-card">
+        <h5>WHERE</h5>
+        <h4>system이 아니라 user 메시지</h4>
+        <p>CLAUDE.md는 시스템 프롬프트의 일부가 아니라, <strong>시스템 프롬프트 다음의 user 메시지</strong>로 전달됩니다.</p>
+      </div>
+    </div>
+
+    <div class="info-box insight">
+      <strong>HTML 주석은 토큰을 쓰지 않는다 (꿀팁)</strong>
+      CLAUDE.md의 블록 단위 HTML 주석 <code>&lt;!-- 메인테이너 메모 --&gt;</code>는 Claude 컨텍스트에 주입되기 <strong>전에 제거</strong>됩니다. 사람용 메모를 토큰 소비 없이 남길 수 있습니다. 단, <strong>코드 블록 안</strong>의 주석은 그대로 보존됩니다.
+    </div>
+
+    <div class="info-box warning">
+      <strong>오해 주의 — "시스템 프롬프트 레벨"이 필요하면</strong>
+      CLAUDE.md는 user 메시지이므로, 진짜 시스템 프롬프트 레벨로 주입하려면 <code>--append-system-prompt</code> CLI 플래그를 써야 합니다. 매 실행마다 전달해야 하므로 대화형보다는 스크립트/자동화에 적합합니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 3 ==================== -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-number">Chapter 3</div>
+    <h2>import(@)와 파일 분할</h2>
+    <p class="chapter-desc">긴 지시를 쪼개는 법 — 그리고 "쪼개도 토큰은 안 줄어든다"는 함정</p>
+
+    <p>CLAUDE.md 안 어디서든 <code>@경로</code> 문법으로 다른 파일을 불러올 수 있습니다.</p>
+
+    <pre><code><span class="lang-label">Markdown</span>
+<span class="code-comment"># 프로젝트 개요는 README, 명령어는 package.json 참고</span>
+See @README for project overview and @package.json for npm commands.
+
+<span class="code-comment"># 추가 지시</span>
+- git 워크플로우 @docs/git-instructions.md
+- 개인 메모 @~/.claude/my-project-instructions.md   <span class="code-comment"># 홈 경로 OK</span>
+- 다른 도구와 공유 @AGENTS.md                       <span class="code-comment"># Codex 등과 공용</span></code></pre>
+
+    <table>
+      <thead><tr><th>규칙</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>최대 깊이</strong></td><td>import는 재귀적으로 다른 파일을 부를 수 있으나 <strong>최대 4 hops</strong>까지</td></tr>
+        <tr><td><strong>상대 경로 기준</strong></td><td>작업 디렉토리가 아니라 <strong>import를 포함한 파일</strong> 기준으로 해석</td></tr>
+        <tr><td><strong>경로 종류</strong></td><td>상대 경로 · 절대 경로 · 홈 경로(<code>@~/...</code>) 모두 허용</td></tr>
+        <tr><td><strong>외부 import 승인</strong></td><td>프로젝트 밖 파일을 처음 import 하면 승인 대화상자가 뜸. 거절하면 비활성 유지</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box danger">
+      <strong>핵심 함정: import는 컨텍스트를 줄여주지 않는다</strong>
+      import된 파일은 그것을 참조한 CLAUDE.md와 함께 <strong>실행 시점에 전부 펼쳐져 로드</strong>됩니다. 즉 파일을 나누면 <strong>정리(organization)에는 도움이 되지만 토큰 절약은 0</strong>입니다. 진짜로 컨텍스트를 아끼려면 → 다음 장의 "온디맨드 로딩"을 보세요.
+    </div>
+
+    <h3>토큰을 진짜로 아끼는 분할: Skills / rules</h3>
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <h5>@import — 항상 로드</h5>
+        <ul>
+          <li>참조 즉시 launch 때 전부 펼쳐짐</li>
+          <li>매 세션 토큰 비용 발생</li>
+          <li>"항상 필요한" 핵심 지시에만</li>
+        </ul>
+      </div>
+      <div class="compare-card after">
+        <h5>Skill / path-scoped rule — 필요 시 로드</h5>
+        <ul>
+          <li>호출되거나 매칭될 때만 로드(on-demand)</li>
+          <li>평소엔 base 컨텍스트를 차지하지 않음</li>
+          <li>특정 워크플로우(PR 리뷰, 마이그레이션)에 적합</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <strong>설계 원칙</strong>
+      "PR 리뷰 절차", "DB 마이그레이션 순서"처럼 <strong>특정 상황에서만 쓰는 상세 지시</strong>는 CLAUDE.md(또는 @import)가 아니라 <strong>Skill</strong>이나 <code>.claude/rules/</code>의 path-scoped 규칙(YAML <code>paths:</code> 프론트매터)으로 빼세요. base 컨텍스트가 가벼워집니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 4 ==================== -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-number">Chapter 4</div>
+    <h2>라인 수 최적화 — 왜 짧을수록 좋은가</h2>
+    <p class="chapter-desc">"짧게 쓰라"는 취향이 아니라, 비용·성능·연구로 뒷받침되는 원칙입니다.</p>
+
+    <h3>근거 1 — 토큰 경제학 (매 턴 비용)</h3>
+    <p>CLAUDE.md는 정적 프리픽스의 일부로 <strong>프롬프트 캐시</strong>에 들어갑니다. 캐시가 따뜻할 때 읽기 비용은 기본 입력가의 <strong>10%(0.1x)</strong>로 저렴하지만, 이것이 "공짜"라는 뜻은 아닙니다.</p>
+
+    <table>
+      <thead><tr><th>항목</th><th>수치</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td><strong>캐시 읽기(hit)</strong></td><td>기본가의 0.1x</td><td>캐시가 살아있는 동안 매 턴 90% 할인</td></tr>
+        <tr><td><strong>캐시 쓰기(5분)</strong></td><td>기본가의 1.25x</td><td>첫 턴/캐시 만료 후엔 더 비쌈</td></tr>
+        <tr><td><strong>캐시 TTL</strong></td><td>5분 (사용 시 갱신)</td><td>5분 이상 침묵 → 캐시 증발, 다음 턴 전액 쓰기</td></tr>
+        <tr><td><strong>손익분기</strong></td><td>읽기 1회</td><td>5분 캐시는 단 1번 재사용해도 이득</td></tr>
+        <tr><td><strong>최소 캐시 단위</strong></td><td>1,024 토큰 (Opus 4.8 / Sonnet 4.6)</td><td>이보다 작으면 캐싱이 조용히 미적용</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box warning">
+      <strong>한글은 토큰을 더 먹는다</strong>
+      "1 토큰 ≈ 영어 4글자 ≈ 0.75단어"가 공식 추정치입니다. 그러나 한글(CJK)은 글자당 토큰이 훨씬 높아, 같은 의미라도 영어 대비 <strong>글자당 약 2~3배</strong> 토큰을 씁니다. 게다가 Opus 4.7+ 신형 토크나이저는 동일 텍스트에 최대 35% 더 많은 토큰을 쓸 수 있습니다. <strong>한국어 CLAUDE.md는 라인 관리가 더 중요합니다.</strong>
+    </div>
+
+    <h3>근거 2 — Context Rot (길수록 멍청해진다)</h3>
+    <p>"많이 넣을수록 좋다"는 직관은 틀렸습니다. 입력이 길어지면 <strong>단순 작업에서도</strong> 성능이 떨어진다는 것이 반복 검증되었습니다.</p>
+
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>arXiv 2307.03172</h5>
+        <h4>Lost in the Middle</h4>
+        <p>정보가 컨텍스트 <strong>중간</strong>에 있으면 정확도가 크게 떨어지고, 시작·끝에 있을 때 가장 높음(U자형). 긴 컨텍스트 모델도 동일.</p>
+      </div>
+      <div class="key-card">
+        <h5>Chroma 2025</h5>
+        <h4>Context Rot (18개 모델)</h4>
+        <p>GPT·Claude·Gemini 등 18개 프런티어 모델 모두 입력이 길어질수록 성능 저하. Claude는 짧은(~300토큰) vs 긴(~113K) 프롬프트 격차가 컸음.</p>
+      </div>
+      <div class="key-card">
+        <h5>arXiv 2510.05381</h5>
+        <h4>길이 자체가 해롭다</h4>
+        <p>관련 정보를 <strong>완벽히 검색</strong>해도, 입력 길이만으로 성능이 13.9~85% 저하. 산만요소가 아니라 "길이" 자체가 원인.</p>
+      </div>
+      <div class="key-card">
+        <h5>arXiv 2509.21051</h5>
+        <h4>지시가 많아질수록 (EMNLP'25)</h4>
+        <p>동시 지시 개수가 늘수록 준수율이 일관되게 하락. 각각은 쉬운 지시도 한꺼번에 주면 못 지킴.</p>
+      </div>
+    </div>
+
+    <blockquote>
+      "트랜스포머는 n개 토큰에 대해 n² 쌍의 관계를 만든다. 컨텍스트가 커질수록 어텐션이 얇게 펴진다 … 원하는 결과의 가능성을 최대화하는 <strong>최소한의 고신호(high-signal) 토큰 집합</strong>을 찾아라."
+      <cite>— Anthropic, Effective Context Engineering for AI Agents</cite>
+    </blockquote>
+
+    <h3>근거 3 — 그래서 몇 줄?</h3>
+    <table>
+      <thead><tr><th>권장</th><th>출처</th><th>구분</th></tr></thead>
+      <tbody>
+        <tr><td><strong>200줄 이하</strong></td><td>Anthropic 공식 (code.claude.com/docs/costs)</td><td>유일한 공식 수치</td></tr>
+        <tr><td>루트 파일 100줄 / 1,000토큰 이하</td><td>The Prompt Shelf (커뮤니티)</td><td>실무 권장 (더 엄격)</td></tr>
+        <tr><td>60~80줄 넘으면 무시되기 시작</td><td>HumanLayer / claude-md-templates</td><td>커뮤니티 경험치</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box concept">
+      <strong>컨텍스트 예산 감각 (커뮤니티 추정)</strong>
+      200K 창 중 Claude Code 시스템 프롬프트(8~12K) + 도구 스키마(4~6K) + MCP 서버 등으로 <strong>첫 메시지 전에 이미 25~40K 토큰</strong>이 소비됩니다. 200줄 CLAUDE.md ≈ 1,500~2,000 토큰, 500줄이면 5,000 토큰을 넘습니다. "한 줄도 공짜가 아니다"가 핵심입니다.
+    </div>
+
+    <div class="info-box success">
+      <strong>공식 가이드 한 줄 요약</strong>
+      "CLAUDE.md를 200줄 이하로 유지하라 — <em>꼭 필요한 것(essentials)만</em> 넣어서." 더 긴 파일은 컨텍스트를 더 쓰고 <strong>준수율(adherence)을 떨어뜨립니다.</strong>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 5 ==================== -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-number">Chapter 5</div>
+    <h2>작성 원칙 — 좋은 예 vs 나쁜 예</h2>
+    <p class="chapter-desc">"무엇을 넣고 무엇을 뺄지"를 가르는 공식 기준</p>
+
+    <h3>Include / Exclude — 공식 기준표</h3>
+    <table>
+      <thead><tr><th>넣을 것 (Include)</th><th>뺄 것 (Exclude)</th></tr></thead>
+      <tbody>
+        <tr><td>Claude가 추측 못 하는 Bash 명령어</td><td>코드를 읽으면 알 수 있는 것</td></tr>
+        <tr><td>기본값과 <strong>다른</strong> 코드 스타일 규칙</td><td>Claude가 이미 아는 표준 언어 관례</td></tr>
+        <tr><td>테스트 방법·선호 러너</td><td>상세 API 문서 (링크로 대체)</td></tr>
+        <tr><td>레포 에티켓 (브랜치 네이밍, PR 규칙)</td><td>자주 바뀌는 정보</td></tr>
+        <tr><td>프로젝트 고유 아키텍처 결정</td><td>긴 설명·튜토리얼</td></tr>
+        <tr><td>환경 특이사항 (필수 env 변수)</td><td>파일별 코드베이스 설명</td></tr>
+        <tr><td>비자명한 함정(gotcha)·동작</td><td>"클린 코드 작성" 같은 자명한 격언</td></tr>
+      </tbody>
+    </table>
+
+    <h3>구체적으로 — 검증 가능하게</h3>
+    <p>좋은 지시는 <strong>스스로 검증 가능</strong>할 만큼 구체적입니다.</p>
+
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "코드를 깔끔하게 포맷해라"</div>
+      <div class="myth-right">&#x2713; "2-space 들여쓰기를 사용한다"</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "변경 사항을 테스트해라"</div>
+      <div class="myth-right">&#x2713; "커밋 전에 <code>npm test</code>를 실행한다"</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-wrong">&#x2717; "파일을 잘 정리해라"</div>
+      <div class="myth-right">&#x2713; "API 핸들러는 <code>src/api/handlers/</code>에 둔다"</div>
+    </div>
+
+    <h3>형식과 강조</h3>
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>STRUCTURE</h5>
+        <h4>마크다운 구조</h4>
+        <p>헤더·불릿으로 그룹화. Claude도 독자처럼 구조를 스캔한다. 빽빽한 문단보다 조직된 섹션.</p>
+      </div>
+      <div class="key-card">
+        <h5>EMPHASIS</h5>
+        <h4>IMPORTANT / YOU MUST</h4>
+        <p>꼭 지켜야 할 규칙엔 강조어를 붙이면 준수율이 측정 가능하게 올라간다(공식 인정).</p>
+      </div>
+      <div class="key-card">
+        <h5>ORDER</h5>
+        <h4>명령어를 위로</h4>
+        <p>빌드/테스트/실행 명령은 맨 위에. 모델은 프롬프트 경계(처음·끝)를 더 잘 본다.</p>
+      </div>
+      <div class="key-card">
+        <h5>VOICE</h5>
+        <h4>관찰이 아니라 지시문</h4>
+        <p>"~인 것 같다"가 아니라 "X를 하라 / Y를 쓰지 마라" 같은 명령형으로.</p>
+      </div>
+    </div>
+
+    <pre><code><span class="lang-label">Markdown · 좋은 예 (간결·구체)</span>
+<span class="code-comment"># Code style</span>
+- 2-space 들여쓰기 (탭 금지)
+- named export 사용, default export 금지
+
+<span class="code-comment"># Workflow</span>
+- 빌드: pnpm build  (npm 아님 — corepack 필요)
+- 테스트: 단일 파일만 → pnpm test path/to/file
+- 커밋 전 pnpm typecheck 필수
+
+<span class="code-comment"># Additional context</span>
+- git 규칙 @docs/git-instructions.md</code></pre>
+
+    <div class="info-box insight">
+      <strong>사람이 쓴 것이 더 낫다</strong>
+      연구(Codersera 인용)에 따르면 LLM이 자동 생성한 컨텍스트 파일은 컨텍스트 없을 때보다 작업 성공률을 ~3% <em>낮추고</em> 추론 비용을 20%+ 올렸습니다. 반면 사람이 쓴 파일은 성공률을 ~4% 올렸습니다. <code>/init</code> 출력물을 그대로 쓰지 말고 <strong>반드시 다듬으세요.</strong>
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 6 ==================== -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-number">Chapter 6</div>
+    <h2>안티패턴 9가지</h2>
+    <p class="chapter-desc">실무자들이 반복해서 경고하는 흔한 실수들</p>
+
+    <table>
+      <thead><tr><th>#</th><th>안티패턴</th><th>왜 나쁜가</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>README/문서 통째 덤프</strong></td><td>가장 흔한 실패. 매뉴얼·튜토리얼·API 문서를 다 넣으면 절반은 무시됨</td></tr>
+        <tr><td>2</td><td><strong>뻔한 지시</strong></td><td>"클린 코드 작성", "시니어처럼 행동" — 토큰만 먹고 행동 변화 0</td></tr>
+        <tr><td>3</td><td><strong>오래된 내용(stale)</strong></td><td>코드는 바뀌는데 지시는 그대로 → 현실과 모순, 오히려 잘못된 판단 유발</td></tr>
+        <tr><td>4</td><td><strong>너무 길어 무시됨</strong></td><td>500줄+는 조용히 후순위로 밀림. "규칙 있는데도 안 지킨다" = 파일이 너무 길다는 신호</td></tr>
+        <tr><td>5</td><td><strong>모순되는 규칙</strong></td><td>상위/하위 파일이 충돌하면 Claude가 임의로 하나 선택(모노레포 주의)</td></tr>
+        <tr><td>6</td><td><strong>비밀키 포함</strong></td><td>git에 커밋되고 외부 도구가 읽음 — API 키·토큰·접속 문자열 절대 금지</td></tr>
+        <tr><td>7</td><td><strong>린터 대용으로 사용</strong></td><td>스타일 규칙은 지시로는 ~25~40%만 준수. ESLint/Prettier로 100% 강제하라</td></tr>
+        <tr><td>8</td><td><strong>인격 주입</strong></td><td>"신중하게 생각해" 류 — 실제 동작에 영향 없는 장식</td></tr>
+        <tr><td>9</td><td><strong>CLAUDE.local.md 커밋</strong></td><td>개인 샌드박스 URL·머신 설정이 팀에 새어나감 (.gitignore 필수)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box danger">
+      <strong>특히 #6 — 비밀은 '위치'만 적어라</strong>
+      비밀 값 자체가 아니라, <strong>비밀이 어디 있고 어떻게 접근하는지</strong>만 문서화하세요. 예: "DB 비밀번호는 1Password의 'staging-db' 항목 참조". CLAUDE.md는 평문으로 공유되는 파일입니다.
+    </div>
+
+    <div class="info-box warning">
+      <strong>특히 #7 — 지시 vs 강제(Hook)</strong>
+      AGENTS.md 가이드 연구에서 "지시만으로는 준수율 ~25~40%, PreToolUse Hook으로 강제하면 ~95%"로 보고됩니다. 반드시 지켜야 하는 것(포맷·금지 명령)은 CLAUDE.md가 아니라 <strong>Hook</strong>으로 — 이건 <a href="03-hook-완전정복.html" style="color:var(--accent);">다음 자료(03. Hook 완전정복)</a>의 주제입니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 7 ==================== -->
+  <section class="chapter" id="ch7">
+    <div class="chapter-number">Chapter 7</div>
+    <h2>실전 템플릿 (복붙용)</h2>
+    <p class="chapter-desc">바로 가져다 쓰는 3가지 출발점 — 미니멀 · 팀용 · 계층 분할</p>
+
+    <h3>① 미니멀 (~15줄) — 대부분의 프로젝트는 이걸로 충분</h3>
+    <pre><code><span class="lang-label">Markdown</span>
+<span class="code-comment"># Commands</span>
+- dev:  pnpm dev
+- test: pnpm test &lt;file&gt;     <span class="code-comment"># 전체 말고 단일 파일</span>
+- lint: pnpm lint --fix
+
+<span class="code-comment"># Code style</span>
+- 2-space 들여쓰기, named export only
+- 새 라이브러리 추가 전 먼저 확인받기
+
+<span class="code-comment"># Gotchas</span>
+- DB는 Drizzle 사용 (Prisma 아님)
+- env 변수는 .env.local — 커밋 금지</code></pre>
+
+    <h3>② 팀용 — WHAT / WHY / HOW (60줄 이하)</h3>
+    <pre><code><span class="lang-label">Markdown</span>
+<span class="code-comment">## [WHAT] Tech stack</span>
+- Next.js 16 (App Router), TypeScript, Drizzle ORM, Postgres
+- 모노레포: apps/web, apps/api, packages/ui
+
+<span class="code-comment">## [WHY] 프로젝트 목적</span>
+- 사내 대시보드. 핵심은 데이터 정합성 &gt; 화면 화려함
+
+<span class="code-comment">## [HOW] 개발 워크플로우</span>
+- 빌드: pnpm build (corepack 필수, npm 사용 시 깨짐)
+- 테스트: pnpm test &lt;file&gt;, 커밋 전 pnpm typecheck
+- 브랜치: feat/*, fix/*  — main 직접 푸시 금지
+
+<span class="code-comment">## 추가 문서 (필요 시 읽기)</span>
+- 아키텍처 @docs/architecture.md
+- DB 스키마 규칙 @docs/db-conventions.md</code></pre>
+
+    <h3>③ 계층 분할 — 루트는 짧게, 상세는 밖으로</h3>
+    <div class="file-tree">
+<span class="folder">&lt;repo&gt;/</span>
+  <span class="file">CLAUDE.md</span>              <span class="desc">← 짧게 (명령어 + 핵심 규칙 + @링크)</span>
+  <span class="folder">docs/</span>
+    <span class="file">architecture.md</span>      <span class="desc">← @import 또는 "필요할 때 읽어라"</span>
+    <span class="file">db-conventions.md</span>
+  <span class="folder">.claude/</span>
+    <span class="folder">rules/</span><span class="file">pr-review.md</span>   <span class="desc">← path-scoped: 해당 작업 때만 로드</span>
+    <span class="folder">skills/</span>              <span class="desc">← 특정 워크플로우 on-demand</span></div>
+
+    <div class="info-box concept">
+      <strong>다른 도구와 공유한다면</strong>
+      이미 <code>AGENTS.md</code>가 있으면 CLAUDE.md는 이렇게 두 줄이면 됩니다:
+      <pre style="margin-top:8px;"><code>@AGENTS.md
+
+## Claude Code 전용
+- src/billing/ 변경은 plan 모드로</code></pre>
+    </div>
+
+    <div class="info-box success">
+      <strong>시작 루틴</strong>
+      <code>/init</code> 으로 초안 생성 → 자명한 줄/장황한 설명 삭제 → 위 템플릿 구조로 재배치 → 실제로 며칠 써보며 다듬기. <code>/init</code>은 기존 <code>AGENTS.md</code>·<code>.cursorrules</code>도 읽어 반영합니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 8 ==================== -->
+  <section class="chapter" id="ch8">
+    <div class="chapter-number">Chapter 8</div>
+    <h2>검증과 반복 — 측정하고 개선하기</h2>
+    <p class="chapter-desc">"CLAUDE.md는 코드처럼 다뤄라" — 리뷰하고, 가지치고, 동작으로 테스트한다</p>
+
+    <h3>핵심 테스트: "이 줄을 지우면 실수하나?"</h3>
+    <blockquote>
+      "각 줄마다 물어보라: '이걸 제거하면 Claude가 실수할까?' 아니라면 잘라라. 비대한 CLAUDE.md는 오히려 진짜 지시를 무시하게 만든다."
+      <cite>— Anthropic, Claude Code Best Practices</cite>
+    </blockquote>
+
+    <h3>두 가지 실패 신호 → 처방</h3>
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <h5>증상 A — 규칙을 계속 어긴다</h5>
+        <p style="font-size:0.9rem;">규칙이 있는데도 같은 잘못을 반복 → <strong>파일이 너무 길어 그 규칙이 묻히는 중.</strong></p>
+        <p style="font-size:0.9rem; margin-top:8px;"><strong>처방:</strong> 가지치기. 자명한 줄 삭제, 핵심 규칙을 위로, 강조어 추가.</p>
+      </div>
+      <div class="compare-card after">
+        <h5>증상 B — 답이 있는데 되묻는다</h5>
+        <p style="font-size:0.9rem;">CLAUDE.md에 적힌 걸 Claude가 다시 질문 → <strong>표현이 모호한 것.</strong></p>
+        <p style="font-size:0.9rem; margin-top:8px;"><strong>처방:</strong> 구체화. "잘 해라"를 "X 명령을 실행한다"로.</p>
+      </div>
+    </div>
+
+    <h3>언제 추가하나 — 일정이 아니라 '실패'에서</h3>
+    <ul>
+      <li>Claude가 <strong>같은 실수를 두 번째</strong>로 했을 때</li>
+      <li>코드 리뷰가 Claude가 알았어야 할 것을 잡아냈을 때</li>
+      <li>채팅에서 <strong>같은 교정을 두 번</strong> 입력했을 때</li>
+      <li>새 팀원이 첫날 똑같은 맥락을 물어볼 만한 것일 때</li>
+    </ul>
+
+    <div class="info-box insight">
+      <strong>사실보다 '교정'을 저장하라</strong>
+      실무자 보고에 따르면 단순 사실보다 <strong>"Y 말고 X를 해라, 왜냐하면 Z"</strong> 형태의 교정 메모가 훨씬 효과적입니다. 맥락(이유)이 붙은 교정은 복리처럼 쌓입니다.
+    </div>
+
+    <h3>도구로 검증하기</h3>
+    <div class="key-grid">
+      <div class="key-card">
+        <h5>/memory</h5>
+        <h4>로드된 파일 감사</h4>
+        <p>지금 세션에 실제 로드된 CLAUDE.md·local·rules를 전부 나열. 목록에 없으면 Claude는 그 파일을 못 본다.</p>
+      </div>
+      <div class="key-card">
+        <h5>/init</h5>
+        <h4>초안 생성·개선 제안</h4>
+        <p>코드베이스를 분석해 시작 CLAUDE.md 생성. 이미 있으면 덮어쓰지 않고 개선안 제시.</p>
+      </div>
+      <div class="key-card">
+        <h5>관찰</h5>
+        <h4>동작이 실제로 바뀌나</h4>
+        <p>수정 후 Claude의 행동이 바뀌는지 직접 확인. 변화가 없으면 그 줄은 효과가 없는 것.</p>
+      </div>
+      <div class="key-card">
+        <h5>auto memory</h5>
+        <h4>보완 루프</h4>
+        <p>Claude가 스스로 학습(빌드 명령·선호)을 MEMORY.md에 기록(머신 로컬, 첫 200줄 로드). CLAUDE.md=사람 지시, auto memory=관찰 누적.</p>
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <strong>한 문장 요약</strong>
+      CLAUDE.md는 한 번 쓰고 끝나는 문서가 아니라 <strong>살아있는 코드</strong>입니다. git에 커밋해 팀과 함께 키우고, 문제가 생기면 리뷰하고, 정기적으로 가지치세요. 시간이 지날수록 가치가 복리로 쌓입니다.
+    </div>
+  </section>
+
+  <!-- ==================== CHAPTER 9 ==================== -->
+  <section class="chapter" id="ch9">
+    <div class="chapter-number">Chapter 9</div>
+    <h2>참고자료</h2>
+    <p class="chapter-desc">본 교육자료에서 참고한 공식 문서, 학술 논문, 리서치 (2026.06 접속 기준)</p>
+
+    <div class="sources-section">
+      <h4>공식 문서 (Anthropic)</h4>
+      <ul>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://code.claude.com/docs/en/memory" target="_blank">How Claude remembers your project (Memory)</a> — 4계층 hierarchy, concatenate, 재귀 로딩, @import(4 hops), /memory·/init, AGENTS.md 관계</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Best Practices for Claude Code</a> — Include/Exclude 표, 구체성·강조어, 가지치기 원칙</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://code.claude.com/docs/en/costs" target="_blank">Manage costs effectively</a> — "200줄 이하" 공식 가이드, CLAUDE.md 로딩 비용</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Effective Context Engineering for AI Agents</a> — context rot 정의, high-signal 원칙, n² 어텐션</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank">Prompt Caching</a> — 5분 TTL, 0.1x 읽기/1.25x 쓰기, 최소 캐시 단위</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank">Pricing</a> — 토큰당 단가, "1토큰≈4글자/0.75단어", 신형 토크나이저 +35% 주의</li>
+        <li><span class="source-tag anthropic">Anthropic</span> <a href="https://www.anthropic.com/news/prompting-long-context" target="_blank">Long context prompting tips</a> — 중요 지시는 프롬프트 끝에 배치</li>
+      </ul>
+    </div>
+
+    <div class="sources-section" style="margin-top:16px;">
+      <h4>학술 논문 (arXiv ID 검증 완료)</h4>
+      <ul>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2307.03172" target="_blank">Lost in the Middle: How Language Models Use Long Contexts</a> (Liu et al., 2023, TACL) — U자형 위치 편향</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2510.05381" target="_blank">Context Length Alone Hurts LLM Performance Despite Perfect Retrieval</a> (Du et al., 2025) — 길이 자체가 13.9~85% 저하</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2509.21051" target="_blank">When Instructions Multiply</a> (Harada et al., EMNLP 2025) — 다중 지시 준수율 저하</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2510.14842" target="_blank">Boosting Instruction Following at Scale</a> (Elder et al., 2025) — 지시 간 충돌(soft conflict)이 저하 유발</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2311.07911" target="_blank">IFEval: Instruction-Following Evaluation</a> (Zhou et al., 2023) — 지시 준수 측정 표준 벤치마크</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2404.13208" target="_blank">The Instruction Hierarchy</a> (Wallace et al., OpenAI, 2024) — 우선순위 계층 설계의 근거</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2601.20404" target="_blank">On the Impact of AGENTS.md Files on AI Coding Agents</a> (Lulla et al., 2026) — 실행 −28.6%·토큰 −16.6%</li>
+        <li><span class="source-tag paper">Paper</span> <a href="https://arxiv.org/abs/2406.06608" target="_blank">The Prompt Report: A Systematic Survey of Prompting</a> (Schulhoff et al., 2024) — 구조화 프롬프트의 우위</li>
+      </ul>
+    </div>
+
+    <div class="sources-section" style="margin-top:16px;">
+      <h4>리서치 &amp; 커뮤니티</h4>
+      <ul>
+        <li><span class="source-tag research">Research</span> <a href="https://www.trychroma.com/research/context-rot" target="_blank">Context Rot: How Increasing Input Tokens Impacts LLM Performance</a> (Chroma, 2025) — 18개 모델 실측</li>
+        <li><span class="source-tag research">Research</span> <a href="https://www.humanlayer.dev/blog/writing-a-good-claude-md" target="_blank">Writing a good CLAUDE.md</a> (HumanLayer) — 인프라로서의 CLAUDE.md, WHAT/WHY/HOW</li>
+        <li><span class="source-tag research">Research</span> <a href="https://thepromptshelf.dev/blog/claude-md-token-budget-optimization/" target="_blank">CLAUDE.md Token Budget Optimization</a> (The Prompt Shelf, 2026) — 토큰 예산·라인 추정</li>
+        <li><span class="source-tag research">Research</span> <a href="https://codersera.com/blog/agents-md-vs-claude-md-vs-cursor-rules-comparison-2026/" target="_blank">AGENTS.md vs CLAUDE.md vs Cursor Rules (2026)</a> (Codersera) — 표준화 타임라인, 자동생성 한계</li>
+        <li><span class="source-tag research">Research</span> <a href="https://gist.github.com/0xfauzi/7c8f65572930a21efa62623557d83f6e" target="_blank">AGENTS.md Best Practices</a> (0xfauzi gist) — 섹션 우선순위, 준수율 vs Hook 강제</li>
+        <li><span class="source-tag research">Research</span> <a href="https://github.com/abhishekray07/claude-md-templates" target="_blank">claude-md-templates</a> (GitHub) — 템플릿 모음, 길이 경험치</li>
+      </ul>
+    </div>
+
+    <div class="info-box concept" style="margin-top:24px;">
+      <strong>다음 자료로</strong>
+      CLAUDE.md는 "권고(probabilistic)"입니다. 반드시 강제해야 하는 동작은 <strong>Hook</strong>(결정론적)으로 넘어갑니다 → <a href="03-hook-완전정복.html" style="color:var(--accent);">03. Hook 완전정복</a>.
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

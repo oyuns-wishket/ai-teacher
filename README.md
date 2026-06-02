@@ -17,10 +17,12 @@ ai-teacher/
 │   ├── agent-patterns/           ← 에이전트 아키텍처/패턴 (ReAct, CoT 등)
 │   └── use-cases/                ← 도메인/업무별 적용 사례
 ├── curriculum/                   ← 교육 커리큘럼 설계
-│   └── outline.md                ← 전체 로드맵 (3레벨, 12개 주제)
+│   └── outline.md                ← 전체 로드맵 (3레벨, 13개 주제)
 ├── materials/                    ← 완성된 교육자료 (standalone HTML)
 │   ├── 01-agent-개발-기본원리.html
-│   └── 02-hook-완전정복.html
+│   ├── 02-claude-md-세팅-가이드.html
+│   ├── 03-hook-완전정복.html
+│   └── 04-하네스-엔지니어링-실전-워크숍.html
 ├── CLAUDE.md                     ← Claude Code 프로젝트 지시
 └── .claude/rules/                ← 디자인 시스템 & 콘텐츠 작성 규칙
 ```
@@ -40,7 +42,9 @@ ai-teacher/
 | # | 주제 | 내용 |
 |---|------|------|
 | 01 | [Agent 개발 기본원리](materials/01-agent-개발-기본원리.html) | Session/Turn/Context, 설정 계층, 토큰 경제학, 아키텍처 패턴, 보안, 체크리스트 |
-| 02 | [Hook 완전 정복](materials/02-hook-완전정복.html) | 하네스 엔지니어링, Hook 원리, 프레임워크별 비교, Next.js 실전 구현 |
+| 02 | [CLAUDE.md 세팅 가이드](materials/02-claude-md-세팅-가이드.html) | 로딩 메커니즘(4계층/concatenate/재귀), import(@), 라인 수 최적화, 작성 원칙, 안티패턴, 템플릿, 검증·반복 |
+| 03 | [Hook 완전 정복](materials/03-hook-완전정복.html) | 하네스 엔지니어링, Hook 원리, 프레임워크별 비교, Next.js 실전 구현 |
+| 04 | [하네스 엔지니어링 실전 워크숍](materials/04-하네스-엔지니어링-실전-워크숍.html) | 개념~세팅~사례~보안 핸즈온 |
 
 ## 커리큘럼 로드맵
 

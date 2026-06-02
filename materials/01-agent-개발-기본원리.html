@@ -524,9 +524,9 @@ Session <span class="en-note">(claude 실행 ~ 종료)</span>
       </div>
     </div>
 
-    <div class="info-box danger">
-      <strong>Git Root 기준</strong>
-      서브디렉토리에서 Claude를 실행해도 <strong>git root의 CLAUDE.md만</strong> 읽습니다. 중간 경로의 CLAUDE.md는 무시됩니다.
+    <div class="info-box concept">
+      <strong>상위 디렉토리는 거슬러 올라가며 로드</strong>
+      서브디렉토리에서 Claude를 실행하면, 작업 위치에서 <strong>상위 트리를 거슬러 올라가며</strong> 만나는 CLAUDE.md를 전부 읽어 <strong>이어붙입니다(concatenate, 덮어쓰기 아님)</strong>. 루트에 가까운 파일이 먼저, 작업 위치에 가까운 파일이 나중에 로드됩니다. 작업 위치보다 <em>아래쪽</em> 서브디렉토리의 CLAUDE.md는 그 폴더의 파일을 읽을 때 지연 로드(just-in-time)됩니다. (자세히는 <a href="02-claude-md-세팅-가이드.html" style="color:var(--accent-dark);">02. CLAUDE.md 세팅 가이드</a>)
     </div>
   </section>
 
@@ -1028,8 +1028,8 @@ Session <span class="en-note">(claude 실행 ~ 종료)</span>
       <div class="myth-right">&#x2713; rules/ 디렉토리의 <strong>모든 파일이 매 턴 전부 로드</strong></div>
     </div>
     <div class="myth-row">
-      <div class="myth-wrong">&#x2717; "서브디렉토리에 CLAUDE.md 두면 읽힌다"</div>
-      <div class="myth-right">&#x2713; <strong>git root의 CLAUDE.md만</strong> 읽음, 중간 경로 무시</div>
+      <div class="myth-wrong">&#x2717; "상위 폴더 CLAUDE.md는 무시되고 git root만 읽힌다"</div>
+      <div class="myth-right">&#x2713; 작업 위치에서 <strong>상위 트리를 거슬러 올라가며</strong> 전부 읽어 이어붙임(덮어쓰기 X)</div>
     </div>
     <div class="myth-row">
       <div class="myth-wrong">&#x2717; "memory에 모든 것을 저장하면 좋다"</div>
