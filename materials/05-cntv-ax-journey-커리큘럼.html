@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNTV+ AX JOURNEY — 커리큘럼 (Final)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8F9FB;
+  --ink:#12161F;
+  --ink2:#2A3140;
+  --muted:#5C6470;
+  --faint:#8B93A1;
+  --line:#E5E8EE;
+  --card:#FFFFFF;
+  --amber:#F59E0B;
+  --orange:#F97316;
+  --orange-d:#EA580C;
+  --emerald:#10B981;
+  --emerald-d:#059669;
+  --blue:#3B82F6;
+  --violet:#8B5CF6;
+  --rose:#F43F5E;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --grad-common:linear-gradient(90deg,#F59E0B,#F97316);
+  --grad-adv:linear-gradient(90deg,#3B82F6,#8B5CF6);
+  --grad-basic:linear-gradient(90deg,#10B981,#059669);
+  --shadow-sm:0 1px 2px rgba(18,22,31,.05),0 4px 14px rgba(18,22,31,.05);
+  --shadow-md:0 2px 6px rgba(18,22,31,.06),0 14px 34px rgba(18,22,31,.09);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:rgba(249,115,22,.22)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+section{scroll-margin-top:86px}
+.mono{font-family:var(--mono)}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(248,249,251,.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:1180px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;font-size:15px;color:var(--ink);text-decoration:none}
+.brand svg{display:block}
+.brand .plus{background:var(--grad-common);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:4px}
+.nav-links a{
+  font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+  padding:7px 12px;border-radius:99px;transition:.2s;
+}
+.nav-links a:hover{color:var(--ink);background:#EEF0F4}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 8px;position:relative}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.16em;
+  color:var(--orange-d);text-transform:uppercase;
+  padding:7px 14px;border:1px solid rgba(249,115,22,.35);border-radius:99px;
+  background:linear-gradient(90deg,rgba(245,158,11,.09),rgba(249,115,22,.09));
+  margin-bottom:22px;
+}
+.hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--grad-common);box-shadow:0 0 0 3px rgba(249,115,22,.18)}
+h1{
+  font-size:clamp(40px,6.2vw,74px);font-weight:900;letter-spacing:-.035em;line-height:1.02;
+}
+h1 .grad{
+  background:linear-gradient(92deg,#F59E0B 0%,#F97316 34%,#8B5CF6 78%,#3B82F6 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{
+  margin-top:20px;font-size:clamp(19px,2.5vw,27px);font-weight:700;letter-spacing:-.02em;color:var(--ink2);
+}
+.tagline em{
+  font-style:normal;
+  background:linear-gradient(90deg,#F97316,#8B5CF6);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);border-radius:99px;
+  padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--ink2);
+  box-shadow:var(--shadow-sm);
+}
+.chip b{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.08em}
+.hero-sum{
+  margin-top:22px;max-width:760px;font-size:16.5px;color:var(--muted);line-height:1.75;
+}
+.hero-sum mark{
+  background:none;font-family:var(--mono);font-weight:700;font-size:15px;
+  color:var(--orange-d);padding:1px 5px;border-radius:6px;background:rgba(249,115,22,.1);
+}
+
+/* ---------- metro map ---------- */
+.map-panel{
+  margin-top:52px;
+  background:#FDFDFE;
+  border:1px solid var(--line);border-radius:26px;
+  box-shadow:var(--shadow-md);
+  position:relative;overflow:hidden;
+}
+.map-panel::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(#E2E6ED 1.1px,transparent 1.1px);
+  background-size:24px 24px;opacity:.55;pointer-events:none;
+}
+.map-head{
+  position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:22px 30px 0;flex-wrap:wrap;
+}
+.map-title{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.18em;color:var(--faint);text-transform:uppercase}
+.map-title b{color:var(--ink)}
+.map-hint{font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:6px}
+.map-scroll{overflow-x:auto;position:relative;scrollbar-width:thin}
+.map-scroll svg{display:block;min-width:1000px;width:100%;height:auto}
+.legend{
+  position:relative;display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;
+  padding:4px 30px 24px;border-top:1px dashed var(--line);margin:0 2px;padding-top:18px;
+}
+.lg{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--ink2)}
+.lg small{color:var(--faint);font-weight:500}
+.lg-bar{width:34px;height:7px;border-radius:99px;flex:none}
+.lg-bar.common{background:var(--grad-common)}
+.lg-bar.basic{background:var(--grad-basic)}
+.lg-bar.adv{background:var(--grad-adv)}
+.lg-bar.exec{background:repeating-linear-gradient(90deg,var(--rose) 0 6px,transparent 6px 11px);height:5px}
+.lg-st{width:15px;height:15px;border-radius:50%;background:#fff;border:3.5px solid var(--ink);flex:none}
+.lg-st.tr{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink)}
+
+/* svg */
+.rail{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s cubic-bezier(.55,0,.15,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fadein{opacity:0;animation:fin .8s ease forwards}
+@keyframes fin{to{opacity:1}}
+.station{cursor:pointer}
+.station circle,.station text{transition:.25s cubic-bezier(.3,1.4,.5,1)}
+.station{transform-box:fill-box;transform-origin:center}
+.station .st-core{transform-box:fill-box;transform-origin:center;transition:.25s cubic-bezier(.3,1.6,.5,1)}
+.station:hover .st-core{transform:scale(1.28)}
+.station .st-name{font-weight:800;font-size:16px;fill:var(--ink);letter-spacing:-.02em}
+.station .st-code{font-family:var(--mono);font-weight:700;font-size:11px;fill:var(--faint);letter-spacing:.14em}
+.station .st-sub{font-size:11px;font-weight:600;fill:var(--faint)}
+.pop{opacity:0;animation:pop .55s cubic-bezier(.3,1.5,.5,1) forwards}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:scale(1)}}
+.svglab{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.1em}
+
+/* tooltip */
+.tip{
+  position:fixed;z-index:99;pointer-events:none;
+  background:#14181F;color:#fff;border-radius:12px;padding:11px 14px;
+  font-size:12.5px;max-width:250px;line-height:1.5;
+  box-shadow:0 12px 30px rgba(10,12,16,.3);
+  opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;
+}
+.tip.on{opacity:1;transform:translateY(0)}
+.tip b{display:block;font-size:13.5px;margin-bottom:2px}
+.tip b i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;margin-right:7px;padding:2px 6px;border-radius:5px;background:rgba(255,255,255,.14)}
+.tip span{color:#B9C0CC}
+.tip em{display:block;font-style:normal;margin-top:6px;font-size:11px;color:#7E8797;font-family:var(--mono)}
+
+/* ---------- hero pillars ---------- */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+.pillar{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 26px;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-sm);
+  transition:transform .25s,box-shadow .25s;
+}
+.pillar:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.pillar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.pillar.p1::before{background:var(--grad-common)}
+.pillar.p2::before{background:var(--grad-adv)}
+.pillar .p-num{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint)}
+.pillar h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:6px 0 6px}
+.pillar p{font-size:14px;color:var(--muted)}
+.expect{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:26px 28px;box-shadow:var(--shadow-sm);
+}
+.expect h3{font-size:13px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin-bottom:16px}
+.expect ul{list-style:none;display:grid;gap:12px}
+.expect li{display:flex;gap:14px;font-size:14.5px;color:var(--ink2);align-items:flex-start}
+.expect .who{
+  flex:none;width:78px;text-align:center;font-size:12px;font-weight:800;color:#fff;
+  border-radius:8px;padding:4px 0;margin-top:2px;letter-spacing:-.01em;
+}
+.expect .who.adv{background:var(--grad-adv)}
+.expect .who.bas{background:var(--grad-basic)}
+.expect .who.all{background:var(--grad-common)}
+
+/* ---------- section frame ---------- */
+.sec{padding:96px 0 0}
+.sec-head{max-width:820px;margin-bottom:44px}
+.kicker{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:currentColor}
+h2{font-size:clamp(28px,3.6vw,42px);font-weight:900;letter-spacing:-.03em;line-height:1.12}
+.lead{margin-top:14px;font-size:16.5px;color:var(--muted);line-height:1.7}
+
+/* ---------- ladder ---------- */
+.ladder-zone{position:relative}
+.ladder{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:end;position:relative;
+}
+.ladder::before{
+  content:"";position:absolute;left:4%;right:2%;bottom:-6px;top:auto;height:0;
+  border-bottom:2px dashed #D8DCE4;z-index:0;
+}
+.rung{
+  position:relative;z-index:1;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:20px 18px 18px;box-shadow:var(--shadow-sm);
+  border-top:5px solid var(--c,#F59E0B);
+  transition:transform .3s cubic-bezier(.3,1.2,.5,1),box-shadow .3s;
+  display:flex;flex-direction:column;gap:12px;min-height:100%;
+}
+.rung:hover{transform:translateY(-8px);box-shadow:var(--shadow-md)}
+.r1{margin-top:200px}.r2{margin-top:150px}.r3{margin-top:100px}.r4{margin-top:50px}.r5{margin-top:0}
+.rung-top{display:flex;align-items:center;gap:10px}
+.rung-num{
+  font-family:var(--mono);font-weight:800;font-size:15px;color:#fff;
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:var(--c,#F59E0B);
+}
+.rung-name{font-size:19px;font-weight:900;letter-spacing:-.02em}
+.rung-def{font-size:13px;color:var(--muted);font-weight:600;margin-top:-6px}
+.slack{
+  margin-top:auto;background:#F4F6F9;border:1px solid #E9ECF1;border-radius:12px;
+  padding:11px 12px;font-size:12.5px;color:var(--ink2);line-height:1.55;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.slack svg{flex:none;margin-top:2px;opacity:.7}
+.slack b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--faint);margin-bottom:2px;font-weight:700}
+.rung.builder{
+  background:linear-gradient(150deg,#171A2B,#232045 60%,#2A1E55);
+  border-color:#33305C;color:#fff;border-top-color:transparent;
+  background-clip:padding-box;position:relative;
+}
+.rung.builder::before{
+  content:"";position:absolute;top:-5px;left:-1px;right:-1px;height:5px;border-radius:18px 18px 0 0;
+  background:var(--grad-adv);
+}
+.rung.builder .rung-name{color:#fff}
+.rung.builder .rung-def{color:#A7AFE0}
+.rung.builder .slack{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#D9DCF5}
+.rung.builder .slack b{color:#8E96C8}
+.rung-only{
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.12em;
+  background:var(--grad-adv);color:#fff;padding:3px 8px;border-radius:6px;margin-left:auto;
+}
+.ladder-goals{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.goal{
+  flex:1;min-width:300px;display:flex;gap:14px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;box-shadow:var(--shadow-sm);
+}
+.goal .g-chip{flex:none;font-size:12px;font-weight:800;color:#fff;border-radius:8px;padding:5px 12px}
+.goal.bas .g-chip{background:var(--grad-basic)}
+.goal.adv .g-chip{background:var(--grad-adv)}
+.goal p{font-size:14px;color:var(--ink2)}
+.goal p b{font-weight:800}
+
+/* ---------- ascent band (여정 지도 5막 · from 05 Ascent) ---------- */
+.band-sec{padding:96px 0 0}
+.ascent-band{
+  position:relative;overflow:hidden;
+  background:
+    linear-gradient(180deg,
+      #0B1226 0%,
+      #0C142B 20%,
+      #101B38 42%,
+      #16223F 60%,
+      #2A2A4A 75%,
+      #4A3350 86%,
+      #7A4440 94%,
+      #B06A3A 100%);
+}
+.ascent-band::before{ /* light → dusk feather (top) */
+  content:"";position:absolute;top:0;left:0;right:0;height:140px;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,var(--bg) 0%,rgba(248,249,251,0) 100%);
+}
+.ascent-band::after{ /* dusk → light feather (bottom) */
+  content:"";position:absolute;bottom:0;left:0;right:0;height:120px;z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,var(--bg) 0%,rgba(248,249,251,0) 100%);
+}
+.band-stars{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 12%,rgba(255,255,255,.55),transparent 60%),
+    radial-gradient(1px 1px at 30% 7%,rgba(255,255,255,.45),transparent 60%),
+    radial-gradient(1.5px 1.5px at 54% 16%,rgba(255,255,255,.4),transparent 60%),
+    radial-gradient(1px 1px at 71% 9%,rgba(255,255,255,.5),transparent 60%),
+    radial-gradient(1.3px 1.3px at 88% 19%,rgba(255,255,255,.4),transparent 60%),
+    radial-gradient(1px 1px at 43% 27%,rgba(255,255,255,.28),transparent 60%),
+    radial-gradient(1.2px 1.2px at 7% 33%,rgba(255,255,255,.24),transparent 60%),
+    radial-gradient(1px 1px at 95% 31%,rgba(255,255,255,.3),transparent 60%);
+}
+.asc-in{position:relative;z-index:2;padding-top:140px;padding-bottom:150px}
+.ascent-band .kicker{color:#FBBF24}
+.ascent-band h2{color:#F4F7FE}
+.ascent-band .lead{color:#A9B7D0}
+.ascent-band .sec-head{margin-bottom:8px}
+.asc-legend{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 10px}
+.abadge{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.06em;padding:5px 12px;border-radius:100px;border:1px solid rgba(148,170,210,.22);
+  color:#C6D0E4;background:rgba(255,255,255,.04);white-space:nowrap;
+}
+.abadge .sw{width:16px;height:4px;border-radius:2px;display:inline-block;flex:none}
+.abadge .sw.dash{background-image:linear-gradient(90deg,currentColor 34%,transparent 34%);background-size:7px 3px;background-repeat:repeat-x;height:3px}
+.abadge.a-common{color:#FBBF24;border-color:rgba(245,158,11,.42);background:rgba(245,158,11,.1)}
+.abadge.a-basic{color:#6EE7B7;border-color:rgba(52,211,153,.4);background:rgba(16,185,129,.1)}
+.abadge.a-adv{color:#B8A6FA;border-color:rgba(139,92,246,.45);background:rgba(139,92,246,.12)}
+.abadge.a-exec{color:#FDA4AF;border-color:rgba(251,113,133,.42);background:rgba(244,63,94,.1)}
+
+.stage-outer{position:relative;margin-top:22px}
+.stage{position:relative;width:100%;aspect-ratio:1200/680}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+.route{stroke-linecap:round;fill:none}
+.route.draw{transition:stroke-dashoffset 2.4s cubic-bezier(.5,0,.2,1)}
+.step{position:absolute;transform:translate(-50%,-50%);z-index:3}
+.step .dot{
+  width:14px;height:14px;border-radius:50%;margin:0 auto;
+  background:linear-gradient(135deg,#F59E0B,#F97316);
+  box-shadow:0 0 0 4px rgba(249,115,22,.18),0 0 18px 2px rgba(249,115,22,.55);
+  transition:transform .3s;
+}
+.step.deep .dot{
+  background:linear-gradient(135deg,#60A5FA,#8B5CF6);
+  box-shadow:0 0 0 4px rgba(139,92,246,.2),0 0 18px 2px rgba(139,92,246,.6);
+}
+.step:hover .dot{transform:scale(1.35)}
+.scard{
+  position:absolute;top:22px;left:50%;transform:translateX(-50%);
+  width:150px;text-align:center;padding:10px 8px 11px;border-radius:12px;
+  border:1px solid rgba(148,170,210,.2);background:rgba(8,14,30,.78);backdrop-filter:blur(6px);
+  transition:border-color .3s,transform .3s,background .3s;
+}
+.step:hover .scard{transform:translateX(-50%) translateY(-3px);border-color:rgba(251,191,36,.45);background:rgba(14,24,48,.92)}
+.step.deep:hover .scard{border-color:rgba(167,139,250,.5)}
+.scard .alt{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:rgba(251,191,36,.85);margin-bottom:4px;white-space:nowrap;font-weight:700}
+.step.deep .scard .alt{color:rgba(183,163,250,.9)}
+.scard b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.01em;line-height:1.25;color:#F0F4FC}
+.scard small{display:block;font-size:10.5px;color:#A9B7D0;margin-top:3px;line-height:1.4}
+.step.s4 .scard{border-color:rgba(52,211,153,.45)}
+.step.s8 .scard{border-color:rgba(139,92,246,.5);box-shadow:0 0 30px -6px rgba(139,92,246,.4)}
+.stage-label{position:absolute;z-index:2;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;line-height:1.5}
+.stage-label.desc{color:#6EE7B7;text-align:center;transform:translateX(-50%)}
+.stage-label.cable{color:#FDA4AF;transform:translateX(-50%)}
+.stage-label.summit-copy{
+  color:#DDD6FE;text-align:right;transform:translateX(-100%);
+  font-family:'Pretendard Variable',Pretendard,sans-serif;font-size:13px;font-weight:700;letter-spacing:0;
+}
+.stage-label.summit-copy .mono{display:block;font-size:9.5px;color:#B8A6FA;letter-spacing:.14em;margin-bottom:2px;font-weight:700}
+.stage-label.summit-copy .after{display:block;margin-top:5px;font-family:var(--mono);font-size:9.5px;font-weight:700;color:#6EE7B7;letter-spacing:.1em}
+.basecamp-tag{
+  position:absolute;z-index:2;transform:translate(-50%,0);
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;color:#6EE7B7;
+  border:1px dashed rgba(52,211,153,.5);border-radius:8px;padding:4px 9px;
+  background:rgba(16,185,129,.1);white-space:nowrap;
+}
+
+/* acts legend inside the band */
+.band-acts{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:40px}
+.b-act{
+  background:rgba(10,18,38,.6);border:1px solid rgba(148,170,210,.18);border-radius:18px;
+  padding:17px 15px 15px;position:relative;overflow:hidden;backdrop-filter:blur(6px);
+  transition:transform .25s,border-color .25s;display:flex;flex-direction:column;gap:4px;
+}
+.b-act:hover{transform:translateY(-4px);border-color:rgba(251,191,36,.35)}
+.b-act::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--g,var(--grad-common))}
+.b-act .act-no{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:#8FA0BE}
+.b-act .act-when{
+  display:inline-block;align-self:flex-start;font-family:var(--mono);font-size:11px;font-weight:700;
+  background:rgba(255,255,255,.08);border-radius:6px;padding:2px 8px;color:#DDE4F2;margin:4px 0 6px;
+}
+.b-act h3{font-size:20px;font-weight:900;letter-spacing:-.02em;color:#F4F7FE}
+.b-act .sub{font-size:12.5px;color:#A9B7D0;line-height:1.5;flex:1}
+.b-act .tgt{font-size:11.5px;font-weight:700;color:#C6D0E4;margin-top:10px;display:flex;align-items:center;gap:6px}
+.b-act .tgt svg{opacity:.6;flex:none}
+
+/* mobile ascent fallback */
+.ascent-mobile{display:none}
+@media(max-width:900px){
+  .stage-outer{display:none}
+  .ascent-mobile{display:block;margin-top:30px;position:relative;padding-left:26px}
+  .ascent-mobile::before{
+    content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;
+    background:linear-gradient(180deg,#F59E0B 0%,#F97316 42%,#60A5FA 56%,#8B5CF6 100%);
+    border-radius:2px;
+  }
+  .m-step{position:relative;padding:0 0 22px 14px}
+  .m-step::before{
+    content:"";position:absolute;left:-26px;top:6px;width:12px;height:12px;border-radius:50%;
+    background:#F97316;box-shadow:0 0 12px rgba(249,115,22,.6);
+  }
+  .m-step.deep::before{background:#8B5CF6;box-shadow:0 0 12px rgba(139,92,246,.6)}
+  .m-step .alt{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;color:#8FA0BE;display:block}
+  .m-step b{font-size:16px;font-weight:800;color:#F0F4FC}
+  .m-step small{display:block;color:#A9B7D0;font-size:12.5px}
+  .m-step .fork{
+    margin-top:8px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6EE7B7;
+    border:1px dashed rgba(52,211,153,.45);border-radius:8px;padding:5px 10px;display:inline-block;
+  }
+  .m-step .fork.coral{color:#FDA4AF;border-color:rgba(251,113,133,.45)}
+  .m-step .fork.vio{color:#C4B5FD;border-color:rgba(139,92,246,.5)}
+}
+
+/* ---------- day cards ---------- */
+.days{display:grid;gap:18px}
+.day{
+  background:var(--card);border:1px solid var(--line);border-radius:22px;
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  padding:26px 30px 26px 36px;
+  transition:box-shadow .3s;
+}
+.day:hover{box-shadow:var(--shadow-md)}
+.day::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--g,var(--grad-common))}
+.day-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.st-sign{
+  flex:none;width:52px;height:52px;border-radius:50%;background:#fff;
+  border:4px solid var(--c,var(--amber));display:grid;place-items:center;
+  font-family:var(--mono);font-weight:800;font-size:16px;color:var(--ink);
+  box-shadow:0 0 0 4px #fff,0 2px 8px rgba(18,22,31,.12);
+}
+.day-head-tx{flex:1;min-width:240px}
+.day-head-tx h3{font-size:clamp(19px,2.2vw,24px);font-weight:900;letter-spacing:-.02em;line-height:1.25}
+.day-head-tx .who{font-size:13px;color:var(--muted);margin-top:3px;font-weight:600}
+.day-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.badge{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;
+  border-radius:99px;padding:5px 11px;white-space:nowrap;
+}
+.badge.act-b{background:#F1F3F7;color:var(--muted)}
+.badge.grn{background:var(--grad-basic);color:#fff}
+.badge.vio{background:var(--grad-adv);color:#fff}
+.badge.ros{background:var(--rose);color:#fff}
+.badge.amb{background:var(--grad-common);color:#fff}
+.day-body{margin-top:18px;display:grid;gap:10px}
+.row{display:flex;gap:14px;align-items:flex-start}
+.row .lb{
+  flex:none;width:64px;text-align:center;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--muted);background:#F1F3F7;border-radius:7px;padding:4px 0;margin-top:2px;
+}
+.row p{font-size:14.5px;color:var(--ink2);flex:1}
+.row p b{font-weight:800}
+.row ul{flex:1;list-style:none;display:grid;gap:5px}
+.row ul li{font-size:14.5px;color:var(--ink2);padding-left:16px;position:relative}
+.row ul li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--c,var(--amber));opacity:.8}
+
+/* D2 modules */
+.d2-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.d2-col{border:1px solid var(--line);border-radius:16px;padding:20px;background:#FBFCFD}
+.d2-col-t{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.d2-col-t .tm{font-family:var(--mono);font-size:10.5px;font-weight:800;letter-spacing:.12em;color:#fff;border-radius:7px;padding:4px 10px}
+.d2-col.am .tm{background:var(--grad-common)}
+.d2-col.pm .tm{background:var(--grad-adv)}
+.d2-col-t h4{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+.mod{padding:14px 0;border-top:1px dashed var(--line)}
+.mod:first-of-type{border-top:none;padding-top:0}
+.mod h5{font-size:14.5px;font-weight:800;display:flex;gap:8px;align-items:baseline}
+.mod h5 .mno{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--faint);flex:none;letter-spacing:.06em}
+.mod ul{list-style:none;margin-top:8px;display:grid;gap:5px}
+.mod ul li{font-size:13px;color:var(--muted);line-height:1.6;padding-left:14px;position:relative}
+.mod ul li::before{content:"";position:absolute;left:1px;top:9px;width:5px;height:5px;border-radius:50%;background:#C6CCD6}
+.mod ul li b{color:var(--ink2);font-weight:700}
+.mini-panels{display:grid;gap:8px;margin-top:10px}
+.mini{
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;
+}
+.mini h6{font-size:12px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.mini h6 .pin{width:8px;height:8px;border-radius:2.5px;flex:none}
+.mini ol,.mini ul{margin:0;padding-left:0;list-style:none;display:grid;gap:3px}
+.mini li{font-size:12px;color:var(--muted);line-height:1.55;padding-left:15px;position:relative}
+.mini ol{counter-reset:q}
+.mini ol li{counter-increment:q}
+.mini ol li::before{content:counter(q);position:absolute;left:0;top:1px;font-family:var(--mono);font-size:9.5px;font-weight:700;color:var(--faint)}
+.mini ul li::before{content:"—";position:absolute;left:0;top:0;color:#C6CCD6;font-size:11px}
+
+/* ---------- exec ---------- */
+.exec-note{
+  display:inline-flex;align-items:center;gap:8px;margin-left:10px;vertical-align:middle;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  border:1.5px dashed var(--rose);color:var(--rose);border-radius:99px;padding:5px 12px;
+}
+.exec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.exec-card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px;
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;
+}
+.exec-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.exec-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:5px;
+  background:repeating-linear-gradient(90deg,var(--rose) 0 10px,rgba(244,63,94,.25) 10px 18px);
+}
+.exec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.exec-no{
+  font-family:var(--mono);font-weight:800;font-size:13px;color:var(--rose);
+  border:2px solid var(--rose);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;
+}
+.exec-dur{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--faint);background:#F1F3F7;padding:3px 9px;border-radius:6px}
+.exec-card h3{font-size:16.5px;font-weight:800;letter-spacing:-.015em;line-height:1.35;margin-bottom:8px}
+.exec-card p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ---------- matrix ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:13px 16px;text-align:left;font-size:13.5px;border-bottom:1px solid #EEF0F4}
+thead th{
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--faint);
+  text-transform:uppercase;background:#FBFCFD;white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:#FAFBFD}
+td.nm{font-weight:800;white-space:nowrap}
+td.ct{text-align:center}
+th.ct{text-align:center}
+.trk{
+  display:inline-block;font-size:11.5px;font-weight:800;color:#fff;border-radius:7px;padding:3px 10px;white-space:nowrap;
+}
+.trk.adv{background:var(--grad-adv)}
+.trk.bas{background:var(--grad-basic)}
+.trk.obs{background:#6B7280}
+.trk.exe{background:var(--rose)}
+.dt{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--dc,#F97316)}
+.dt.ring{background:#fff;border:3px solid var(--dc,#F97316);width:8px;height:8px}
+.dim{color:#C3C9D3;font-family:var(--mono)}
+.sm{font-size:11.5px;color:var(--muted);white-space:nowrap;font-weight:600}
+.mtx-note{margin-top:14px;display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.mtx-note span{display:inline-flex;align-items:center;gap:7px}
+
+/* ---------- spread ---------- */
+.spread-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.sp-card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;
+  box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;
+}
+.sp-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.sp-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad-basic)}
+.sp-ic{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;
+  background:linear-gradient(135deg,rgba(16,185,129,.14),rgba(5,150,105,.14));color:var(--emerald-d);
+}
+.sp-card h3{font-size:15.5px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+.sp-card h3 small{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.1em;margin-bottom:4px;font-weight:700}
+.sp-card p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ---------- kpi ---------- */
+.kpi-tbl td:nth-child(2){font-family:var(--mono);font-weight:700;font-size:13px;color:var(--orange-d)}
+.kpi-tbl td:first-child{font-weight:800}
+.kpi-tbl td:nth-child(3){color:var(--muted)}
+
+/* ---------- graduation ---------- */
+.grad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grad-card{
+  border-radius:20px;padding:26px;position:relative;overflow:hidden;
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow-sm);
+  transition:transform .25s,box-shadow .25s;
+}
+.grad-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.grad-card::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:var(--g)}
+.grad-card .gc-t{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.grad-card .gc-t .trk{font-size:12px}
+.grad-card ul{list-style:none;display:grid;gap:8px}
+.grad-card li{font-size:13.5px;color:var(--ink2);display:flex;gap:9px;align-items:flex-start;line-height:1.55}
+.grad-card li svg{flex:none;margin-top:4px}
+.grad-card.common-g{
+  background:linear-gradient(145deg,#171A2B,#1F1D3E 55%,#2A1E4E);border-color:#33305C;
+}
+.grad-card.common-g li{color:#D9DCF5}
+.grad-card.common-g .gc-note{color:#8E96C8;font-size:12px;margin-top:10px;font-family:var(--mono)}
+
+/* ---------- footer ---------- */
+footer{margin-top:110px;border-top:1px solid var(--line);background:#FDFDFE}
+.foot-in{max-width:1180px;margin:0 auto;padding:36px 28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+footer .f-brand{font-weight:800;font-size:14px;display:flex;align-items:center;gap:9px}
+footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .rail,.pop,.fadein{animation:none;stroke-dashoffset:0;opacity:1}
+  .route.draw{transition:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .band-acts{grid-template-columns:repeat(3,1fr)}
+  .scard{width:134px}
+  .exec-grid{grid-template-columns:repeat(2,1fr)}
+  .spread-grid{grid-template-columns:repeat(2,1fr)}
+  .ladder{grid-template-columns:repeat(2,1fr);align-items:stretch}
+  .ladder::before{display:none}
+  .r1,.r2,.r3,.r4,.r5{margin-top:0}
+  .rung.builder{grid-column:1/-1}
+}
+@media (max-width:720px){
+  .nav-links{display:none}
+  .hero{padding-top:48px}
+  .pillars{grid-template-columns:1fr}
+  .d2-grid{grid-template-columns:1fr}
+  .band-acts{grid-template-columns:1fr 1fr}
+  .asc-in{padding-top:120px;padding-bottom:130px}
+  .ladder{grid-template-columns:1fr}
+  .grad-grid{grid-template-columns:1fr}
+  .exec-grid{grid-template-columns:1fr}
+  .spread-grid{grid-template-columns:1fr}
+  .day{padding:22px 20px 22px 26px}
+  .row{flex-direction:column;gap:6px}
+  .row .lb{width:auto;padding:4px 10px;align-self:flex-start}
+  .sec{padding-top:72px}
+  .band-sec{padding-top:72px}
+}
+@media (max-width:480px){
+  .band-acts{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg1)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg1" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV<span class="plus">+</span>&nbsp;AX JOURNEY
+    </a>
+    <div class="nav-links">
+      <a href="#ladder">AX 사다리</a>
+      <a href="#acts">여정 지도</a>
+      <a href="#days">Day-by-Day</a>
+      <a href="#exec">경영진</a>
+      <a href="#matrix">참가자</a>
+      <a href="#kpi">KPI</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-kicker"><span class="dot"></span>회사 AX 교육 커리큘럼 · 전사 여정</div>
+    <h1>CNTV<span class="grad">+</span> AX<br><span class="grad">JOURNEY</span></h1>
+    <p class="tagline">"도구를 배우는 8일이 아니라, <em>일하는 방식이 바뀌는 8일.</em>"</p>
+
+    <div class="hero-meta">
+      <span class="chip"><b>기간</b> 본과정 8일 + 경영진 세션 1일(병행) + 사후 확산 30일</span>
+      <span class="chip"><b>대상</b> 10명 — 심화 트랙 5 · 기초 트랙 5</span>
+    </div>
+    <p class="hero-sum">
+      하루 <mark>4.5~6시간</mark>의 수작업과 월 <mark>20~40건</mark>의 오류를 만드는 현행 업무를,
+      AI와 함께 일하는 방식으로 바꾸는 전사 여정.
+    </p>
+
+    <!-- 두 기둥 -->
+    <div class="pillars">
+      <div class="pillar p1 reveal">
+        <span class="p-num">PILLAR 01</span>
+        <h3>AX 조직방향</h3>
+        <p>왜 하는가, 누가 하는가, 어떤 문화여야 하는가 <b>(D2 오전)</b></p>
+      </div>
+      <div class="pillar p2 reveal" style="--d:.1s">
+        <span class="p-num">PILLAR 02</span>
+        <h3>개념 → 예제 → 실전 실습</h3>
+        <p>개념을 배우고, 예제를 보고, 내 업무로 직접 <b>(D2 오후 ~ D8)</b></p>
+      </div>
+    </div>
+
+    <!-- 교육 기대성 -->
+    <div class="expect reveal" style="--d:.15s">
+      <h3>교육 기대성 — 성과 정의</h3>
+      <ul>
+        <li><span class="who adv">심화 5명</span><span>시스템 유지보수를 내부에서 직접 처리하고, 다른 업무 영역에서도 스스로 문제를 정의하고 해결하는 수준까지. "도구를 배우는 것"을 넘어 일하는 방식의 사고 변화.</span></li>
+        <li><span class="who bas">기초 5명</span><span>AI 도구 활용 이해도를 높여 본인 업무에 실제 적용하고, 소속 부서 내 교육 전달자로서 변화를 조직 전체로 확산.</span></li>
+        <li><span class="who all">공통</span><span>수료 후 업무를 대하는 시각 자체가 바뀌는 것이 가장 중요한 성과.</span></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ JOURNEY MAP — THE ASCENT (5막 + 병행, from 05) ══════════════ -->
+<section class="band-sec" id="acts">
+  <div class="ascent-band">
+    <div class="band-stars" aria-hidden="true"></div>
+    <div class="wrap asc-in">
+      <div class="sec-head reveal">
+        <span class="kicker">Journey Map — The Ascent</span>
+        <h2>여정 지도 — 5막 + 병행 1</h2>
+        <p class="lead">진단에서 확산까지, 아래에서 위로 오르는 하나의 능선. D1에서 출발해 D4 베이스캠프에서 기초 트랙이 수료·하산하고, 심화 트랙은 5단 빌더 구간을 지나 D8 정상에 오른다. 경영진은 케이블카로 병행한다.</p>
+      </div>
+
+      <div class="asc-legend reveal" style="--d:.1s">
+        <span class="abadge a-common"><span class="sw" style="background:linear-gradient(90deg,#F59E0B,#F97316)"></span>공통 루트 · 전원 D1–D4</span>
+        <span class="abadge a-basic"><span class="sw dash"></span>기초 · D4 베이스캠프 수료·하산</span>
+        <span class="abadge a-adv"><span class="sw" style="background:linear-gradient(90deg,#60A5FA,#A78BFA)"></span>심화 · D5–D8 정상 등반</span>
+        <span class="abadge a-exec"><span class="sw dash"></span>경영진 · 병행 1일 (케이블카)</span>
+      </div>
+
+      <div class="stage-outer reveal" style="--d:.15s">
+        <div class="stage">
+          <svg viewBox="0 0 1200 680" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="ridge1" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#0b1530"/><stop offset="1" stop-color="#1b2b52"/>
+              </linearGradient>
+              <linearGradient id="ridge2" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#081128"/><stop offset="1" stop-color="#12203f"/>
+              </linearGradient>
+              <linearGradient id="routeC" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#F59E0B"/><stop offset="1" stop-color="#F97316"/>
+              </linearGradient>
+              <linearGradient id="routeD" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#60A5FA"/><stop offset="1" stop-color="#A78BFA"/>
+              </linearGradient>
+              <radialGradient id="dawn" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="rgba(255,182,72,.38)"/><stop offset="1" stop-color="rgba(255,182,72,0)"/>
+              </radialGradient>
+            </defs>
+
+            <!-- dawn glow behind summit -->
+            <circle cx="1130" cy="70" r="300" fill="url(#dawn)"/>
+
+            <!-- stars -->
+            <g fill="#fff">
+              <circle cx="120" cy="80" r="1.4" opacity=".6"/><circle cx="330" cy="50" r="1" opacity=".5"/>
+              <circle cx="240" cy="170" r="1.2" opacity=".4"/><circle cx="520" cy="90" r="1.4" opacity=".55"/>
+              <circle cx="640" cy="40" r="1" opacity=".45"/><circle cx="440" cy="220" r="1" opacity=".35"/>
+              <circle cx="80" cy="280" r="1.2" opacity=".3"/><circle cx="760" cy="130" r="1.1" opacity=".4"/>
+            </g>
+
+            <!-- far / near ridges -->
+            <polygon points="0,680 180,560 340,620 560,470 720,545 940,340 1080,420 1200,240 1200,680" fill="url(#ridge2)" opacity=".55"/>
+            <polygon points="0,680 240,545 420,615 640,430 830,510 1030,255 1200,120 1200,680" fill="url(#ridge1)" opacity=".78"/>
+
+            <!-- cable car (executives, parallel · rose) -->
+            <line x1="120" y1="662" x2="1010" y2="118" stroke="#FB7185" stroke-width="1.6" stroke-dasharray="2 9" opacity=".55" stroke-linecap="round"/>
+            <g transform="translate(743,282)" opacity=".9">
+              <line x1="0" y1="-6" x2="0" y2="8" stroke="#FB7185" stroke-width="1.6"/>
+              <rect x="-13" y="8" width="26" height="18" rx="5" fill="rgba(251,113,133,.16)" stroke="#FB7185" stroke-width="1.6"/>
+              <line x1="-5" y1="8" x2="-5" y2="26" stroke="#FB7185" stroke-width="1" opacity=".55"/>
+              <line x1="5" y1="8" x2="5" y2="26" stroke="#FB7185" stroke-width="1" opacity=".55"/>
+            </g>
+
+            <!-- basic-track descent from basecamp (emerald) -->
+            <path id="descent" d="M540,372 C610,470 670,540 800,590" fill="none" stroke="#34D399" stroke-width="2.2" stroke-dasharray="7 8" opacity=".8" stroke-linecap="round"/>
+
+            <!-- main routes: common = amber→orange, deep = blue→violet -->
+            <path class="route draw" id="routeAll" d="M84,588 L234,516 L384,444 L540,372" stroke="url(#routeC)" stroke-width="3.4"/>
+            <path class="route draw" id="routeDeep" d="M540,372 L696,296 L840,224 L978,152 L1092,84 L1148,46" stroke="url(#routeD)" stroke-width="3.4"/>
+
+            <!-- basecamp tent (emerald) -->
+            <g transform="translate(540,352)">
+              <path d="M-16,0 L0,-24 L16,0 Z" fill="rgba(52,211,153,.14)" stroke="#34D399" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M0,-24 L0,0" stroke="#34D399" stroke-width="1.4" opacity=".7"/>
+            </g>
+
+            <!-- summit flag (violet, D8) -->
+            <g transform="translate(1148,46)">
+              <circle r="26" fill="rgba(139,92,246,.16)"/>
+              <line x1="0" y1="6" x2="0" y2="-42" stroke="#C4B5FD" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M0,-42 L34,-33 L0,-23 Z" fill="#8B5CF6"/>
+              <circle r="4.4" fill="#DDD6FE"/>
+            </g>
+          </svg>
+
+          <!-- steps (HTML overlay) -->
+          <div class="step s1" style="left:7%;top:86.5%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D1 · ALT 0 · BASE</span><b>진단</b><small>전원 10명 · 1:1 인터뷰</small></div>
+          </div>
+          <div class="step s2" style="left:19.5%;top:75.9%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D2 · 사다리 1단 시작</span><b>정렬</b><small>조직방향 + 개념교육<br>대표님 참관</small></div>
+          </div>
+          <div class="step s3" style="left:32%;top:65.3%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D3 · 사다리 1–2단</span><b>체득 I</b><small>대화 · 연결 (전원)</small></div>
+          </div>
+          <div class="step s4" style="left:45%;top:54.7%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D4 · 사다리 3–4단</span><b>체득 II</b><small>스킬 · 자동화 (전원)</small></div>
+          </div>
+          <div class="step s5 deep" style="left:58%;top:43.5%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D5 · 5단 빌더 구간</span><b>내재화 I</b><small>코워크 리뷰 × 코드 첫걸음 (심화 5)</small></div>
+          </div>
+          <div class="step s6 deep" style="left:70%;top:32.9%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D6 · 5단 빌더 구간</span><b>내재화 II</b><small>CS 기초 Ⅰ · 컴퓨터가 일하는 방식</small></div>
+          </div>
+          <div class="step s7 deep" style="left:81.5%;top:22.4%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D7 · 5단 빌더 구간</span><b>내재화 III</b><small>CS 기초 Ⅱ · 서비스가 동작하는 방식</small></div>
+          </div>
+          <div class="step s8 deep" style="left:91%;top:12.4%">
+            <span class="dot"></span>
+            <div class="scard"><span class="alt">D8 · 5단 · 정상</span><b>내재화 IV</b><small>OMS 수정·개발 실습<br>심화 수료</small></div>
+          </div>
+
+          <!-- labels -->
+          <div class="basecamp-tag" style="left:45%;top:63.5%">BASECAMP — 기초 트랙 수료 (D4)</div>
+          <div class="stage-label desc" style="left:70%;top:89%">기초조 하산 루트 ↘<br>부서 전달자로 (전달자 키트)</div>
+          <div class="stage-label cable" style="left:29%;top:47%">경영진 세션 · 병행 1일</div>
+          <div class="stage-label summit-copy" style="left:93.5%;top:1.5%"><span class="mono">SUMMIT</span>일하는 방식이<br>바뀌는 지점<span class="after">이후 — 확산 30일</span></div>
+        </div>
+      </div>
+
+      <!-- mobile fallback -->
+      <div class="ascent-mobile reveal">
+        <div class="m-step"><span class="alt">D1 · ALT 0 · BASE</span><b>진단</b><small>전원 10명 · 1:1 인터뷰</small></div>
+        <div class="m-step"><span class="alt">D2 · 사다리 1단 시작</span><b>정렬</b><small>조직방향 + 개념교육 · 대표님 참관</small></div>
+        <div class="m-step"><span class="alt">D3 · 사다리 1–2단</span><b>체득 I — 대화 · 연결</b><small>전원</small>
+          <span class="fork coral">경영진 세션 — 병행 1일 (케이블카)</span></div>
+        <div class="m-step"><span class="alt">D4 · 사다리 3–4단 · BASECAMP</span><b>체득 II — 스킬 · 자동화</b><small>전원</small>
+          <span class="fork">기초 트랙 수료 → 하산 → 부서 전달자로</span></div>
+        <div class="m-step deep"><span class="alt">D5 · 5단 빌더 구간</span><b>내재화 I — 코워크 리뷰 × 코드 첫걸음</b><small>심화 5명 · 클로드 코드</small></div>
+        <div class="m-step deep"><span class="alt">D6 · 5단 빌더 구간</span><b>내재화 II — CS 기초 Ⅰ</b><small>심화 5명 · 컴퓨터가 일하는 방식</small></div>
+        <div class="m-step deep"><span class="alt">D7 · 5단 빌더 구간</span><b>내재화 III — CS 기초 Ⅱ</b><small>심화 5명 · 서비스가 동작하는 방식</small></div>
+        <div class="m-step deep"><span class="alt">D8 · 5단 · SUMMIT</span><b>내재화 IV — OMS 수정·개발 실습</b><small>심화 트랙 수료</small>
+          <span class="fork vio">SUMMIT — 일하는 방식이 바뀌는 지점 · 이후 확산 30일</span></div>
+      </div>
+
+      <!-- 5막 + 병행 legend (전 텍스트) -->
+      <div class="band-acts">
+        <div class="b-act reveal" style="--g:linear-gradient(90deg,#F5B40B,#F59E0B);--d:0s">
+          <span class="act-no">제1막</span>
+          <span class="act-when">D1</span>
+          <h3>진단</h3>
+          <p class="sub">지금, 우리는 어떻게 일하고 있나</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>전원 10명 (1:1 인터뷰)</span>
+        </div>
+        <div class="b-act reveal" style="--g:linear-gradient(90deg,#F59E0B,#F97316);--d:.06s">
+          <span class="act-no">제2막</span>
+          <span class="act-when">D2</span>
+          <h3>정렬</h3>
+          <p class="sub">AX는 도구가 아니라 방향이다</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>전원 10명 + 대표님 참관</span>
+        </div>
+        <div class="b-act reveal" style="--g:linear-gradient(90deg,#F97316,#EA580C);--d:.12s">
+          <span class="act-no">제3막</span>
+          <span class="act-when">D3–D4</span>
+          <h3>체득</h3>
+          <p class="sub">사다리를 오르다 — 대화에서 자동화까지</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>전원 (기초 트랙 수료일 = D4)</span>
+        </div>
+        <div class="b-act reveal" style="--g:linear-gradient(90deg,#60A5FA,#A78BFA);--d:.18s">
+          <span class="act-no">제4막</span>
+          <span class="act-when">D5–D8</span>
+          <h3>내재화</h3>
+          <p class="sub">쓰는 사람에서 만드는 사람으로</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>심화 5명</span>
+        </div>
+        <div class="b-act reveal" style="--g:repeating-linear-gradient(90deg,#FB7185 0 10px,rgba(251,113,133,.3) 10px 17px);--d:.24s">
+          <span class="act-no">병행</span>
+          <span class="act-when">1일 (일정 협의)</span>
+          <h3>후원</h3>
+          <p class="sub">스폰서의 일</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>이홍주 이사 (+대표님 선택 참석)</span>
+        </div>
+        <div class="b-act reveal" style="--g:linear-gradient(90deg,#34D399,#059669);--d:.3s">
+          <span class="act-no">제5막</span>
+          <span class="act-when">수료 후 30일</span>
+          <h3>확산</h3>
+          <p class="sub">한 명의 변화를 조직의 변화로</p>
+          <span class="tgt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5S20 17 20 21"/></svg>전원 + 각 부서</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ AX LADDER ══════════════ -->
+<section class="sec" id="ladder">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Signature Frame</span>
+      <h2>AX 사다리 — 프로그램 전체를 관통하는 5단</h2>
+      <p class="lead">같은 일(Slack에 일정 남기기)이 단이 오를수록 이렇게 달라진다.</p>
+    </div>
+
+    <div class="ladder-zone">
+      <div class="ladder">
+        <div class="rung r1 reveal" style="--c:#F5B40B;--d:0s">
+          <div class="rung-top"><span class="rung-num">1</span><span class="rung-name">대화</span></div>
+          <p class="rung-def">말로 시킨다</p>
+          <div class="slack">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <span><b>SLACK 일정 예시</b>AI와 대화해 일정을 정리하고, 내가 Slack에 남긴다</span>
+          </div>
+        </div>
+        <div class="rung r2 reveal" style="--c:#F59E0B;--d:.08s">
+          <div class="rung-top"><span class="rung-num">2</span><span class="rung-name">연결</span></div>
+          <p class="rung-def">AI를 내 도구에 잇는다</p>
+          <div class="slack">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <span><b>SLACK 일정 예시</b>Slack과 AI를 연결해, AI가 직접 일정을 남긴다</span>
+          </div>
+        </div>
+        <div class="rung r3 reveal" style="--c:#F97316;--d:.16s">
+          <div class="rung-top"><span class="rung-num">3</span><span class="rung-name">스킬</span></div>
+          <p class="rung-def">반복을 박제한다</p>
+          <div class="slack">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <span><b>SLACK 일정 예시</b>스킬 호출 한 번이면 일정이 남는다</span>
+          </div>
+        </div>
+        <div class="rung r4 reveal" style="--c:#EA580C;--d:.24s">
+          <div class="rung-top"><span class="rung-num">4</span><span class="rung-name">자동화</span></div>
+          <p class="rung-def">AI가 먼저 움직인다</p>
+          <div class="slack">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <span><b>SLACK 일정 예시</b>아침 8시 반, 봇이 먼저 묻고 나는 대답만 하면 끝</span>
+          </div>
+        </div>
+        <div class="rung r5 builder reveal" style="--c:#8B5CF6;--d:.32s">
+          <div class="rung-top">
+            <span class="rung-num" style="background:var(--grad-adv)">5</span>
+            <span class="rung-name">빌더</span>
+            <span class="rung-only">심화 전용</span>
+          </div>
+          <p class="rung-def">도구를 직접 만든다</p>
+          <div class="slack">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <span><b>SLACK 일정 예시</b>클로드 코드로 우리 팀의 도구와 시스템을 직접 만들고 고친다</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ladder-goals">
+        <div class="goal bas reveal">
+          <span class="g-chip">기초 트랙 목표</span>
+          <p><b>4단까지 체험</b>, 내 업무 1개를 사다리에 올린다.</p>
+        </div>
+        <div class="goal adv reveal" style="--d:.1s">
+          <span class="g-chip">심화 트랙 목표</span>
+          <p><b>5단 빌더</b> — 쓰는 사람에서 만드는 사람으로.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ══════════════ DAY BY DAY ══════════════ -->
+<section class="sec" id="days" style="padding-top:64px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--violet)">Day-by-Day</span>
+      <h2>역별 안내 — D1부터 D8까지</h2>
+      <p class="lead">각 역(Day)에서 무엇을 하고, 무엇이 남는가. 역 표지판을 따라가면 된다.</p>
+    </div>
+
+    <div class="days">
+
+      <!-- D1 -->
+      <article class="day reveal" id="day-1" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B">
+        <div class="day-head">
+          <span class="st-sign">D1</span>
+          <div class="day-head-tx">
+            <h3>진단 · AX 업무 인터뷰</h3>
+            <p class="who">전원 10명 · 1:1 각 30~40분</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제1막 진단</span><span class="badge amb">전원</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">무엇을</span><p>확정 질문지(50문항) 기반 1:1 인터뷰. 업무 실태·페인 실측 + 변화적응력·조직문화 진단.</p></div>
+          <div class="row"><span class="lb">산출물</span>
+            <ul>
+              <li>개인별 자동화 과제 백로그 (1인 1개 이상)</li>
+              <li>조직문화 baseline 점수 (공유 편한 조직 1~5점)</li>
+              <li>트랙별 준비도 리포트</li>
+            </ul>
+          </div>
+          <div class="row"><span class="lb">포인트</span><p>여기서 나온 <b>"내 30분 반복작업"</b>이 D4 개인 실습 과제가 되고, 심화 페인은 D8 종합 프로젝트가 된다. <b>버려지는 답변이 없다.</b></p></div>
+        </div>
+      </article>
+
+      <!-- D2 -->
+      <article class="day reveal" id="day-2" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316">
+        <div class="day-head">
+          <span class="st-sign">D2</span>
+          <div class="day-head-tx">
+            <h3>정렬 · AX 조직방향 &amp; 개념교육</h3>
+            <p class="who">전원 10명 + 대표님 참관</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제2막 정렬</span><span class="badge amb">전원</span></div>
+        </div>
+
+        <div class="d2-grid">
+          <!-- 오전 -->
+          <div class="d2-col am">
+            <div class="d2-col-t"><span class="tm">AM</span><h4>기둥 ① AX 조직방향 — "AX에서 꼭 필요한 세 가지"</h4></div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 1</span>비즈니스 이해</h5>
+              <ul>
+                <li>AI는 우리 일을 모른다 — <b>데이터·프로세스·변수 대응력, 도메인 지식이 곧 AX의 무기.</b></li>
+              </ul>
+            </div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 2</span>변화적응력</h5>
+              <ul>
+                <li>1등이 매달 바뀌는 초변화 시대 — <b>변화를 즐기는 태도, 그리고 영크크.</b></li>
+              </ul>
+            </div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 3</span>조직문화</h5>
+              <ul>
+                <li>TMI가 난무하는 조직으로 — <b>공유·학습 자가진단 · 늙크크/영크크 선언 · 문화 5원칙.</b></li>
+              </ul>
+            </div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 4</span>종착지</h5>
+              <ul>
+                <li>처음엔 역할별로, 결국엔 <b>수평하게.</b> (+ D1 인터뷰 결과 익명 공개)</li>
+              </ul>
+            </div>
+
+            <p style="margin-top:12px;font-size:12.5px;color:#8A8F98;letter-spacing:-.01em">※ 조직방향 상세 내용은 D2 교육자료(별도 제작)에 수록됩니다.</p>
+          </div>
+
+          <!-- 오후 -->
+          <div class="d2-col pm">
+            <div class="d2-col-t"><span class="tm">PM</span><h4>기둥 ② 시작 · AI 개념교육 &amp; 사다리 데모</h4></div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 5</span>AI 기본기 (비전공자 눈높이)</h5>
+              <ul>
+                <li>LLM이 일하는 방식</li>
+                <li>프롬프트 = <b>업무 지시서</b></li>
+                <li>컨텍스트 = <b>업무 맥락</b></li>
+                <li>환각과 검증 습관 — AI의 답을 믿는 법·의심하는 법</li>
+              </ul>
+            </div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 6</span>AX 사다리 라이브 데모</h5>
+              <ul>
+                <li>Slack 일정 예시로 <b>1단→4단을 눈앞에서 시연.</b></li>
+                <li>"같은 일이 단이 오를수록 이렇게 짧아진다."</li>
+              </ul>
+            </div>
+
+            <div class="mod">
+              <h5><span class="mno">모듈 7</span>우리 회사에 대입</h5>
+              <ul>
+                <li>발주서·송장·정산이 사다리를 오르면 어떻게 되나</li>
+                <li>내일부터의 실습 예고.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- D3 -->
+      <article class="day reveal" id="day-3" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#F97316">
+        <div class="day-head">
+          <span class="st-sign">D3</span>
+          <div class="day-head-tx">
+            <h3>체득 Ⅰ · 대화와 연결</h3>
+            <p class="who">전원 · 클로드 코워크</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제3막 체득</span><span class="badge amb">전원</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">오전</span><p>코워크 온보딩(계정·화면·파일) → <b>1단 대화</b>: 문서 요약, 엑셀 정리, 메일 초안을 말로 시켜본다.</p></div>
+          <div class="row"><span class="lb">오후</span><p><b>2단 연결</b>: Slack·드라이브 연결 → <b>실전 예제 ① 발주서 만들기 자동화</b>.</p></div>
+          <div class="row"><span class="lb">산출물</span><p>1인 1건 — 코워크로 실제 업무 처리 완료.</p></div>
+        </div>
+      </article>
+
+      <!-- D4 -->
+      <article class="day reveal" id="day-4" style="--g:linear-gradient(180deg,#EA580C,#059669);--c:#EA580C">
+        <div class="day-head">
+          <span class="st-sign" style="box-shadow:0 0 0 4px #fff,0 0 0 6.5px #EA580C,0 2px 10px rgba(18,22,31,.15)">D4</span>
+          <div class="day-head-tx">
+            <h3>체득 Ⅱ · 스킬과 자동화</h3>
+            <p class="who">전원 · 환승역 — 기초선 종착, 심화선 연장</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제3막 체득</span><span class="badge amb">전원</span><span class="badge grn">기초 트랙 수료일</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">오전</span><p><b>3단 스킬</b>: 반복작업을 스킬로 박제 → <b>실전 예제 ② 송장 업데이트 자동화</b>.</p></div>
+          <div class="row"><span class="lb">오후</span><p><b>4단 자동화</b> 맛보기: 스케줄 봇 — "아침 8시 반, 봇이 먼저 말을 건다" + <b>개인 과제 실습</b>: D1 인터뷰에서 발굴한 "내 30분 반복작업"을 각자 자동화 → 5분 미니 발표.</p></div>
+          <div class="row"><span class="lb">수료</span><p>기초 트랙 수료: <b>전달자 키트</b> 배부 (부서 전파용 미니 교육 자료) — 기초 4인은 소속 부서의 교육 전달자가 된다.</p></div>
+        </div>
+      </article>
+
+      <!-- D5 -->
+      <article class="day reveal" id="day-5" style="--g:linear-gradient(180deg,#3B82F6,#5B6CF6);--c:#3B82F6">
+        <div class="day-head">
+          <span class="st-sign">D5</span>
+          <div class="day-head-tx">
+            <h3>내재화 Ⅰ · 코워크 리뷰 × 클로드 코드 첫걸음</h3>
+            <p class="who">심화 5명 · 클로드 코드</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제4막 내재화</span><span class="badge vio">심화</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">오전</span><p>클로드 코드 온보딩 — 터미널과 친해지기. 코워크와 뭐가 다른가: <b>같은 AI, 더 깊은 손.</b></p></div>
+          <div class="row"><span class="lb">오후</span><p>D3–D4에서 코워크로 했던 자동화(발주서·송장·개인 과제)를 <b>클로드 코드로 다시 열어 리뷰</b> — 같은 일이 코드 관점에서는 어떻게 보이는지 이해.</p></div>
+          <div class="row"><span class="lb">산출물</span><p>코워크 산출물 1건을 클로드 코드로 재현.</p></div>
+        </div>
+      </article>
+
+      <!-- D6 -->
+      <article class="day reveal" id="day-6" style="--g:linear-gradient(180deg,#5B6CF6,#6D5CF6);--c:#5B6CF6">
+        <div class="day-head">
+          <span class="st-sign">D6</span>
+          <div class="day-head-tx">
+            <h3>내재화 Ⅱ · CS 기초 Ⅰ — 컴퓨터가 일하는 방식</h3>
+            <p class="who">심화 5명</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제4막 내재화</span><span class="badge vio">심화</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">기본기</span><p>파일·폴더·경로, 터미널 기본기, 프로그램과 프로세스.</p></div>
+          <div class="row"><span class="lb">데이터</span><p>데이터와 파일 형식: 엑셀·CSV·텍스트 — <b>우리가 매일 만지는 데이터의 실체.</b></p></div>
+          <div class="row"><span class="lb">웹</span><p>인터넷과 웹이 동작하는 법: 브라우저가 하는 일, 주소창에 엔터를 치면 생기는 일.</p></div>
+          <div class="row"><span class="lb">원칙</span><p>진행 원칙: <b>낭낭하게</b> — 질문 무제한, 눈높이 반복, 진도보다 이해.</p></div>
+        </div>
+      </article>
+
+      <!-- D7 -->
+      <article class="day reveal" id="day-7" style="--g:linear-gradient(180deg,#6D5CF6,#7C55F6);--c:#6D5CF6">
+        <div class="day-head">
+          <span class="st-sign">D7</span>
+          <div class="day-head-tx">
+            <h3>내재화 Ⅲ · CS 기초 Ⅱ — 서비스가 동작하는 방식</h3>
+            <p class="who">심화 5명</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제4막 내재화</span><span class="badge vio">심화</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">DB</span><p>데이터베이스와 테이블: <b>주문·상품·정산 데이터가 저장되는 구조.</b></p></div>
+          <div class="row"><span class="lb">서버</span><p>서버와 클라이언트, API: 화면과 데이터가 주고받는 법.</p></div>
+          <div class="row"><span class="lb">투어</span><p>우리 OMS 구조 투어: 화면–데이터–규칙이 어떻게 이어져 있나 — <b>내일 직접 수정해볼 지점 정하기.</b></p></div>
+        </div>
+      </article>
+
+      <!-- D8 -->
+      <article class="day reveal" id="day-8" style="--g:linear-gradient(180deg,#7C55F6,#8B5CF6);--c:#8B5CF6">
+        <div class="day-head">
+          <span class="st-sign" style="box-shadow:0 0 0 4px #fff,0 0 0 6.5px #8B5CF6,0 2px 10px rgba(18,22,31,.15)">D8</span>
+          <div class="day-head-tx">
+            <h3>내재화 Ⅳ · OMS 수정·개발 실습</h3>
+            <p class="who">심화 5명 · 종착역</p>
+          </div>
+          <div class="day-badges"><span class="badge act-b">제4막 내재화</span><span class="badge vio">심화 트랙 수료일</span></div>
+        </div>
+        <div class="day-body">
+          <div class="row"><span class="lb">오전</span><p>클로드 코드로 <b>우리 OMS 서비스를 직접 수정·개발</b> — 작은 것부터 (문구·화면 수정 → 간단한 기능 개선).</p></div>
+          <div class="row"><span class="lb">오후</span><p>결과 발표 (대표님·이사 참석) + 수료식 + AX 로드맵 다음 단계 공유.</p></div>
+          <div class="row"><span class="lb">핵심</span><p>수료 기준의 핵심: <b>내가 쓰는 시스템을 내 손으로 고쳐봤는가</b> — 유지보수 내재화의 첫걸음.</p></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EXEC SESSIONS ══════════════ -->
+<section class="sec" id="exec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--rose)">Executive Branch Line</span>
+      <h2>병행 · 경영진 세션 M1–M4<span class="exec-note">내용 제안</span></h2>
+      <p class="lead">후원 — 스폰서의 일. 이홍주 이사, 1일 · 일정 협의 (+대표님 선택 참석). 경영진 지선은 D8 발표에 합류한다.</p>
+    </div>
+    <div class="exec-grid">
+      <div class="exec-card reveal" style="--d:0s">
+        <div class="exec-top"><span class="exec-no">M1</span><span class="exec-dur">90분</span></div>
+        <h3>AX가 바꾸는 손익</h3>
+        <p>하루 4.5~6시간 수작업과 월 20~40건 오류의 비용 → 자동화 후 시간·오류·전환 지표로 보는 회수.</p>
+      </div>
+      <div class="exec-card reveal" style="--d:.07s">
+        <div class="exec-top"><span class="exec-no">M2</span><span class="exec-dur">90분</span></div>
+        <h3>스폰서의 행동 3가지</h3>
+        <p>학습 시간 보장 / 공유를 칭찬 / 실험을 허용 — 그리고 이것이 평가에 반영되게 하는 법.</p>
+      </div>
+      <div class="exec-card reveal" style="--d:.14s">
+        <div class="exec-top"><span class="exec-no">M3</span><span class="exec-dur">90분</span></div>
+        <h3>경영 대시보드 체험</h3>
+        <p>BI 화면으로 채널별 매출·마진 보기 + 대화형 질문("이번 달 채널별 마진은?")을 직접.</p>
+      </div>
+      <div class="exec-card reveal" style="--d:.21s">
+        <div class="exec-top"><span class="exec-no">M4</span><span class="exec-dur">60분</span></div>
+        <h3>의사결정</h3>
+        <p>AX 로드맵 다음 단계 — 주문수집 워커, 더존 연동, 채널 API — 무엇부터 투자할지.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PARTICIPANT MATRIX ══════════════ -->
+<section class="sec" id="matrix">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--emerald-d)">Passengers</span>
+      <h2>참가자 매트릭스 — 누가 · 언제</h2>
+      <p class="lead">노선별 탑승 안내. 심화 5인은 D8 종착까지, 기초 4인은 D4에서 수료 하차, 경영진은 지선으로 병행.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>참가자</th><th>소속</th><th>트랙</th>
+            <th class="ct">D1</th><th class="ct">D2</th><th class="ct">D3–D4</th><th class="ct">D5–D8</th><th class="ct">경영진 세션</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nm">박성희 실장</td><td>경영기획</td><td><span class="trk adv">심화</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">박정선 팀장</td><td>홈쇼핑사업팀</td><td><span class="trk adv">심화</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">신은선 과장</td><td>홈쇼핑사업팀</td><td><span class="trk adv">심화</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">서희정 사원</td><td>홈쇼핑사업팀</td><td><span class="trk adv">심화</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">양승혜 사원</td><td>홈쇼핑사업팀</td><td><span class="trk adv">심화</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dt" style="--dc:#6D5CF6"></span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">서지애 과장</td><td>경영기획팀</td><td><span class="trk bas">기초</span></td>
+            <td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dim">—</span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">박소연</td><td>전략사업팀</td><td><span class="trk bas">기초</span></td>
+            <td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dim">—</span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">김현지</td><td>콘텐츠사업팀</td><td><span class="trk bas">기초</span></td>
+            <td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dim">—</span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">이현주</td><td>편성팀</td><td><span class="trk bas">기초</span></td>
+            <td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dt" style="--dc:#10B981"></span></td><td class="ct"><span class="dim">—</span></td><td class="ct"><span class="dim">—</span></td>
+          </tr>
+          <tr>
+            <td class="nm">대표님</td><td><span class="dim">—</span></td><td><span class="trk obs">참관</span></td>
+            <td class="ct"><span class="dt" style="--dc:#6B7280"></span></td><td class="ct"><span class="sm">● (참관)</span></td><td class="ct"><span class="sm">선택</span></td><td class="ct"><span class="sm">D8 발표 참석</span></td><td class="ct"><span class="sm">선택</span></td>
+          </tr>
+          <tr>
+            <td class="nm">이홍주 이사</td><td><span class="dim">—</span></td><td><span class="trk exe">경영진</span></td>
+            <td class="ct"><span class="dim">—</span></td><td class="ct"><span class="sm">선택</span></td><td class="ct"><span class="dim">—</span></td><td class="ct"><span class="sm">D8 발표 참석</span></td><td class="ct"><span class="dt" style="--dc:#F43F5E"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mtx-note reveal">
+      <span><span class="dt" style="--dc:#6D5CF6"></span>심화 트랙 (D8까지)</span>
+      <span><span class="dt" style="--dc:#10B981"></span>기초 트랙 (D4 수료)</span>
+      <span><span class="dt" style="--dc:#F43F5E"></span>경영진 지선</span>
+      <span><span class="dim">—</span>&nbsp;해당 없음</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 30-DAY SPREAD ══════════════ -->
+<section class="sec" id="spread">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--emerald-d)">Act 5 · After the Line</span>
+      <h2>확산 — 수료 후 30일 챌린지</h2>
+      <p class="lead">제5막. 한 명의 변화를 조직의 변화로. 노선은 끝나도 여정은 계속된다.</p>
+    </div>
+    <div class="spread-grid">
+      <div class="sp-card reveal" style="--d:0s">
+        <div class="sp-ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+        <h3><small>WEEKLY</small>주 1회 공유회 (금요일 30분)</h3>
+        <p>"이번 주 내가 자동화한 것 1개" — TMI 문화의 실전.</p>
+      </div>
+      <div class="sp-card reveal" style="--d:.07s">
+        <div class="sp-ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8a5 5 0 1 0-10 0"/><circle cx="12" cy="12" r="3.2"/><path d="M5 21c0-3.2 3-5 7-5s7 1.8 7 5"/></svg></div>
+        <h3><small>RELAY</small>전달자 세션</h3>
+        <p>기초 수료자 4인이 각 소속 부서에서 미니 교육 1회 진행 (전달자 키트 활용).</p>
+      </div>
+      <div class="sp-card reveal" style="--d:.14s">
+        <div class="sp-ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></div>
+        <h3><small>ROTATION</small>심화 운영 로테이션</h3>
+        <p>심화 5인이 OMS 운영·유지보수 1차 대응 당번제 시작.</p>
+      </div>
+      <div class="sp-card reveal" style="--d:.21s">
+        <div class="sp-ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+        <h3><small>RE-CHECK</small>30일 후 재진단</h3>
+        <p>D1 인터뷰 핵심 문항 재질문 (before/after) — "업무를 대하는 시각"이 실제로 바뀌었는지 측정.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ KPI ══════════════ -->
+<section class="sec" id="kpi">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Measurement</span>
+      <h2>성과 측정 — KPI</h2>
+      <p class="lead">여정이 실제로 업무를 바꿨는지, 숫자로 확인한다.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <table class="kpi-tbl">
+        <thead>
+          <tr><th>지표</th><th>Baseline (as-is)</th><th>측정 시점</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>반복 수작업 시간</td><td>일 4.5~6시간</td><td>30일 후 실측 (목표: 절반 이하)</td></tr>
+          <tr><td>입력 오류</td><td>월 20~40건</td><td>월 단위 추적</td></tr>
+          <tr><td>1인 1자동화</td><td>0</td><td>수료 시 (기초: 30분 과제 1개 / 심화: OMS 수정·개발 1건)</td></tr>
+          <tr><td>조직문화 점수</td><td>D1 인터뷰 1~5점</td><td>30일 후 재측정</td></tr>
+          <tr><td>OMS 1차 대응률</td><td>외부 의존 100%</td><td>심화 로테이션 시작 후</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ GRADUATION ══════════════ -->
+<section class="sec" id="grad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--violet)">Final Stop</span>
+      <h2>수료 기준</h2>
+      <p class="lead">종착역에서 확인하는 세 가지.</p>
+    </div>
+    <div class="grad-grid">
+      <div class="grad-card reveal" style="--g:var(--grad-basic);--d:0s">
+        <div class="gc-t"><span class="trk bas">기초</span></div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>D2~D4 이수</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>내 업무 자동화 1건 발표</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>부서 전달 세션 1회 약속</li>
+        </ul>
+      </div>
+      <div class="grad-card reveal" style="--g:var(--grad-adv);--d:.08s">
+        <div class="gc-t"><span class="trk adv">심화</span></div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6D5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>전 과정 이수</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6D5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>OMS 수정·개발 실습 1건 발표</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6D5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>OMS 운영 로테이션 참여</li>
+        </ul>
+      </div>
+      <div class="grad-card common-g reveal" style="--g:var(--grad-common);--d:.16s">
+        <div class="gc-t"><span class="trk" style="background:var(--grad-common)">공통 — 가장 중요</span></div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>업무를 대하는 시각이 바뀌었는가</li>
+        </ul>
+        <p class="gc-note">→ 30일 후 재진단으로 확인.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="foot-in">
+    <span class="f-brand">
+      <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg2)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg2" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV+ AX JOURNEY
+    </span>
+    <p>FINAL EDITION · ROUTE MAP × ASCENT · 본과정 8일 + 경영진 세션 1일(병행) + 사후 확산 30일 · 내부 공유용</p>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="tooltip" aria-hidden="true"><b></b><span></span><em>클릭 → 상세 보기</em></div>
+
+<script>
+(function(){
+  /* scroll reveal */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* ascent route draw (from 05) */
+  var routes = document.querySelectorAll('.route.draw');
+  routes.forEach(function(p){
+    var len = p.getTotalLength();
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+  });
+  var stage = document.querySelector('.stage');
+  if(stage){
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var all = document.getElementById('routeAll');
+          var deep = document.getElementById('routeDeep');
+          if(all){ all.style.strokeDashoffset = 0; }
+          if(deep){ deep.style.transitionDelay = '1.6s'; deep.style.strokeDashoffset = 0; }
+          sio.disconnect();
+        }
+      });
+    },{threshold:.3});
+    sio.observe(stage);
+  }
+
+  /* metro station tooltip + anchor scroll */
+  var tip = document.getElementById('tip');
+  var tipB = tip.querySelector('b');
+  var tipS = tip.querySelector('span');
+
+  function moveTip(ev){
+    var x = ev.clientX + 16, y = ev.clientY + 18;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    if(x + w > window.innerWidth - 12) x = ev.clientX - w - 14;
+    if(y + h > window.innerHeight - 12) y = ev.clientY - h - 14;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+
+  document.querySelectorAll('.station').forEach(function(st){
+    st.addEventListener('mouseenter', function(ev){
+      tipB.innerHTML = '<i>' + st.dataset.day + '</i>' + st.dataset.title;
+      tipS.textContent = st.dataset.desc;
+      tip.classList.add('on');
+      tip.setAttribute('aria-hidden','false');
+      moveTip(ev);
+    });
+    st.addEventListener('mousemove', moveTip);
+    st.addEventListener('mouseleave', function(){
+      tip.classList.remove('on');
+      tip.setAttribute('aria-hidden','true');
+    });
+    function go(){
+      var t = document.querySelector(st.dataset.target);
+      if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+      tip.classList.remove('on');
+    }
+    st.addEventListener('click', go);
+    st.addEventListener('keydown', function(ev){
+      if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); go(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
