@@ -134,18 +134,20 @@
   }
   .expect dd b{font-weight:600;color:var(--ink)}
 
-  /* 설계 원칙 */
-  .principle{
+  /* 인터뷰 목적 */
+  .purpose{
     margin-top:16px;
     border:1px solid var(--line);border-radius:12px;background:var(--card);
     padding:22px 24px;
   }
-  .principle h2{
+  .purpose h2{
     font-size:11.5px;font-weight:600;letter-spacing:.18em;
     color:var(--sage);margin-bottom:10px;
   }
-  .principle p{font-size:13px;font-weight:200;color:var(--ink-70);line-height:1.85}
-  .principle p b{font-weight:600;color:var(--ink)}
+  .purpose p{font-size:13px;font-weight:200;color:var(--ink-70);line-height:1.85}
+  .purpose p + p{margin-top:4px}
+  .purpose p b{font-weight:600;color:var(--ink)}
+  .purpose .goal-key{font-weight:600;color:var(--sage)}
 
   /* ---------- PART ---------- */
   .part{margin-top:88px;scroll-margin-top:72px}
@@ -178,11 +180,6 @@
     border:1px solid var(--line);border-radius:12px;background:var(--card);
     padding:26px 32px 10px;
   }
-  .group-title{
-    font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--ink);
-    padding-bottom:14px;border-bottom:1px solid var(--line-soft);
-  }
-  .group-title small{font-weight:200;color:var(--ink-55);letter-spacing:0}
 
   /* 질문 — 메모란 없음, 질문만 */
   .q{display:flex;gap:16px;padding:17px 0 19px}
@@ -192,15 +189,16 @@
     font-size:15px;font-weight:400;line-height:1.72;color:var(--ink);
     transition:opacity .3s ease;
   }
+  .q-text b{font-weight:600}
   .q-num{
-    display:inline-block;min-width:22px;
+    display:inline-block;min-width:26px;
     font-size:12px;font-weight:600;color:var(--sage);
     font-variant-numeric:tabular-nums;
   }
   .q-text .paren{font-weight:200;color:var(--ink-55)}
   .q:has(.check input:checked) .q-text{opacity:.32}
   .q:has(.check input:checked) .q-num{opacity:.55}
-  .q:has(.check input:checked) .scale{opacity:.45}
+  .q:has(.check input:checked) .ladder{opacity:.45}
 
   /* 체크박스 (원형) */
   .check{
@@ -224,48 +222,59 @@
   .check input:checked + .ring::after{opacity:1}
   .check input:focus-visible + .ring{outline:2px solid var(--sage-line);outline-offset:3px}
 
-  /* 1~5점 척도 */
-  .scale{
-    margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  /* 사다리 자가 위치 — 0~4단 클릭 선택 */
+  .ladder{
+    margin-top:14px;display:flex;flex-direction:column;
     transition:opacity .3s ease;
   }
-  .scale-caption{
-    font-size:11.5px;font-weight:200;color:var(--ink-55);margin-right:6px;
+  .ladder label{
+    position:relative;display:flex;align-items:center;gap:13px;
+    padding:8px 12px;margin:0 -12px;border-radius:9px;
+    cursor:pointer;transition:background .18s ease;
   }
-  .scale label{position:relative;cursor:pointer}
-  .scale input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
-  .scale .dot{
-    display:flex;align-items:center;justify-content:center;
-    width:34px;height:34px;border-radius:50%;
+  .ladder label + label{margin-top:2px}
+  .ladder input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+  .ladder .rung{
+    flex:none;display:flex;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:50%;
     border:1px solid var(--ink-24);
-    font-size:13px;font-weight:400;color:var(--ink-70);
+    font-size:12.5px;font-weight:400;color:var(--ink-70);
+    font-variant-numeric:tabular-nums;
     transition:all .18s ease;user-select:none;
   }
-  .scale label:hover .dot{border-color:var(--sage-line);color:var(--sage)}
-  .scale input:checked + .dot{
+  .ladder .rung-text{
+    font-size:13.5px;font-weight:200;color:var(--ink-70);line-height:1.6;
+    transition:color .18s ease;
+  }
+  .ladder .rung-text b{font-weight:600;color:var(--ink)}
+  .ladder label:hover{background:var(--sage-soft)}
+  .ladder label:hover .rung{border-color:var(--sage-line);color:var(--sage)}
+  .ladder input:checked + .rung{
     background:var(--sage);border-color:var(--sage);color:#fff;font-weight:600;
   }
-  .scale input:focus-visible + .dot{outline:2px solid var(--sage-line);outline-offset:3px}
+  .ladder input:checked + .rung + .rung-text{color:var(--ink)}
+  .ladder input:focus-visible + .rung{outline:2px solid var(--sage-line);outline-offset:3px}
 
-  /* ---------- 운영 팁 ---------- */
-  .tips{margin-top:88px;scroll-margin-top:72px}
-  .tips-card{
+  /* ---------- 산출물 · 운영 팁 ---------- */
+  .end-block{margin-top:88px;scroll-margin-top:72px}
+  .end-block h2{font-size:clamp(19px,3vw,22px);font-weight:600;letter-spacing:-.01em}
+  .end-block h2 small{font-size:12.5px;font-weight:200;color:var(--ink-55);letter-spacing:0;margin-left:10px}
+  .end-card{
     margin-top:24px;
     border:1px solid var(--line);border-radius:12px;background:var(--card);
     padding:28px 32px;
   }
-  .tips h2{font-size:clamp(19px,3vw,22px);font-weight:600;letter-spacing:-.01em}
-  .tips h2 small{font-size:12.5px;font-weight:200;color:var(--ink-55);letter-spacing:0;margin-left:10px}
-  .tips li{
+  .end-card li{
     list-style:none;position:relative;
     padding:14px 0 14px 26px;
     font-size:14px;font-weight:400;color:var(--ink-70);line-height:1.8;
   }
-  .tips li + li{border-top:1px solid var(--line-soft)}
-  .tips li::before{
+  .end-card li + li{border-top:1px solid var(--line-soft)}
+  .end-card li::before{
     content:"—";position:absolute;left:0;top:14px;
     color:var(--sage);font-weight:600;
   }
+  .end-card li b{font-weight:600;color:var(--ink)}
 
   footer{
     margin-top:96px;padding-top:24px;border-top:1px solid var(--line);
@@ -285,6 +294,8 @@
     .nav-in{padding:12px 20px;gap:16px}
     .nav-mark{display:none}
     .part{margin-top:64px}
+    .end-block{margin-top:64px}
+    .ladder label{margin:0;padding:8px 0;gap:11px}
   }
 
   /* ---------- 인쇄 ---------- */
@@ -301,34 +312,32 @@
     .roster{gap:12px;margin-top:24px}
     .roster-track{padding:14px 18px 12px}
     .expect{margin-top:12px;padding:16px 18px 4px}
-    .principle{margin-top:12px;padding:16px 18px}
+    .purpose{margin-top:12px;padding:16px 18px}
     .fields{margin-top:28px;padding:14px 0}
-    .roster-track,.expect,.principle{break-inside:avoid}
+    .roster-track,.expect,.purpose{break-inside:avoid}
 
     .part{margin-top:0;break-before:page}
-    .tips{margin-top:0;break-before:page}
+    .end-block{margin-top:0;break-before:page}
+    .end-block + .end-block{break-before:auto;margin-top:28px}
     .part-quote{margin-top:12px}
 
-    /* 메모란이 없으므로 질문 리스트는 2단 — 질문 단위 잘림 금지 */
-    .group{
-      break-inside:auto;margin-top:14px;padding:16px 20px 6px;
-      column-count:2;column-gap:26px;column-fill:balance;
-    }
-    .group-title{column-span:all;padding-bottom:10px}
-    .q{break-inside:avoid;padding:11px 0 13px;gap:12px}
+    .group{break-inside:auto;margin-top:14px;padding:16px 22px 6px}
+    .q{break-inside:avoid;padding:12px 0 14px;gap:12px}
     .q-text{font-size:10pt;line-height:1.62}
     .check{width:15px;height:15px;margin-top:3px}
     .check .ring{border-color:rgba(43,41,38,.45);
       -webkit-print-color-adjust:exact;print-color-adjust:exact}
     .check .ring::after{left:3px;top:3.5px;width:7px;height:3.5px}
-    .scale{margin-top:10px;gap:7px}
-    .scale .dot{width:26px;height:26px;font-size:10.5px;border-color:rgba(43,41,38,.45)}
-    .scale input:checked + .dot{
+    .ladder{margin-top:8px}
+    .ladder label{padding:4px 0;margin:0;gap:10px}
+    .ladder .rung{width:24px;height:24px;font-size:9.5pt;border-color:rgba(43,41,38,.45)}
+    .ladder .rung-text{font-size:9.5pt}
+    .ladder input:checked + .rung{
       -webkit-print-color-adjust:exact;print-color-adjust:exact}
     .pill{border:1px solid var(--sage);background:none;
       -webkit-print-color-adjust:exact;print-color-adjust:exact}
     .field-value{border-bottom-color:rgba(43,41,38,.45)}
-    .tips-card{break-inside:avoid}
+    .end-card{break-inside:avoid;padding:18px 22px}
     footer{margin-top:32px}
   }
 </style>
@@ -338,11 +347,10 @@
 <nav aria-label="파트 이동">
   <div class="nav-in">
     <span class="nav-mark">AX INTERVIEW</span>
-    <a href="#part0">PART 0</a>
     <a href="#part1">PART 1</a>
     <a href="#part2">PART 2</a>
     <a href="#part3">PART 3</a>
-    <a href="#part4">PART 4</a>
+    <a href="#outputs">산출물</a>
     <a href="#tips">운영 팁</a>
   </div>
 </nav>
@@ -353,8 +361,8 @@
   <header>
     <p class="eyebrow">CNTV플러스 (씨엔티브이플러스)</p>
     <h1>AX를 위한 업무 인터뷰</h1>
-    <p class="subtitle">CNTV플러스 — 업무 실태 · AX 준비도 진단</p>
-    <p class="duration">소요 시간 — 1인 30~40분 (공통 파트 → 트랙 전용 파트)</p>
+    <p class="subtitle">CNTV플러스 — 인별 AX 단계 확인 · 실습 과제 선정</p>
+    <p class="duration">소요 — 1인 20~30분</p>
 
     <div class="fields">
       <div><span class="field-label">인터뷰 일시</span><span class="field-value" contenteditable="true"></span></div>
@@ -370,9 +378,8 @@
         <p>홈쇼핑사업팀 전원: <b>박정선 팀장</b> · <b>신은선 과장</b> · <b>서희정 사원</b> · <b>양승혜 사원</b></p>
       </div>
       <div class="roster-track">
-        <div class="roster-head"><span class="pill">기초 트랙 5명</span><span class="roster-note">기초 과정</span></div>
-        <p><b>대표님</b> <span class="org">(참관 · 프로젝트 스폰서)</span></p>
-        <p><b>서지애 과장</b> <span class="org">(경영기획팀 · 아마란스 연동)</span></p>
+        <div class="roster-head"><span class="pill">기초 트랙 4명</span><span class="roster-note">기초 과정</span></div>
+        <p><b>서지애 과장</b> <span class="org">(경영기획팀)</span></p>
         <p><b>박소연</b> <span class="org">(전략사업팀)</span> · <b>김현지</b> <span class="org">(콘텐츠사업팀)</span> · <b>이현주</b> <span class="org">(편성팀)</span></p>
       </div>
     </div>
@@ -382,269 +389,63 @@
       <h2>교육 기대성</h2>
       <dl>
         <div class="row"><dt>심화 5명</dt><dd>개발 완료 후 시스템 유지보수를 내부에서 직접 처리하고, 다른 업무 영역에서도 스스로 문제를 정의하고 해결하는 수준까지. "도구를 배우는 것"을 넘어 <b>일하는 방식의 사고 변화</b>.</dd></div>
-        <div class="row"><dt>기초 5명</dt><dd>AI 도구 활용 이해도를 높여 본인 업무에 실제 적용하고, 소속 부서 내 <b>교육 전달자</b>로서 변화를 조직 전체로 확산.</dd></div>
-        <div class="row"><dt>공통</dt><dd>수료 후 <b>업무를 대하는 시각 자체가 바뀌는 것</b>이 가장 중요한 성과.</dd></div>
+        <div class="row"><dt>기초 4명</dt><dd>AI 도구 활용 이해도를 높여 본인 업무에 실제 적용하고, 소속 부서 내 <b>교육 전달자</b>로서 변화를 조직 전체로 확산.</dd></div>
+        <div class="row"><dt>공통</dt><dd>교육 후 <b>업무를 대하는 시각 자체가 바뀌는 것</b>이 가장 중요한 성과.</dd></div>
       </dl>
     </div>
 
-    <div class="principle">
-      <h2>설계 원칙</h2>
-      <p>인터뷰 목적: <b>(a) as-is 업무 실태·페인 실측</b> <b>(b) 비즈니스 이해 · 변화적응력 · 조직문화 진단</b> <b>(c) 교육 기대성 대비 준비도 확인</b>. 1인 30~40분, 공통 파트 → 트랙 전용 파트.</p>
+    <!-- 인터뷰 목적 -->
+    <div class="purpose">
+      <h2>인터뷰 목적</h2>
+      <p><span class="goal-key">(a)</span> <b>인별 AX 단계 확인</b> — 지금 AI를 어느 정도 쓰고 있는지, 사다리 몇 단인지.</p>
+      <p><span class="goal-key">(b)</span> <b>실습 과제 선정</b> — D3–D4 실습에서 자동화할 "내 과제"를 함께 고른다.</p>
     </div>
   </header>
-
-  <!-- ================= PART 0 ================= -->
-  <section class="part" id="part0">
-    <div class="part-head">
-      <span class="part-no">PART 0</span>
-      <span class="pill">공통 · 10명 전원</span>
-      <h2>공통 질문 <span class="who">— 10명 전원</span></h2>
-    </div>
-
-    <div class="group">
-      <p class="group-title">A. 아이스브레이킹 / 자기업무</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>하루 업무를 시간 순서로 말해주세요. 그중 "이건 매일 똑같이 반복한다" 싶은 작업은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>그 반복작업 중 엑셀·복붙·여러 화면 오가기가 들어가는 건 뭔가요? 하루에 대략 몇 시간?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span>최근 한 달, 실수하거나 다시 한 적 있는 작업은? 왜 났다고 생각하세요?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">B. 변화적응력 진단</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>ChatGPT·Gemini·클로드 같은 AI 도구, 업무나 개인적으로 써본 적 있나요? 어디에?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>"새 도구·새 방식이 자주 바뀐다"는 상황에 대해 어떻게 느끼세요? <span class="paren">(즐겁다 / 피곤하다 / 따라가기 벅차다 등, 솔직하게)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>새로운 걸 배울 때 주로 어떻게 배우세요? <span class="paren">(직접 해봄 / 물어봄 / 문서 / 유튜브 등)</span></p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">C. 조직문화 진단</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">7</span>모르는 게 생기면 다른 직원에게 편하게 물어보는 편인가요? 물어보기 망설여진다면 왜?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">8</span>반대로, 누가 나한테 자꾸 물어보면 귀찮은가요, 반가운가요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">9</span>좋은 걸 알게 되면 사내에 공유하는 편인가요? <span class="paren">(예: "이 도구 좋더라")</span> 안 한다면 왜?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">10</span>회의에서 "의견 있냐"고 할 때 자유롭게 말하는 편인가요? 틀린 말 할까봐 주저한 적은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">11</span>우리 조직은 공유하기 편한 조직이라고 느끼나요? 1~5점이면 몇 점, 그 이유는?</p>
-          <div class="scale" role="radiogroup" aria-label="5점 척도">
-            <span class="scale-caption">※ 5점 척도 표기</span>
-            <label><input type="radio" name="scale-p0q11" value="1"><span class="dot">1</span></label>
-            <label><input type="radio" name="scale-p0q11" value="2"><span class="dot">2</span></label>
-            <label><input type="radio" name="scale-p0q11" value="3"><span class="dot">3</span></label>
-            <label><input type="radio" name="scale-p0q11" value="4"><span class="dot">4</span></label>
-            <label><input type="radio" name="scale-p0q11" value="5"><span class="dot">5</span></label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">D. AX 기대</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">12</span>이번 AX 교육/시스템에서 "이것만 해결돼도 좋겠다" 하는 게 있다면?</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ================= PART 1 ================= -->
   <section class="part" id="part1">
     <div class="part-head">
       <span class="part-no">PART 1</span>
-      <span class="pill">심화 트랙 · 5명</span>
-      <h2>심화 트랙 <span class="who">— 박성희 실장 · 박정선 팀장 · 신은선 과장 · 서희정 사원 · 양승혜 사원</span></h2>
-    </div>
-    <p class="part-quote">as-is ③~⑨를 실제로 손으로 하는 분들 = 새 OMS의 직접 운영자. 단계별로 깊게 + 유지보수 내재화 준비도까지.</p>
-
-    <div class="group">
-      <p class="group-title">주문 수집·검수 (③)</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>9개 온라인 채널 주문을 어떻게 받나요? 채널마다 로그인→다운로드를 따로 하시죠? 하루 총 몇 시간, 몇 번?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>검수할 때 뭘 확인하나요? <span class="paren">(주소 오류·도서산간/제주·상품명 변환·취소/기배송)</span> 그중 제일 손 많이 가는 건?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span>주소 오류(제주·도서 오인입) 발견하면 지금 어떻게 처리하나요? <span class="paren">(네이트온 통보 → 발주서 전송 여부로 분기 → 취소요청… 이 흐름 맞나요? 빠진 건?)</span></p>
-        </div>
-      </div>
+      <span class="pill">전원 9명</span>
+      <h2>AX 단계 확인 <span class="who">— "지금 나는 사다리 몇 단인가"</span></h2>
     </div>
 
     <div class="group">
-      <p class="group-title">발주 (⑤)</p>
-      <div class="q">
+      <div class="q" style="padding-top:6px">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>공급업체별 발주서를 매일 어떻게 만드나요? 업체마다 양식이 다른가요? DTS는 출고/수거 2파일로 따로 만들죠?</p>
+          <p class="q-text"><span class="q-num">1</span>AI 도구(ChatGPT·Gemini·클로드 등)를 지금 어디에 쓰고 있나요? 업무/개인 각각, 얼마나 자주?</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>출고번호 임의 부여(교환·추가배송·사내구매 등 출하번호 없는 건)는 어떤 규칙으로 매기나요? 사람마다 다른가요?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">송장 (⑥) <small>— 이중등록 페인</small></p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>송장을 세일코리아 + 각 채널에 두 번(또는 세 번) 등록하는 게 맞죠? 한 건에 몇 분 걸리나요?</p>
+          <p class="q-text"><span class="q-num">2</span>AI에게 일을 시켜본 것 중 가장 잘 됐던 경험은? 반대로 실망했던 경험은?</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">7</span>"한 주문에 송장 여러 개"(합포장 안 되는 2개 주문)일 때 지금 어떻게 하나요? 누락 나는 빈도는?</p>
+          <p class="q-text"><span class="q-num">3</span><b>사다리 자가 위치</b> — 지금 어디쯤인가요? <span class="paren">(하나 체크)</span></p>
+          <div class="ladder" role="radiogroup" aria-label="사다리 자가 위치 0단~4단">
+            <label><input type="radio" name="ladder-q3" value="0"><span class="rung">0</span><span class="rung-text"><b>0단 · 아직 안 써봄</b></span></label>
+            <label><input type="radio" name="ladder-q3" value="1"><span class="rung">1</span><span class="rung-text"><b>1단 · 대화</b> — 질문·요약·초안 작성에 쓴다</span></label>
+            <label><input type="radio" name="ladder-q3" value="2"><span class="rung">2</span><span class="rung-text"><b>2단 · 연결</b> — 내 파일·도구와 함께 쓴다</span></label>
+            <label><input type="radio" name="ladder-q3" value="3"><span class="rung">3</span><span class="rung-text"><b>3단 · 스킬</b> — 반복작업을 저장해두고 재사용한다</span></label>
+            <label><input type="radio" name="ladder-q3" value="4"><span class="rung">4</span><span class="rung-text"><b>4단 · 자동화</b> — 시키지 않아도 알아서 돌아가게 만들었다</span></label>
+          </div>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">8</span>자사(이지어드민)와 타사(업체 메일) 송장 인입 시점·방식이 다른데, 기다리다 놓치는 경우는?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">CS·반품·교환 (⑦)</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">9</span>반품 접수 조건(타사=입금확인만 / 자사=입고+입금 둘 다)을 매번 어떻게 판단하나요? 헷갈리는 케이스는?</p>
+          <p class="q-text"><span class="q-num">4</span>새 도구를 배울 때 어떤 방식이 편한가요? <span class="paren">(시연 따라하기 / 문서 / 직접 부딪히기 / 옆에서 코칭)</span></p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">10</span>교환 처리 기준표(타사불량/타사변심/자사불량/자사의심 4분기)를 머릿속에 다 넣고 하나요, 문서 보고 하나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">11</span>택배비 입금확인(우리은행 계좌 대조)은 어떻게 하나요? 미입금건 관리는 별도 파일로?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">정산 (⑧)</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">12</span>정산이 5종(DTS 월 / 매입업체 주 / 콜보험 / 온라인 월 / 세일코리아 수수료 월)으로 다 다른데, 각각 어떻게 대사하나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">13</span>채널 매출 - 수수료 - 광고수수료 맞추는 게 제일 오래 걸리는 정산은 뭔가요? 불일치 나면 어떻게 찾나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">14</span>매입정산 산식(상품대+택배비)이 아직 확정 안 됐는데, 실제로는 어떤 기준으로 계산하나요?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">회계 (⑨)</p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">15</span>더존 아마란스에 전표를 수기로 넣을 때, 하루 몇 건? 어떤 유형(매출/반품/수수료/매입)? 오류가 제일 잦은 유형은?</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">심화 준비도 <small>— "운영·유지보수 내재화 + 스스로 문제정의" (교육 기대성 정렬)</small></p>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">16</span>새 OMS로 바뀌면 화면 조작·오류 대응을 직접 하셔야 하는데, 우려되는 점은? 어떤 걸 미리 배우고 싶나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">17</span>교육 후에는 시스템 유지보수(설정 변경·오류 1차 대응·간단한 수정)를 내부에서 맡게 됩니다. 어디까지 직접 해볼 의향이 있나요? 가장 걱정되는 지점은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">18</span>최근 업무에서 "문제를 스스로 정의하고 해결"해 본 경험이 있다면? <span class="paren">(누가 시키기 전에 고친 것, 만들어 쓴 엑셀·양식 등)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">19</span>지금 이 업무 중 "AI/자동화가 해줬으면" 1순위는? "이건 절대 사람이 해야 한다" 싶은 건?</p>
+          <p class="q-text"><span class="q-num">5</span>AI 결과물을 어디까지 믿나요? 검증은 어떻게 하나요? <span class="paren">(안 해봤다면 솔직하게)</span></p>
         </div>
       </div>
     </div>
@@ -654,46 +455,39 @@
   <section class="part" id="part2">
     <div class="part-head">
       <span class="part-no">PART 2</span>
-      <span class="pill">기초 트랙 A</span>
-      <h2>기초 트랙 A <span class="who">— 서지애 과장 (경영기획팀 · 아마란스 연동)</span></h2>
+      <span class="pill">전원 9명</span>
+      <h2>실습 과제 선정 <span class="who">— "D3–D4에서 자동화할 내 과제 고르기"</span></h2>
     </div>
-    <p class="part-quote">아마란스(더존) 연동 접점. 정산→회계로 데이터가 넘어오는 쪽 + 부서 내 전달자 역할.</p>
 
     <div class="group">
       <div class="q" style="padding-top:6px">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>홈쇼핑사업팀의 정산·전표 데이터가 경영기획팀(아마란스)으로 어떻게 넘어오나요? 파일? 수기 재입력?</p>
+          <p class="q-text"><span class="q-num">6</span>매일/매주 반복하는 작업 3가지를 꼽는다면? <span class="paren">(엑셀 정리, 복붙, 자료 취합, 보고서 등)</span></p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>넘어온 데이터에서 자주 틀리거나 다시 확인해야 하는 항목은?</p>
+          <p class="q-text"><span class="q-num">7</span>그중 실습에서 <b>자동화해보고 싶은 1순위</b>는? 왜 그 작업인가요?</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span>시스템이 자동 연동된다면, 경영기획팀 입장에서 "이 형식·이 항목으로 와야 한다"는 요구사항이 있나요?</p>
+          <p class="q-text"><span class="q-num">8</span>그 작업의 재료와 결과물은? — 입력(어떤 파일·데이터가 들어가서) / 출력(뭐가 만들어지면 끝인지)</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>지금 회계·경영 업무 중 반복 수작업(대사·집계·보고서 만들기)은 어떤 게 있나요?</p>
+          <p class="q-text"><span class="q-num">9</span>실습에 쓸 <b>샘플 파일</b>을 준비할 수 있나요? <span class="paren">(민감정보 제외한 버전으로)</span></p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>AI가 이 중 뭘 도와주면 가장 체감이 클까요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>교육받은 내용을 팀 내에 전달·확산하는 역할을 맡는다면, 어떤 방식이 편할까요? <span class="paren">(짧은 데모 / 문서 / 1:1 알려주기)</span></p>
+          <p class="q-text"><span class="q-num">10</span>자동화로 시간이 생기면, 그 시간에 뭘 하고 싶나요?</p>
         </div>
       </div>
     </div>
@@ -703,122 +497,59 @@
   <section class="part" id="part3">
     <div class="part-head">
       <span class="part-no">PART 3</span>
-      <span class="pill">기초 트랙 B</span>
-      <h2>기초 트랙 B <span class="who">— 박소연 (전략사업팀) · 김현지 (콘텐츠사업팀) · 이현주 (편성팀)</span></h2>
+      <span class="pill">심화 5명만</span>
+      <h2>심화 트랙 추가 확인 <span class="who">— 박성희 실장 · 박정선 팀장 · 신은선 과장 · 서희정 사원 · 양승혜 사원</span></h2>
     </div>
-    <p class="part-quote">OMS와 직접 무관. "내 업무를 AI로 자동화할 과제를 스스로 발굴" + 부서 내 교육 전달자 역할.</p>
 
     <div class="group">
       <div class="q" style="padding-top:6px">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>본인 업무를 크게 3가지로 나눈다면? 각각에서 반복적이거나 시간 잡아먹는 부분은?</p>
+          <p class="q-text"><span class="q-num">11</span>심화 과정은 클로드 코워크를 넘어 <b>클로드 코드(터미널)</b>까지 갑니다. 컴퓨터 기본기(파일·폴더, 엑셀 외 도구) 중 자신 없는 부분이 있다면?</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>"이건 기계적인데 어쩔 수 없이 사람이 한다" 싶은 작업이 있나요? <span class="paren">(예: 자료 취합, 보고서 포맷팅, 리서치, 번역 등)</span></p>
+          <p class="q-text"><span class="q-num">12</span>교육 후 새 OMS의 화면 조작·오류 1차 대응을 맡게 됩니다. 미리 배워두고 싶은 것은?</p>
         </div>
       </div>
       <div class="q">
         <label class="check"><input type="checkbox"><span class="ring"></span></label>
         <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span>지금까지 "AI는 내 업무랑 상관없다"고 생각했다면, 왜 그렇게 느꼈나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>다른 팀(전략/콘텐츠/편성)에서 AI를 잘 쓴다는 얘기를 들으면, 내 업무에 적용해볼 의향이 있나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>만약 30분짜리 반복작업을 자동화한다면 뭘 자동화하고 싶은가요? <span class="paren">(구체적으로)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>새 정보(AI 소식)를 접했을 때 팀에 공유하는 편인가요? 공유가 어색하다면 뭐 때문에?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">7</span>교육 후 소속 팀의 "교육 전달자" 역할을 맡는다면, 어떤 지원(자료·시간·형식)이 있으면 해볼 만할까요?</p>
+          <p class="q-text"><span class="q-num">13</span>D8에는 OMS를 직접 수정해봅니다 — 평소 "이거 좀 고쳐졌으면" 했던 화면·기능이 있나요?</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= PART 4 ================= -->
-  <section class="part" id="part4">
-    <div class="part-head">
-      <span class="part-no">PART 4</span>
-      <span class="pill">기초 트랙 C · 스폰서</span>
-      <h2>기초 트랙 C <span class="who">— 대표님 (참관 · 프로젝트 스폰서)</span></h2>
-    </div>
-    <p class="part-quote">실무 질문 아님. 방향·투자·조직문화 의지 확인.</p>
-
-    <div class="group">
-      <div class="q" style="padding-top:6px">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>이번 AX 프로젝트로 6개월~1년 뒤 회사가 어떻게 달라지길 기대하시나요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>"하루 5시간 수작업, 월 20~40건 오류"라는 현행 수치를 알고 계셨나요? 목표 수준은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span>AX가 되려면 시니어의 도메인 지식을 데이터로 정제하고 주니어가 새 정보를 자유롭게 제안하는 문화가 필요합니다. 지금 우리 조직이 그런가요? 바꾸고 싶은 부분은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>교육 이수/시스템 안착을 위해 시간·인력·평가에서 어떤 지원을 해주실 수 있나요? <span class="paren">(예: 학습 시간 보장, 공유·실험을 칭찬하는 평가)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>"말 아끼는 조직이 아니라 TMI가 난무하는 조직"에 동의하시나요? 대표님이 먼저 보여줄 수 있는 행동은?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>AX에서 대표님이 생각하는 1순위 우선 과제는? <span class="paren">(OMS 안착 / 전사 역량 / 특정 팀 등)</span></p>
-        </div>
-      </div>
+  <!-- ================= 산출물 ================= -->
+  <section class="end-block" id="outputs">
+    <h2>산출물 <small>문서 말미</small></h2>
+    <div class="end-card">
+      <ul>
+        <li><b>인별 AX 단계 맵</b> — 9명 각자의 사다리 위치(0~4단). D2 사다리 강의 도입부에 "우리 반 분포"로 익명 공개.</li>
+        <li><b>자동화 과제 백로그</b> — 1인 1개 이상. Q7–Q8 답이 그대로 D3–D4 실습 과제가 된다.</li>
+        <li><b>샘플 데이터 준비 목록</b> — Q9 기준, 실습 전 취합.</li>
+      </ul>
     </div>
   </section>
 
   <!-- ================= 운영 팁 ================= -->
-  <section class="tips" id="tips">
-    <h2>인터뷰 운영 팁 <small>문서 말미, 진행자용</small></h2>
-    <div class="tips-card">
+  <section class="end-block" id="tips">
+    <h2>인터뷰 운영 팁 <small>진행자용</small></h2>
+    <div class="end-card">
       <ul>
-        <li>공통 파트 11번(공유 편한 조직 1~5점)은 익명 집계해서 교육 때 "우리 조직 현주소"로 오픈 → 조직문화 세션 도입부로 활용.</li>
-        <li>심화 트랙(PART 1) 답변은 OMS 스펙 검증(특히 매입정산 산식·출고번호 규칙·CS 분기)에 직접 반영.</li>
-        <li>기초 트랙(PART 2·3) 답변에서 나온 "자동화하고 싶은 30분 작업"은 실습(클로드 코워크) 실제 과제로 재활용.</li>
-        <li>수료 기준이 "업무를 대하는 시각의 변화"이므로, 공통 B·C 파트 답변은 교육 전(baseline) 기록으로 남겨 수료 후 재질문·비교.</li>
+        <li>Q3 사다리 자가 위치는 교육 후 30일 재측정과 비교하는 baseline이다.</li>
+        <li>Q7–Q8이 이 인터뷰의 핵심 — 입력·출력이 분명한 과제일수록 실습 성공률이 높다. 모호하면 그 자리에서 함께 좁혀준다.</li>
+        <li>Q13 답변은 D8 OMS 수정·개발 실습의 후보 목록으로 수집.</li>
       </ul>
     </div>
   </section>
 
   <footer>
     <span>CNTV플러스 — AX를 위한 업무 인터뷰</span>
-    <span>총 50문항 · 업무 실태 · AX 준비도 진단</span>
+    <span>총 13문항 · 인별 AX 단계 확인 · 실습 과제 선정</span>
   </footer>
 
 </div>
@@ -831,8 +562,8 @@
     });
   });
 
-  // 1~5점 척도: 같은 점수 재클릭 시 선택 해제
-  document.querySelectorAll('.scale input[type="radio"]').forEach(function (radio) {
+  // 사다리 자가 위치: 같은 단 재클릭 시 선택 해제
+  document.querySelectorAll('.ladder input[type="radio"]').forEach(function (radio) {
     radio.addEventListener('mousedown', function () {
       radio.dataset.wasChecked = radio.checked ? '1' : '';
     });
