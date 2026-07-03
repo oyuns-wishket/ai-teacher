@@ -1,576 +1,794 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AX를 위한 업무 인터뷰 — CNTV플러스</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AX를 위한 업무 인터뷰 — D1 진단 (CNTV+ AX JOURNEY)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#F7F5F2;
-    --card:#FAF8F5;
-    --ink:#2B2926;
-    --ink-70:rgba(43,41,38,.70);
-    --ink-55:rgba(43,41,38,.55);
-    --ink-38:rgba(43,41,38,.38);
-    --ink-24:rgba(43,41,38,.24);
-    --line:rgba(43,41,38,.13);
-    --line-soft:rgba(43,41,38,.09);
-    --sage:#6F7F63;
-    --sage-soft:rgba(111,127,99,.11);
-    --sage-line:rgba(111,127,99,.45);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
-    background:var(--bg);
-    color:var(--ink);
-    font-size:15px;
-    font-weight:400;
-    line-height:1.66;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-    word-break:keep-all;
-  }
-  ::selection{background:var(--sage-soft)}
+:root{
+  --bg:#F8F9FB;
+  --ink:#12161F;
+  --ink2:#2A3140;
+  --muted:#5C6470;
+  --faint:#8B93A1;
+  --line:#E5E8EE;
+  --card:#FFFFFF;
+  --amber:#F59E0B;
+  --amber-l:#F5B40B;
+  --orange:#F97316;
+  --orange-d:#EA580C;
+  --emerald:#10B981;
+  --emerald-d:#059669;
+  --blue:#3B82F6;
+  --violet:#8B5CF6;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --grad-common:linear-gradient(90deg,#F59E0B,#F97316);
+  --grad-adv:linear-gradient(90deg,#3B82F6,#8B5CF6);
+  --grad-basic:linear-gradient(90deg,#10B981,#059669);
+  --shadow-sm:0 1px 2px rgba(18,22,31,.05),0 4px 14px rgba(18,22,31,.05);
+  --shadow-md:0 2px 6px rgba(18,22,31,.06),0 14px 34px rgba(18,22,31,.09);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+::selection{background:rgba(249,115,22,.22)}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px}
+section{scroll-margin-top:86px}
+.mono{font-family:var(--mono)}
 
-  .wrap{max-width:760px;margin:0 auto;padding:0 28px 140px}
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(248,249,251,.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:980px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;font-size:15px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand svg{display:block;flex:none}
+.brand .plus{background:var(--grad-common);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-links{display:flex;gap:4px}
+.nav-links a{
+  font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+  padding:7px 12px;border-radius:99px;transition:.2s;white-space:nowrap;
+}
+.nav-links a:hover{color:var(--ink);background:#EEF0F4}
+.prog{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);
+  border:1px solid rgba(249,115,22,.3);border-radius:99px;padding:5px 12px;white-space:nowrap;
+}
+.prog b{font-weight:800}
 
-  /* ---------- 내비게이션 ---------- */
-  nav{
-    position:sticky;top:0;z-index:10;
-    background:rgba(247,245,242,.94);
-    border-bottom:1px solid var(--line-soft);
-  }
-  .nav-in{
-    max-width:760px;margin:0 auto;padding:14px 28px;
-    display:flex;gap:22px;flex-wrap:wrap;align-items:baseline;
-  }
-  nav a{
-    font-size:11.5px;font-weight:600;letter-spacing:.09em;
-    color:var(--ink-55);text-decoration:none;
-    transition:color .18s ease;
-  }
-  nav a:hover,nav a:focus-visible{color:var(--sage)}
-  nav .nav-mark{font-size:11.5px;font-weight:200;letter-spacing:.14em;color:var(--ink-38);margin-right:auto}
+/* ---------- hero ---------- */
+.hero{padding:64px 0 8px}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.16em;
+  color:var(--orange-d);text-transform:uppercase;
+  padding:7px 14px;border:1px solid rgba(249,115,22,.35);border-radius:99px;
+  background:linear-gradient(90deg,rgba(245,158,11,.09),rgba(249,115,22,.09));
+  margin-bottom:22px;
+}
+.hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--grad-common);box-shadow:0 0 0 3px rgba(249,115,22,.18)}
+h1{font-size:clamp(36px,5.6vw,62px);font-weight:900;letter-spacing:-.035em;line-height:1.06}
+h1 .grad{
+  background:linear-gradient(92deg,#F5B40B 0%,#F59E0B 40%,#F97316 75%,#EA580C 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{margin-top:16px;font-size:clamp(16px,2.2vw,21px);font-weight:700;letter-spacing:-.02em;color:var(--ink2)}
+.tagline em{
+  font-style:normal;
+  background:linear-gradient(90deg,#F59E0B,#EA580C);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);border-radius:99px;
+  padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--ink2);
+  box-shadow:var(--shadow-sm);
+}
+.chip b{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.08em}
 
-  /* ---------- 헤더 ---------- */
-  header{padding-top:76px}
-  .eyebrow{
-    font-size:12px;font-weight:600;letter-spacing:.22em;
-    color:var(--sage);margin-bottom:22px;
-  }
-  h1{
-    font-size:clamp(34px,6vw,46px);
-    font-weight:200;letter-spacing:-.015em;line-height:1.22;
-  }
-  .subtitle{
-    margin-top:14px;font-size:16px;font-weight:400;color:var(--ink-70);
-  }
-  .duration{margin-top:10px;font-size:13px;font-weight:200;color:var(--ink-55)}
+/* ---------- meta fields ---------- */
+.meta-card{
+  margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:24px 28px;box-shadow:var(--shadow-sm);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+}
+.field{display:flex;flex-direction:column;gap:7px}
+.f-lb{
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  color:var(--faint);text-transform:uppercase;
+}
+.f-in{
+  display:block;min-height:32px;padding:2px 4px 6px;font-size:15.5px;font-weight:700;color:var(--ink);
+  border-bottom:2px solid #E3D3B4;outline:none;transition:border-color .2s;
+  cursor:text;
+}
+.f-in:focus{border-bottom-color:var(--orange)}
+.f-in:empty::before{content:attr(data-ph);color:#C6CCD6;font-weight:500}
 
-  /* 기입란 — contenteditable은 이 3칸뿐 */
-  .fields{
-    margin-top:44px;
-    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    padding:20px 0;
-    display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-  }
-  .field-label{
-    display:block;font-size:11px;font-weight:600;letter-spacing:.12em;
-    color:var(--ink-38);margin-bottom:8px;
-  }
-  .field-value{
-    display:block;min-height:26px;
-    font-size:14.5px;font-weight:400;
-    border-bottom:1px dotted var(--ink-24);
-    outline:none;caret-color:var(--sage);padding-bottom:3px;
-    transition:border-color .18s ease;
-  }
-  .field-value:focus{border-bottom-color:var(--sage-line)}
-  .field-value:empty::before{content:"　";color:transparent}
+/* ---------- purpose pillars ---------- */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.pillar{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 26px;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-sm);
+  transition:transform .25s,box-shadow .25s;
+}
+.pillar:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.pillar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.pillar.p1::before{background:linear-gradient(180deg,#F5B40B,#F59E0B)}
+.pillar.p2::before{background:linear-gradient(180deg,#F97316,#EA580C)}
+.pillar .p-num{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint)}
+.pillar h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:6px 0 6px}
+.pillar p{font-size:14px;color:var(--muted)}
+.pillar p b{color:var(--ink2);font-weight:800}
 
-  /* 교육 대상 명단 */
-  .roster{
-    margin-top:32px;
-    display:grid;grid-template-columns:1fr 1fr;gap:16px;
-  }
-  .roster-track{
-    border:1px solid var(--line);border-radius:12px;background:var(--card);
-    padding:20px 24px 18px;
-  }
-  .roster-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-  .roster-note{font-size:11.5px;font-weight:200;color:var(--ink-55)}
-  .roster-track p{
-    font-size:13px;font-weight:400;color:var(--ink-70);line-height:1.8;
-    padding:5px 0;
-  }
-  .roster-track p + p{border-top:1px solid var(--line-soft)}
-  .roster-track p b{font-weight:600;color:var(--ink)}
-  .roster-track .org{font-weight:200;color:var(--ink-55)}
+/* ---------- section frame ---------- */
+.sec{padding:76px 0 0}
+.sec-head{max-width:820px;margin-bottom:34px}
+.kicker{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:currentColor}
+h2{font-size:clamp(24px,3.2vw,36px);font-weight:900;letter-spacing:-.03em;line-height:1.14}
+.lead{margin-top:12px;font-size:16px;color:var(--muted);line-height:1.7}
+.lead b{color:var(--ink2);font-weight:800}
 
-  /* 교육 기대성 박스 */
-  .expect{
-    margin-top:16px;
-    border:1px solid var(--line);border-radius:12px;background:var(--card);
-    padding:22px 24px 8px;
-  }
-  .expect h2{
-    font-size:11.5px;font-weight:600;letter-spacing:.18em;
-    color:var(--sage);margin-bottom:6px;
-  }
-  .expect .row{
-    display:flex;gap:14px;align-items:baseline;
-    padding:11px 0;
-  }
-  .expect .row + .row{border-top:1px solid var(--line-soft)}
-  .expect dt{
-    flex:none;width:64px;
-    font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--sage);
-  }
-  .expect dd{
-    font-size:13px;font-weight:200;color:var(--ink-70);line-height:1.8;
-  }
-  .expect dd b{font-weight:600;color:var(--ink)}
+/* ---------- roster ---------- */
+.roster{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ros-card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:24px 26px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.ros-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--g)}
+.ros-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.trk{display:inline-block;font-size:12px;font-weight:800;color:#fff;border-radius:8px;padding:4px 12px;white-space:nowrap}
+.trk.adv{background:var(--grad-adv)}
+.trk.bas{background:var(--grad-basic)}
+.ros-note{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--faint)}
+.ros-card ul{list-style:none;display:grid;gap:8px}
+.ros-card li{
+  display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink2);
+  padding:9px 12px;border:1px solid #EEF0F4;border-radius:12px;background:#FBFCFD;
+}
+.ros-card li b{font-weight:800;color:var(--ink)}
+.ros-card li span{font-size:12.5px;color:var(--faint);font-weight:600;margin-left:auto;white-space:nowrap}
+.ros-card li.grp{
+  border:none;background:none;padding:8px 2px 0;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--faint);
+}
 
-  /* 인터뷰 목적 */
-  .purpose{
-    margin-top:16px;
-    border:1px solid var(--line);border-radius:12px;background:var(--card);
-    padding:22px 24px;
-  }
-  .purpose h2{
-    font-size:11.5px;font-weight:600;letter-spacing:.18em;
-    color:var(--sage);margin-bottom:10px;
-  }
-  .purpose p{font-size:13px;font-weight:200;color:var(--ink-70);line-height:1.85}
-  .purpose p + p{margin-top:4px}
-  .purpose p b{font-weight:600;color:var(--ink)}
-  .purpose .goal-key{font-weight:600;color:var(--sage)}
+/* ---------- expectations ---------- */
+.expect{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:26px 28px;box-shadow:var(--shadow-sm);
+}
+.expect h3{font-size:13px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin-bottom:16px}
+.expect ul{list-style:none;display:grid;gap:12px}
+.expect li{display:flex;gap:14px;font-size:14.5px;color:var(--ink2);align-items:flex-start}
+.expect .who{
+  flex:none;width:78px;text-align:center;font-size:12px;font-weight:800;color:#fff;
+  border-radius:8px;padding:4px 0;margin-top:2px;letter-spacing:-.01em;
+}
+.expect .who.adv{background:var(--grad-adv)}
+.expect .who.bas{background:var(--grad-basic)}
+.expect .who.all{background:var(--grad-common)}
 
-  /* ---------- PART ---------- */
-  .part{margin-top:88px;scroll-margin-top:72px}
-  .part-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-  .part-no{
-    font-size:12px;font-weight:600;letter-spacing:.2em;color:var(--sage);
-  }
-  .part-head h2{
-    width:100%;margin-top:8px;
-    font-size:clamp(21px,3.4vw,25px);font-weight:600;letter-spacing:-.01em;line-height:1.4;
-  }
-  .part-head h2 .who{font-weight:200;color:var(--ink-70)}
-  .pill{
-    display:inline-block;
-    font-size:11px;font-weight:600;letter-spacing:.08em;
-    color:var(--sage);background:var(--sage-soft);
-    border-radius:999px;padding:4px 12px;
-    vertical-align:2px;
-  }
-  .part-quote{
-    margin-top:16px;
-    border-left:2px solid var(--sage-line);
-    padding-left:16px;
-    font-size:13.5px;font-weight:200;color:var(--ink-55);line-height:1.8;
-  }
+/* ---------- question cards ---------- */
+.qs{display:grid;gap:14px}
+.q{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  padding:20px 24px 20px 30px;
+  transition:box-shadow .3s,opacity .45s;
+}
+.q:hover{box-shadow:var(--shadow-md)}
+.q::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--g,var(--grad-common))}
+.qhead{display:flex;align-items:flex-start;gap:16px}
+.qsign{
+  flex:none;width:44px;height:44px;border-radius:50%;background:#fff;
+  border:3.5px solid var(--c,var(--amber));display:grid;place-items:center;
+  font-family:var(--mono);font-weight:800;font-size:13px;color:var(--ink);
+  box-shadow:0 0 0 3px #fff,0 2px 8px rgba(18,22,31,.1);
+  transition:.3s;
+}
+.qtext{flex:1;font-size:15.5px;color:var(--ink2);line-height:1.65;padding-top:8px}
+.qtext b{font-weight:800;color:var(--ink)}
+.qtext .hint{color:var(--faint)}
+.qcheck{
+  flex:none;width:30px;height:30px;border-radius:50%;margin-top:7px;
+  border:2px solid #C9CFD9;background:#fff;cursor:pointer;
+  display:grid;place-items:center;transition:.25s;padding:0;
+}
+.qcheck svg{display:block}
+.qcheck svg path{stroke:transparent;transition:.2s}
+.qcheck:hover{border-color:var(--amber);transform:scale(1.08)}
+.q.done{opacity:.55}
+.q.done .qcheck{background:var(--grad-common);border-color:transparent}
+.q.done .qcheck svg path{stroke:#fff}
+.q.done .qsign{border-color:#D8DCE4;color:var(--faint)}
 
-  /* 질문 그룹 카드 */
-  .group{
-    margin-top:24px;
-    border:1px solid var(--line);border-radius:12px;background:var(--card);
-    padding:26px 32px 10px;
-  }
+/* ---------- Q3 mini ladder ---------- */
+.lad-zone{position:relative;margin-top:22px;padding:6px 2px 12px}
+.lad{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:end;position:relative;
+}
+.lad::before{
+  content:"";position:absolute;left:3%;right:2%;bottom:-8px;height:0;
+  border-bottom:2px dashed #D8DCE4;z-index:0;
+}
+.lrung{
+  position:relative;z-index:1;width:100%;text-align:left;cursor:pointer;
+  background:var(--card);border:1.5px solid var(--line);border-radius:16px;
+  padding:14px 14px 13px;box-shadow:var(--shadow-sm);
+  border-top:4px solid var(--c,#F59E0B);
+  font-family:inherit;
+  transition:transform .3s cubic-bezier(.3,1.2,.5,1),box-shadow .3s,border-color .3s,background .3s;
+  display:flex;flex-direction:column;gap:6px;
+}
+.lrung:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.lr0{margin-top:128px}.lr1{margin-top:96px}.lr2{margin-top:64px}.lr3{margin-top:32px}.lr4{margin-top:0}
+.l-top{display:flex;align-items:center;gap:8px}
+.l-dan{
+  font-family:var(--mono);font-weight:800;font-size:11px;color:#fff;
+  border-radius:6px;padding:3px 8px;letter-spacing:.06em;background:var(--c,#F59E0B);flex:none;
+}
+.l-chk{
+  margin-left:auto;width:20px;height:20px;border-radius:50%;flex:none;
+  border:2px solid #D8DCE4;background:#fff;display:grid;place-items:center;transition:.25s;
+}
+.l-chk svg path{stroke:transparent;transition:.2s}
+.l-name{font-size:15px;font-weight:900;letter-spacing:-.02em;color:var(--ink)}
+.l-def{font-size:12px;color:var(--muted);font-weight:600;line-height:1.5}
+.lrung.sel{
+  border-color:var(--c);background:var(--t,rgba(245,158,11,.06));
+  box-shadow:var(--shadow-md);
+}
+.lrung.sel .l-chk{background:var(--c);border-color:var(--c)}
+.lrung.sel .l-chk svg path{stroke:#fff}
+.q.done .lrung:not(.sel){opacity:.6}
 
-  /* 질문 — 메모란 없음, 질문만 */
-  .q{display:flex;gap:16px;padding:17px 0 19px}
-  .q + .q{border-top:1px solid var(--line-soft)}
-  .q-body{flex:1;min-width:0}
-  .q-text{
-    font-size:15px;font-weight:400;line-height:1.72;color:var(--ink);
-    transition:opacity .3s ease;
-  }
-  .q-text b{font-weight:600}
-  .q-num{
-    display:inline-block;min-width:26px;
-    font-size:12px;font-weight:600;color:var(--sage);
-    font-variant-numeric:tabular-nums;
-  }
-  .q-text .paren{font-weight:200;color:var(--ink-55)}
-  .q:has(.check input:checked) .q-text{opacity:.32}
-  .q:has(.check input:checked) .q-num{opacity:.55}
-  .q:has(.check input:checked) .ladder{opacity:.45}
+/* ---------- outputs ---------- */
+.out-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.out-card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;
+  box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;
+}
+.out-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.out-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad-common)}
+.out-no{
+  font-family:var(--mono);font-weight:800;font-size:12px;color:var(--orange-d);
+  border:2px solid var(--orange-d);width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;background:#fff;margin-bottom:12px;
+}
+.out-card h3{font-size:16px;font-weight:800;letter-spacing:-.015em;margin-bottom:6px}
+.out-card p{font-size:13.5px;color:var(--muted);line-height:1.65}
+.out-card p b{color:var(--ink2);font-weight:700}
 
-  /* 체크박스 (원형) */
-  .check{
-    position:relative;flex:none;
-    width:19px;height:19px;margin-top:4px;cursor:pointer;
-  }
-  .check input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
-  .check .ring{
-    position:absolute;inset:0;border-radius:50%;
-    border:1.5px solid var(--ink-24);background:transparent;
-    transition:border-color .18s ease,background .18s ease;
-  }
-  .check .ring::after{
-    content:"";position:absolute;left:4.5px;top:5px;
-    width:8px;height:4px;
-    border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;
-    transform:rotate(-45deg);opacity:0;transition:opacity .18s ease;
-  }
-  .check:hover .ring{border-color:var(--sage-line)}
-  .check input:checked + .ring{background:var(--sage);border-color:var(--sage)}
-  .check input:checked + .ring::after{opacity:1}
-  .check input:focus-visible + .ring{outline:2px solid var(--sage-line);outline-offset:3px}
+/* ---------- tips ---------- */
+.tips{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:26px 28px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.tips::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:repeating-linear-gradient(90deg,var(--amber) 0 10px,rgba(245,158,11,.25) 10px 18px)}
+.tips h3{font-size:13px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin-bottom:16px}
+.tips ul{list-style:none;display:grid;gap:12px}
+.tips li{display:flex;gap:14px;font-size:14.5px;color:var(--ink2);align-items:flex-start;line-height:1.65}
+.tips .lb{
+  flex:none;width:56px;text-align:center;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--orange-d);background:rgba(249,115,22,.1);border-radius:7px;padding:4px 0;margin-top:3px;
+}
+.tips li b{font-weight:800}
 
-  /* 사다리 자가 위치 — 0~4단 클릭 선택 */
-  .ladder{
-    margin-top:14px;display:flex;flex-direction:column;
-    transition:opacity .3s ease;
-  }
-  .ladder label{
-    position:relative;display:flex;align-items:center;gap:13px;
-    padding:8px 12px;margin:0 -12px;border-radius:9px;
-    cursor:pointer;transition:background .18s ease;
-  }
-  .ladder label + label{margin-top:2px}
-  .ladder input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
-  .ladder .rung{
-    flex:none;display:flex;align-items:center;justify-content:center;
-    width:32px;height:32px;border-radius:50%;
-    border:1px solid var(--ink-24);
-    font-size:12.5px;font-weight:400;color:var(--ink-70);
-    font-variant-numeric:tabular-nums;
-    transition:all .18s ease;user-select:none;
-  }
-  .ladder .rung-text{
-    font-size:13.5px;font-weight:200;color:var(--ink-70);line-height:1.6;
-    transition:color .18s ease;
-  }
-  .ladder .rung-text b{font-weight:600;color:var(--ink)}
-  .ladder label:hover{background:var(--sage-soft)}
-  .ladder label:hover .rung{border-color:var(--sage-line);color:var(--sage)}
-  .ladder input:checked + .rung{
-    background:var(--sage);border-color:var(--sage);color:#fff;font-weight:600;
-  }
-  .ladder input:checked + .rung + .rung-text{color:var(--ink)}
-  .ladder input:focus-visible + .rung{outline:2px solid var(--sage-line);outline-offset:3px}
+/* ---------- footer ---------- */
+footer{margin-top:96px;border-top:1px solid var(--line);background:#FDFDFE}
+.foot-in{max-width:980px;margin:0 auto;padding:34px 28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+footer .f-brand{font-weight:800;font-size:14px;display:flex;align-items:center;gap:9px}
+footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
 
-  /* ---------- 산출물 · 운영 팁 ---------- */
-  .end-block{margin-top:88px;scroll-margin-top:72px}
-  .end-block h2{font-size:clamp(19px,3vw,22px);font-weight:600;letter-spacing:-.01em}
-  .end-block h2 small{font-size:12.5px;font-weight:200;color:var(--ink-55);letter-spacing:0;margin-left:10px}
-  .end-card{
-    margin-top:24px;
-    border:1px solid var(--line);border-radius:12px;background:var(--card);
-    padding:28px 32px;
-  }
-  .end-card li{
-    list-style:none;position:relative;
-    padding:14px 0 14px 26px;
-    font-size:14px;font-weight:400;color:var(--ink-70);line-height:1.8;
-  }
-  .end-card li + li{border-top:1px solid var(--line-soft)}
-  .end-card li::before{
-    content:"—";position:absolute;left:0;top:14px;
-    color:var(--sage);font-weight:600;
-  }
-  .end-card li b{font-weight:600;color:var(--ink)}
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+}
 
-  footer{
-    margin-top:96px;padding-top:24px;border-top:1px solid var(--line);
-    font-size:11.5px;font-weight:200;letter-spacing:.1em;color:var(--ink-38);
-    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  }
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .lad{grid-template-columns:repeat(2,1fr);align-items:stretch}
+  .lad::before{display:none}
+  .lr0,.lr1,.lr2,.lr3,.lr4{margin-top:0}
+  .lr4{grid-column:1/-1}
+  .roster{grid-template-columns:1fr}
+  .out-grid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .nav-links{display:none}
+  .hero{padding-top:44px}
+  .pillars{grid-template-columns:1fr}
+  .meta-card{grid-template-columns:1fr;gap:16px}
+  .q{padding:18px 18px 18px 24px}
+  .qhead{gap:12px}
+  .sec{padding-top:60px}
+}
+@media (max-width:520px){
+  .lad{grid-template-columns:1fr}
+  .lr4{grid-column:auto}
+}
 
-  /* ---------- 반응형 ---------- */
-  @media (max-width:640px){
-    .wrap{padding:0 20px 100px}
-    header{padding-top:52px}
-    .fields{grid-template-columns:repeat(3,1fr);gap:12px}
-    .roster{grid-template-columns:1fr}
-    .expect .row{flex-direction:column;gap:4px}
-    .expect dt{width:auto}
-    .group{padding:20px 20px 8px}
-    .nav-in{padding:12px 20px;gap:16px}
-    .nav-mark{display:none}
-    .part{margin-top:64px}
-    .end-block{margin-top:64px}
-    .ladder label{margin:0;padding:8px 0;gap:11px}
-  }
-
-  /* ---------- 인쇄 ---------- */
-  @page{size:A4;margin:16mm 14mm}
-  @media print{
-    :root{
-      --bg:#fff;--card:#fff;
-      --line:rgba(43,41,38,.28);--line-soft:rgba(43,41,38,.16);
-    }
-    body{background:#fff;font-size:10.5pt;line-height:1.6}
-    nav{display:none}
-    .wrap{max-width:none;padding:0}
-    header{padding-top:0}
-    .roster{gap:12px;margin-top:24px}
-    .roster-track{padding:14px 18px 12px}
-    .expect{margin-top:12px;padding:16px 18px 4px}
-    .purpose{margin-top:12px;padding:16px 18px}
-    .fields{margin-top:28px;padding:14px 0}
-    .roster-track,.expect,.purpose{break-inside:avoid}
-
-    .part{margin-top:0;break-before:page}
-    .end-block{margin-top:0;break-before:page}
-    .end-block + .end-block{break-before:auto;margin-top:28px}
-    .part-quote{margin-top:12px}
-
-    .group{break-inside:auto;margin-top:14px;padding:16px 22px 6px}
-    .q{break-inside:avoid;padding:12px 0 14px;gap:12px}
-    .q-text{font-size:10pt;line-height:1.62}
-    .check{width:15px;height:15px;margin-top:3px}
-    .check .ring{border-color:rgba(43,41,38,.45);
-      -webkit-print-color-adjust:exact;print-color-adjust:exact}
-    .check .ring::after{left:3px;top:3.5px;width:7px;height:3.5px}
-    .ladder{margin-top:8px}
-    .ladder label{padding:4px 0;margin:0;gap:10px}
-    .ladder .rung{width:24px;height:24px;font-size:9.5pt;border-color:rgba(43,41,38,.45)}
-    .ladder .rung-text{font-size:9.5pt}
-    .ladder input:checked + .rung{
-      -webkit-print-color-adjust:exact;print-color-adjust:exact}
-    .pill{border:1px solid var(--sage);background:none;
-      -webkit-print-color-adjust:exact;print-color-adjust:exact}
-    .field-value{border-bottom-color:rgba(43,41,38,.45)}
-    .end-card{break-inside:avoid;padding:18px 22px}
-    footer{margin-top:32px}
-  }
+/* ---------- print (A4) ---------- */
+@media print{
+  @page{size:A4;margin:13mm}
+  body{background:#fff;font-size:12.5px}
+  nav{display:none}
+  .reveal{opacity:1 !important;transform:none !important;transition:none !important}
+  .hero{padding-top:6px}
+  h1{font-size:30px}
+  .tagline{font-size:15px}
+  .meta-card,.pillar,.ros-card,.expect,.q,.out-card,.tips{box-shadow:none;border:1px solid #D8DCE4}
+  .meta-card{margin-top:18px;padding:16px 20px}
+  .f-in{min-height:24px;border-bottom-color:#B8BFCB}
+  .pillars{margin-top:12px}
+  .sec{padding-top:26px}
+  .sec-head{margin-bottom:16px}
+  h2{font-size:20px}
+  .lead{font-size:13px;margin-top:6px}
+  .qs{gap:9px}
+  .q{padding:12px 16px 12px 20px;break-inside:avoid;opacity:1 !important}
+  .qtext{font-size:12.5px;padding-top:5px}
+  .qsign{width:32px;height:32px;font-size:10.5px;border-width:2.5px}
+  .qcheck{width:18px;height:18px;border-radius:4px;margin-top:5px;border:1.5px solid #9AA3B2;transform:none !important}
+  .q.done .qcheck{background:var(--grad-common);border-color:transparent}
+  .lad-zone{margin-top:12px;padding-bottom:4px}
+  .lad{grid-template-columns:repeat(5,1fr);gap:7px;align-items:stretch}
+  .lad::before{display:none}
+  .lr0,.lr1,.lr2,.lr3,.lr4{margin-top:0}
+  .lr4{grid-column:auto}
+  .lrung{padding:9px 9px 8px;break-inside:avoid;box-shadow:none}
+  .lrung.sel{box-shadow:none}
+  .l-name{font-size:12px}
+  .l-def{font-size:10px}
+  .l-dan{font-size:9.5px;padding:2px 6px}
+  .l-chk{width:14px;height:14px;border-radius:3.5px}
+  .roster{grid-template-columns:1fr 1fr;gap:10px}
+  .ros-card{padding:14px 16px}
+  .ros-card li{padding:5px 9px;font-size:12px}
+  .expect,.tips{padding:16px 20px;margin-top:10px}
+  .expect li,.tips li{font-size:12px}
+  .out-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .out-card{padding:14px 16px;break-inside:avoid}
+  .out-card p{font-size:11.5px}
+  #part2{break-before:page}
+  footer{margin-top:30px}
+  .foot-in{padding:16px 0}
+}
 </style>
 </head>
 <body>
 
-<nav aria-label="파트 이동">
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
   <div class="nav-in">
-    <span class="nav-mark">AX INTERVIEW</span>
-    <a href="#part1">PART 1</a>
-    <a href="#part2">PART 2</a>
-    <a href="#part3">PART 3</a>
-    <a href="#outputs">산출물</a>
-    <a href="#tips">운영 팁</a>
+    <a class="brand" href="#top">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg1)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg1" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV<span class="plus">+</span>&nbsp;AX JOURNEY
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#who">대상</a>
+        <a href="#part1">PART 1</a>
+        <a href="#part2">PART 2</a>
+        <a href="#outputs">산출물</a>
+      </div>
+      <span class="prog"><b id="progn">0</b>/12 체크</span>
+    </div>
   </div>
 </nav>
 
-<div class="wrap">
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-kicker"><span class="dot"></span>CNTV+ AX JOURNEY · D1 진단</div>
+    <h1>AX를 위한<br><span class="grad">업무 인터뷰</span></h1>
+    <p class="tagline">CNTV플러스 — <em>인별 AX 단계 확인 · 실습 과제 선정</em></p>
 
-  <!-- ================= 헤더 ================= -->
-  <header>
-    <p class="eyebrow">CNTV플러스 (씨엔티브이플러스)</p>
-    <h1>AX를 위한 업무 인터뷰</h1>
-    <p class="subtitle">CNTV플러스 — 인별 AX 단계 확인 · 실습 과제 선정</p>
-    <p class="duration">소요 — 1인 20~30분</p>
-
-    <div class="fields">
-      <div><span class="field-label">인터뷰 일시</span><span class="field-value" contenteditable="true"></span></div>
-      <div><span class="field-label">인터뷰이</span><span class="field-value" contenteditable="true"></span></div>
-      <div><span class="field-label">진행자</span><span class="field-value" contenteditable="true"></span></div>
+    <div class="hero-meta">
+      <span class="chip"><b>소요</b> 1인 20~30분</span>
+      <span class="chip"><b>질문</b> 전원 동일 (반 구분과 무관)</span>
+      <span class="chip"><b>대상</b> 9명 — 심화 5 · 기초 4</span>
     </div>
 
-    <!-- 교육 대상 명단 -->
-    <div class="roster">
-      <div class="roster-track">
-        <div class="roster-head"><span class="pill">심화 트랙 5명</span><span class="roster-note">기초+심화 전 과정</span></div>
-        <p><b>박성희 실장</b> <span class="org">(경영기획)</span></p>
-        <p>홈쇼핑사업팀 전원: <b>박정선 팀장</b> · <b>신은선 과장</b> · <b>서희정 사원</b> · <b>양승혜 사원</b></p>
+    <!-- 기입란 -->
+    <div class="meta-card reveal">
+      <div class="field">
+        <span class="f-lb">인터뷰 일시</span>
+        <span class="f-in" contenteditable="true" spellcheck="false" data-ph="예: 7/10 (금) 10:00" role="textbox" aria-label="인터뷰 일시"></span>
       </div>
-      <div class="roster-track">
-        <div class="roster-head"><span class="pill">기초 트랙 4명</span><span class="roster-note">기초 과정</span></div>
-        <p><b>서지애 과장</b> <span class="org">(경영기획팀)</span></p>
-        <p><b>박소연</b> <span class="org">(전략사업팀)</span> · <b>김현지</b> <span class="org">(콘텐츠사업팀)</span> · <b>이현주</b> <span class="org">(편성팀)</span></p>
+      <div class="field">
+        <span class="f-lb">인터뷰이</span>
+        <span class="f-in" contenteditable="true" spellcheck="false" data-ph="이름 · 소속" role="textbox" aria-label="인터뷰이"></span>
+      </div>
+      <div class="field">
+        <span class="f-lb">진행자</span>
+        <span class="f-in" contenteditable="true" spellcheck="false" data-ph="이름" role="textbox" aria-label="진행자"></span>
+      </div>
+    </div>
+
+    <!-- 인터뷰 목적 -->
+    <div class="pillars">
+      <div class="pillar p1 reveal">
+        <span class="p-num">목적 A</span>
+        <h3>인별 AX 단계 확인</h3>
+        <p>지금 AI를 어느 정도 쓰고 있는지, <b>사다리 몇 단</b>인지.</p>
+      </div>
+      <div class="pillar p2 reveal" style="--d:.1s">
+        <span class="p-num">목적 B</span>
+        <h3>실습 과제 선정</h3>
+        <p>D3–D4 실습에서 자동화할 <b>"내 과제"</b>를 함께 고른다.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ 교육 대상 ══════════════ -->
+<section class="sec" id="who">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Interviewees</span>
+      <h2>교육 대상 — 9명</h2>
+      <p class="lead">질문은 전원 동일 — 심화/기초는 반 구분일 뿐이다.</p>
+    </div>
+    <div class="roster">
+      <div class="ros-card reveal" style="--g:var(--grad-adv)">
+        <div class="ros-head"><span class="trk adv">심화 트랙 5명</span><span class="ros-note">기초+심화 전 과정</span></div>
+        <ul>
+          <li><b>박성희 실장</b><span>경영기획</span></li>
+          <li class="grp">홈쇼핑사업팀 전원</li>
+          <li><b>박정선 팀장</b><span>홈쇼핑사업팀</span></li>
+          <li><b>신은선 과장</b><span>홈쇼핑사업팀</span></li>
+          <li><b>서희정 사원</b><span>홈쇼핑사업팀</span></li>
+          <li><b>양승혜 사원</b><span>홈쇼핑사업팀</span></li>
+        </ul>
+      </div>
+      <div class="ros-card reveal" style="--g:var(--grad-basic);--d:.1s">
+        <div class="ros-head"><span class="trk bas">기초 트랙 4명</span><span class="ros-note">기초 과정</span></div>
+        <ul>
+          <li><b>서지애 과장</b><span>경영기획팀</span></li>
+          <li><b>박소연</b><span>전략사업팀</span></li>
+          <li><b>김현지</b><span>콘텐츠사업팀</span></li>
+          <li><b>이현주</b><span>편성팀</span></li>
+        </ul>
       </div>
     </div>
 
     <!-- 교육 기대성 -->
-    <div class="expect">
-      <h2>교육 기대성</h2>
-      <dl>
-        <div class="row"><dt>심화 5명</dt><dd>개발 완료 후 시스템 유지보수를 내부에서 직접 처리하고, 다른 업무 영역에서도 스스로 문제를 정의하고 해결하는 수준까지. "도구를 배우는 것"을 넘어 <b>일하는 방식의 사고 변화</b>.</dd></div>
-        <div class="row"><dt>기초 4명</dt><dd>AI 도구 활용 이해도를 높여 본인 업무에 실제 적용하고, 소속 부서 내 <b>교육 전달자</b>로서 변화를 조직 전체로 확산.</dd></div>
-        <div class="row"><dt>공통</dt><dd>교육 후 <b>업무를 대하는 시각 자체가 바뀌는 것</b>이 가장 중요한 성과.</dd></div>
-      </dl>
+    <div class="expect reveal" style="--d:.15s">
+      <h3>교육 기대성 — 성과 정의</h3>
+      <ul>
+        <li><span class="who adv">심화 5명</span><span>시스템 유지보수를 내부에서 직접 처리하고, 다른 업무 영역에서도 스스로 문제를 정의하고 해결하는 수준까지. "도구를 배우는 것"을 넘어 일하는 방식의 사고 변화.</span></li>
+        <li><span class="who bas">기초 4명</span><span>AI 도구 활용 이해도를 높여 본인 업무에 실제 적용하고, 소속 부서 내 교육 전달자로서 변화를 조직 전체로 확산.</span></li>
+        <li><span class="who all">공통</span><span>교육 후 업무를 대하는 시각 자체가 바뀌는 것이 가장 중요한 성과.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PART 1 ══════════════ -->
+<section class="sec" id="part1">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--amber)">Part 1 · 전원 · 6문</span>
+      <h2>지금 나의 AI — AX 단계 확인</h2>
+      <p class="lead">써봤든 안 써봤든, 있는 그대로. 정답은 없다.</p>
     </div>
 
-    <!-- 인터뷰 목적 -->
-    <div class="purpose">
-      <h2>인터뷰 목적</h2>
-      <p><span class="goal-key">(a)</span> <b>인별 AX 단계 확인</b> — 지금 AI를 어느 정도 쓰고 있는지, 사다리 몇 단인지.</p>
-      <p><span class="goal-key">(b)</span> <b>실습 과제 선정</b> — D3–D4 실습에서 자동화할 "내 과제"를 함께 고른다.</p>
-    </div>
-  </header>
+    <div class="qs">
 
-  <!-- ================= PART 1 ================= -->
-  <section class="part" id="part1">
-    <div class="part-head">
-      <span class="part-no">PART 1</span>
-      <span class="pill">전원 9명</span>
-      <h2>AX 단계 확인 <span class="who">— "지금 나는 사다리 몇 단인가"</span></h2>
-    </div>
-
-    <div class="group">
-      <div class="q" style="padding-top:6px">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">1</span>AI 도구(ChatGPT·Gemini·클로드 등)를 지금 어디에 쓰고 있나요? 업무/개인 각각, 얼마나 자주?</p>
+      <article class="q reveal" id="q1" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B">
+        <div class="qhead">
+          <span class="qsign">Q1</span>
+          <p class="qtext">AI 도구(ChatGPT·Gemini·클로드 등), 써보셨나요? 어디에, 얼마나 자주? <span class="hint">(업무든 개인이든)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q1 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
         </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">2</span>AI에게 일을 시켜본 것 중 가장 잘 됐던 경험은? 반대로 실망했던 경험은?</p>
+      </article>
+
+      <article class="q reveal" id="q2" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B">
+        <div class="qhead">
+          <span class="qsign">Q2</span>
+          <p class="qtext">최근 AI에게 시켜본 일 중 기억나는 것 하나 — 잘 됐나요, 실망했나요?</p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q2 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
         </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">3</span><b>사다리 자가 위치</b> — 지금 어디쯤인가요? <span class="paren">(하나 체크)</span></p>
-          <div class="ladder" role="radiogroup" aria-label="사다리 자가 위치 0단~4단">
-            <label><input type="radio" name="ladder-q3" value="0"><span class="rung">0</span><span class="rung-text"><b>0단 · 아직 안 써봄</b></span></label>
-            <label><input type="radio" name="ladder-q3" value="1"><span class="rung">1</span><span class="rung-text"><b>1단 · 대화</b> — 질문·요약·초안 작성에 쓴다</span></label>
-            <label><input type="radio" name="ladder-q3" value="2"><span class="rung">2</span><span class="rung-text"><b>2단 · 연결</b> — 내 파일·도구와 함께 쓴다</span></label>
-            <label><input type="radio" name="ladder-q3" value="3"><span class="rung">3</span><span class="rung-text"><b>3단 · 스킬</b> — 반복작업을 저장해두고 재사용한다</span></label>
-            <label><input type="radio" name="ladder-q3" value="4"><span class="rung">4</span><span class="rung-text"><b>4단 · 자동화</b> — 시키지 않아도 알아서 돌아가게 만들었다</span></label>
+      </article>
+
+      <article class="q reveal" id="q3" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316">
+        <div class="qhead">
+          <span class="qsign">Q3</span>
+          <p class="qtext"><b>사다리 자가 위치</b> — 지금 어디쯤인가요? <span class="hint">(하나 체크)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q3 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+        <div class="lad-zone">
+          <div class="lad" role="radiogroup" aria-label="사다리 자가 위치 (0~4단)">
+            <button type="button" class="lrung lr0" role="radio" aria-checked="false" data-step="0" style="--c:#98A1B0;--t:rgba(139,147,161,.07)">
+              <span class="l-top"><span class="l-dan">0단</span><span class="l-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg></span></span>
+              <span class="l-name">아직 안 써봄</span>
+            </button>
+            <button type="button" class="lrung lr1" role="radio" aria-checked="false" data-step="1" style="--c:#F5B40B;--t:rgba(245,180,11,.07)">
+              <span class="l-top"><span class="l-dan">1단</span><span class="l-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg></span></span>
+              <span class="l-name">대화</span>
+              <span class="l-def">질문·요약·초안 작성에 쓴다</span>
+            </button>
+            <button type="button" class="lrung lr2" role="radio" aria-checked="false" data-step="2" style="--c:#F59E0B;--t:rgba(245,158,11,.07)">
+              <span class="l-top"><span class="l-dan">2단</span><span class="l-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg></span></span>
+              <span class="l-name">연결</span>
+              <span class="l-def">내 파일·도구와 함께 쓴다</span>
+            </button>
+            <button type="button" class="lrung lr3" role="radio" aria-checked="false" data-step="3" style="--c:#F97316;--t:rgba(249,115,22,.07)">
+              <span class="l-top"><span class="l-dan">3단</span><span class="l-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg></span></span>
+              <span class="l-name">스킬</span>
+              <span class="l-def">반복작업을 저장해두고 재사용한다</span>
+            </button>
+            <button type="button" class="lrung lr4" role="radio" aria-checked="false" data-step="4" style="--c:#EA580C;--t:rgba(234,88,12,.07)">
+              <span class="l-top"><span class="l-dan">4단</span><span class="l-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg></span></span>
+              <span class="l-name">자동화</span>
+              <span class="l-def">시키지 않아도 알아서 돌아가게 만들었다</span>
+            </button>
           </div>
         </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">4</span>새 도구를 배울 때 어떤 방식이 편한가요? <span class="paren">(시연 따라하기 / 문서 / 직접 부딪히기 / 옆에서 코칭)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">5</span>AI 결과물을 어디까지 믿나요? 검증은 어떻게 하나요? <span class="paren">(안 해봤다면 솔직하게)</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </article>
 
-  <!-- ================= PART 2 ================= -->
-  <section class="part" id="part2">
-    <div class="part-head">
-      <span class="part-no">PART 2</span>
-      <span class="pill">전원 9명</span>
-      <h2>실습 과제 선정 <span class="who">— "D3–D4에서 자동화할 내 과제 고르기"</span></h2>
-    </div>
+      <article class="q reveal" id="q4" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316">
+        <div class="qhead">
+          <span class="qsign">Q4</span>
+          <p class="qtext">평소 컴퓨터 작업 중 <b>자신 있는 것 / 자신 없는 것</b>은? <span class="hint">(예: 엑셀, 파일·폴더 정리, 새 프로그램 설치)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q4 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
 
-    <div class="group">
-      <div class="q" style="padding-top:6px">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">6</span>매일/매주 반복하는 작업 3가지를 꼽는다면? <span class="paren">(엑셀 정리, 복붙, 자료 취합, 보고서 등)</span></p>
+      <article class="q reveal" id="q5" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#EA580C">
+        <div class="qhead">
+          <span class="qsign">Q5</span>
+          <p class="qtext">새로운 도구를 배울 때 어떤 방식이 편한가요? <span class="hint">(시연 따라하기 / 옆에서 코칭 / 직접 부딪히기)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q5 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
         </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">7</span>그중 실습에서 <b>자동화해보고 싶은 1순위</b>는? 왜 그 작업인가요?</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">8</span>그 작업의 재료와 결과물은? — 입력(어떤 파일·데이터가 들어가서) / 출력(뭐가 만들어지면 끝인지)</p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">9</span>실습에 쓸 <b>샘플 파일</b>을 준비할 수 있나요? <span class="paren">(민감정보 제외한 버전으로)</span></p>
-        </div>
-      </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">10</span>자동화로 시간이 생기면, 그 시간에 뭘 하고 싶나요?</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </article>
 
-  <!-- ================= PART 3 ================= -->
-  <section class="part" id="part3">
-    <div class="part-head">
-      <span class="part-no">PART 3</span>
-      <span class="pill">심화 5명만</span>
-      <h2>심화 트랙 추가 확인 <span class="who">— 박성희 실장 · 박정선 팀장 · 신은선 과장 · 서희정 사원 · 양승혜 사원</span></h2>
+      <article class="q reveal" id="q6" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#EA580C">
+        <div class="qhead">
+          <span class="qsign">Q6</span>
+          <p class="qtext">AI에 대해 궁금한 점이나 걱정되는 점이 있다면? <span class="hint">(틀린 답, 보안… 뭐든 솔직하게)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q6 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PART 2 ══════════════ -->
+<section class="sec" id="part2">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Part 2 · 전원 · 6문</span>
+      <h2>내 업무에서 실습 거리 찾기 — 실습 과제 선정</h2>
+      <p class="lead">여기서 나온 답이 <b>그대로 D3–D4 실습 과제</b>가 된다.</p>
     </div>
 
-    <div class="group">
-      <div class="q" style="padding-top:6px">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">11</span>심화 과정은 클로드 코워크를 넘어 <b>클로드 코드(터미널)</b>까지 갑니다. 컴퓨터 기본기(파일·폴더, 엑셀 외 도구) 중 자신 없는 부분이 있다면?</p>
+    <div class="qs">
+
+      <article class="q reveal" id="q7" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B">
+        <div class="qhead">
+          <span class="qsign">Q7</span>
+          <p class="qtext">매일 또는 매주 <b>반복하는 작업 3가지</b>를 꼽는다면? <span class="hint">(엑셀 정리, 복붙, 자료 취합, 보고서…)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q7 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
         </div>
+      </article>
+
+      <article class="q reveal" id="q8" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B">
+        <div class="qhead">
+          <span class="qsign">Q8</span>
+          <p class="qtext">그중 "이건 진짜 없어졌으면 좋겠다" <b>1순위</b>는? 왜 그 작업인가요?</p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q8 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <article class="q reveal" id="q9" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316">
+        <div class="qhead">
+          <span class="qsign">Q9</span>
+          <p class="qtext">그 작업의 재료와 결과물은? — <b>입력</b><span class="hint">(어떤 파일·데이터가 들어가서)</span> / <b>출력</b><span class="hint">(뭐가 만들어지면 끝인지)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q9 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <article class="q reveal" id="q10" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316">
+        <div class="qhead">
+          <span class="qsign">Q10</span>
+          <p class="qtext">실습 때 쓸 <b>샘플 파일</b>을 준비할 수 있나요? <span class="hint">(민감한 내용은 뺀 버전으로)</span></p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q10 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <article class="q reveal" id="q11" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#EA580C">
+        <div class="qhead">
+          <span class="qsign">Q11</span>
+          <p class="qtext">지금 쓰는 프로그램·양식에서 "이거 좀 고쳐졌으면" 하는 게 있나요?</p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q11 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <article class="q reveal" id="q12" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#EA580C">
+        <div class="qhead">
+          <span class="qsign">Q12</span>
+          <p class="qtext">이번 교육에서 <b>"이것 하나만 얻어가면 성공"</b>이라면, 그건 뭘까요?</p>
+          <button class="qcheck" type="button" aria-pressed="false" aria-label="Q12 완료 체크">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 10 18 20 6"/></svg>
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 산출물 ══════════════ -->
+<section class="sec" id="outputs">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Deliverables</span>
+      <h2>산출물 — 인터뷰가 끝나면 남는 것</h2>
+      <p class="lead">네 가지 산출물이 D2~D8 여정에 그대로 이어진다. <b>버려지는 답변이 없다.</b></p>
+    </div>
+    <div class="out-grid">
+      <div class="out-card reveal">
+        <span class="out-no">01</span>
+        <h3>인별 AX 단계 맵</h3>
+        <p>9명 각자의 사다리 위치(0~4단). <b>D2 사다리 강의 도입부에 "우리 반 분포"로 익명 공개.</b></p>
       </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">12</span>교육 후 새 OMS의 화면 조작·오류 1차 대응을 맡게 됩니다. 미리 배워두고 싶은 것은?</p>
-        </div>
+      <div class="out-card reveal" style="--d:.07s">
+        <span class="out-no">02</span>
+        <h3>자동화 과제 백로그</h3>
+        <p>1인 1개 이상. <b>Q8~Q9 답이 그대로 D3–D4 실습 과제가 된다.</b></p>
       </div>
-      <div class="q">
-        <label class="check"><input type="checkbox"><span class="ring"></span></label>
-        <div class="q-body">
-          <p class="q-text"><span class="q-num">13</span>D8에는 OMS를 직접 수정해봅니다 — 평소 "이거 좀 고쳐졌으면" 했던 화면·기능이 있나요?</p>
-        </div>
+      <div class="out-card reveal" style="--d:.14s">
+        <span class="out-no">03</span>
+        <h3>샘플 파일 준비 목록</h3>
+        <p>Q10 기준, 실습 전 취합.</p>
+      </div>
+      <div class="out-card reveal" style="--d:.21s">
+        <span class="out-no">04</span>
+        <h3>개선 아이디어 후보</h3>
+        <p>Q11 답변 수집. <b>심화조 답변은 D8 "OMS 작은 개선" 후보로.</b></p>
       </div>
     </div>
-  </section>
 
-  <!-- ================= 산출물 ================= -->
-  <section class="end-block" id="outputs">
-    <h2>산출물 <small>문서 말미</small></h2>
-    <div class="end-card">
+    <!-- 운영 팁 -->
+    <div class="tips reveal" style="--d:.1s">
+      <h3>인터뷰 운영 팁 — 진행자용</h3>
       <ul>
-        <li><b>인별 AX 단계 맵</b> — 9명 각자의 사다리 위치(0~4단). D2 사다리 강의 도입부에 "우리 반 분포"로 익명 공개.</li>
-        <li><b>자동화 과제 백로그</b> — 1인 1개 이상. Q7–Q8 답이 그대로 D3–D4 실습 과제가 된다.</li>
-        <li><b>샘플 데이터 준비 목록</b> — Q9 기준, 실습 전 취합.</li>
+        <li><span class="lb">Q3</span><span>Q3 사다리 자가 위치는 <b>교육 후 변화를 비교하는 baseline</b>이다.</span></li>
+        <li><span class="lb">Q8–9</span><span>Q8~Q9가 이 인터뷰의 핵심 — <b>입력·출력이 분명한 과제일수록 실습 성공률이 높다.</b> 모호하면 그 자리에서 함께 좁혀준다.</span></li>
+        <li><span class="lb">Q4</span><span>Q4 답변으로 심화조의 코드 수업(D5~) <b>눈높이를 조절</b>한다.</span></li>
       </ul>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ================= 운영 팁 ================= -->
-  <section class="end-block" id="tips">
-    <h2>인터뷰 운영 팁 <small>진행자용</small></h2>
-    <div class="end-card">
-      <ul>
-        <li>Q3 사다리 자가 위치는 교육 후 30일 재측정과 비교하는 baseline이다.</li>
-        <li>Q7–Q8이 이 인터뷰의 핵심 — 입력·출력이 분명한 과제일수록 실습 성공률이 높다. 모호하면 그 자리에서 함께 좁혀준다.</li>
-        <li>Q13 답변은 D8 OMS 수정·개발 실습의 후보 목록으로 수집.</li>
-      </ul>
-    </div>
-  </section>
-
-  <footer>
-    <span>CNTV플러스 — AX를 위한 업무 인터뷰</span>
-    <span>총 13문항 · 인별 AX 단계 확인 · 실습 과제 선정</span>
-  </footer>
-
-</div>
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="foot-in">
+    <span class="f-brand">
+      <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg2)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg2" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV+ AX JOURNEY
+    </span>
+    <p>D1 · 진단 — 1:1 인터뷰 · 1인 20~30분 · 전원 동일 질문 · 내부 공유용</p>
+  </div>
+</footer>
 
 <script>
-  // 헤더 기입란(3칸): Enter로 줄바꿈 방지(한 줄 유지)
-  document.querySelectorAll('.field-value').forEach(function (el) {
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+(function(){
+  /* scroll reveal */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* progress counter */
+  var progn = document.getElementById('progn');
+  function updateProg(){
+    progn.textContent = document.querySelectorAll('.q.done').length;
+  }
+
+  /* per-question check */
+  document.querySelectorAll('.qcheck').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = btn.closest('.q');
+      var done = q.classList.toggle('done');
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+      updateProg();
     });
   });
 
-  // 사다리 자가 위치: 같은 단 재클릭 시 선택 해제
-  document.querySelectorAll('.ladder input[type="radio"]').forEach(function (radio) {
-    radio.addEventListener('mousedown', function () {
-      radio.dataset.wasChecked = radio.checked ? '1' : '';
-    });
-    radio.addEventListener('click', function () {
-      if (radio.dataset.wasChecked === '1') { radio.checked = false; }
+  /* Q3 ladder single-select */
+  var q3 = document.getElementById('q3');
+  var q3check = q3.querySelector('.qcheck');
+  var rungs = q3.querySelectorAll('.lrung');
+  rungs.forEach(function(r){
+    r.addEventListener('click', function(){
+      var wasSel = r.classList.contains('sel');
+      rungs.forEach(function(o){
+        o.classList.remove('sel');
+        o.setAttribute('aria-checked','false');
+      });
+      if(!wasSel){
+        r.classList.add('sel');
+        r.setAttribute('aria-checked','true');
+      }
+      var hasSel = !wasSel;
+      q3.classList.toggle('done', hasSel);
+      q3check.setAttribute('aria-pressed', hasSel ? 'true' : 'false');
+      updateProg();
     });
   });
+
+  /* 기입란: Enter = 확정(blur), 붙여넣기는 plain text */
+  document.querySelectorAll('.f-in').forEach(function(f){
+    f.addEventListener('keydown', function(ev){
+      if(ev.key === 'Enter'){ ev.preventDefault(); f.blur(); }
+    });
+    f.addEventListener('paste', function(ev){
+      ev.preventDefault();
+      var t = (ev.clipboardData || window.clipboardData).getData('text/plain');
+      document.execCommand('insertText', false, t.replace(/\s+/g,' ').trim());
+    });
+  });
+})();
 </script>
 </body>
 </html>
