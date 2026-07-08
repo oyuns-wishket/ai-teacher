@@ -28,7 +28,8 @@
 - 크로스세션 메모리: `~/.claude/projects/-Users-manager-ai-teacher/memory/cntv-d1-diagnosis.md`에 요약 있음(맥북 로컬 — 다른 맥이면 이 HANDOFF + SSOT로 충분).
 
 
+
 <!-- AUTO-CRUMB
-branch: main | head: 79d977f
+branch: main | head: f2ca396
 changed: notes/2026-06-29-claude-governance-learning.md 
 -->
