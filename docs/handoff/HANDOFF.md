@@ -27,7 +27,8 @@
 - 배포 방식 미정(참가자 URL 공유 형태 — 기존에 "여기 다 모아서 URL 공유" 언급 → `index.html` 링크 추가 여부도 구현 때 확인).
 - 크로스세션 메모리: `~/.claude/projects/-Users-manager-ai-teacher/memory/cntv-d1-diagnosis.md`에 요약 있음(맥북 로컬 — 다른 맥이면 이 HANDOFF + SSOT로 충분).
 
+
 <!-- AUTO-CRUMB
-branch: main | head: 6a029b3
+branch: main | head: 79d977f
 changed: notes/2026-06-29-claude-governance-learning.md 
 -->
