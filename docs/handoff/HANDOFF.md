@@ -24,7 +24,8 @@
 - Vercel/GitHub Pages 중 어느 URL을 참가자 공유 정본으로 쓸지 사용자 확인 필요.
 - 크로스세션 메모리: `~/.claude/projects/-Users-manager-ai-teacher/memory/cntv-d1-diagnosis.md`(맥북 로컬 — 다른 맥이면 이 HANDOFF + SSOT로 충분).
 
+
 <!-- AUTO-CRUMB
-branch: main | head: 453539d
-changed: "docs/plans/2026-07-08-cntv-d1-\354\247\204\353\213\250\353\246\254\355\217\254\355\212\270.md" "materials/07-cntv-ax-d1-\354\247\204\353\213\250\353\246\254\355\217\254\355\212\270.html" notes/2026-06-29-claude-governance-learning.md
+branch: main | head: be19916
+changed: notes/2026-06-29-claude-governance-learning.md 
 -->
