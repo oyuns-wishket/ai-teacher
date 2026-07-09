@@ -170,39 +170,35 @@ h2{font-size:clamp(24px,3.2vw,36px);font-weight:900;letter-spacing:-.03em;line-h
   margin-top:14px;font-size:13px;color:var(--faint);
 }
 
-/* ---------- gap track ---------- */
+/* ---------- gap ranges ---------- */
 .track-zone{
   margin-top:6px;background:var(--card);border:1px solid var(--line);border-radius:20px;
-  padding:30px 34px 26px;box-shadow:var(--shadow-sm);
+  padding:28px 34px 26px;box-shadow:var(--shadow-sm);
 }
 .track-title{
   font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint);
-  text-transform:uppercase;margin-bottom:66px;
+  text-transform:uppercase;margin-bottom:24px;
 }
-.track{position:relative;height:14px;border-radius:99px;background:#EEF0F4;margin:0 6px}
-.track .gapfill{
-  position:absolute;top:0;bottom:0;left:25%;width:55%;
-  background:linear-gradient(90deg,rgba(139,147,161,.35),rgba(245,158,11,.55),rgba(249,115,22,.75));
-  border-radius:99px;
+.range-row{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.r-lb{
+  flex:none;width:86px;text-align:center;font-family:var(--mono);font-size:11px;font-weight:800;
+  border-radius:8px;padding:6px 0;
 }
-.mk{position:absolute;bottom:22px;transform:translateX(-50%);text-align:center;width:max-content}
-.mk .mk-chip{
-  display:inline-block;font-family:var(--mono);font-size:11px;font-weight:800;letter-spacing:.02em;
-  border-radius:8px;padding:5px 11px;white-space:nowrap;
+.r-lb.out{color:#fff;background:var(--grad-common)}
+.r-lb.und{color:var(--ink2);background:#EEF0F4;border:1.5px solid #C9CFD9}
+.r-track{position:relative;flex:1;height:30px;border-radius:10px;background:#F1F3F7}
+.r-band{
+  position:absolute;top:4px;bottom:4px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10.5px;font-weight:800;letter-spacing:.02em;white-space:nowrap;
 }
-.mk::after{content:"";display:block;width:2px;height:14px;margin:5px auto 0}
-.mk.und{left:25%}
-.mk.und .mk-chip{color:var(--ink2);background:#EEF0F4;border:1.5px solid #C9CFD9}
-.mk.und::after{background:#9AA3B2}
-.mk.out{left:80%}
-.mk.out .mk-chip{color:#fff;background:var(--grad-common)}
-.mk.out::after{background:var(--orange)}
-.ticks{display:flex;justify-content:space-between;margin:12px 6px 0}
+.r-band.out{background:linear-gradient(90deg,rgba(245,158,11,.35),rgba(249,115,22,.85));color:#fff}
+.r-band.und{background:rgba(139,147,161,.3);border:1.5px dashed #9AA3B2;color:var(--ink2)}
+.ticks{display:flex;justify-content:space-between;margin:2px 6px 0;padding-left:100px}
 .ticks span{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--faint)}
 .track-cap{
   margin-top:18px;text-align:center;font-size:13.5px;font-weight:700;color:var(--orange-d);
 }
-.track-cap .mono{font-size:11px;letter-spacing:.08em}
 
 .gap-facts{margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .gf{
@@ -346,9 +342,12 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
   .nav-links{display:none}
   .hero{padding-top:44px}
   .sec{padding-top:60px}
-  .track-zone{padding:26px 20px 22px}
-  .track-title{margin-bottom:72px}
-  .mk .mk-chip{font-size:9.5px;padding:4px 8px}
+  .track-zone{padding:24px 18px 20px}
+  .range-row{flex-direction:column;align-items:stretch;gap:6px}
+  .r-lb{width:110px}
+  .r-band{font-size:9px}
+  .ticks{padding-left:0}
+  .ticks span{font-size:9px}
   .limit{grid-template-columns:36px 1fr;gap:12px}
   .limit .l-no{width:30px;height:30px;font-size:10.5px}
   .map-scroll{padding:14px 18px 20px}
@@ -425,12 +424,12 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
   <div class="wrap">
     <div class="hero-kicker"><span class="dot"></span>CNTV+ AX JOURNEY · D1 진단 결과</div>
     <h1>업무 인터뷰<br><span class="grad">진단 리포트</span></h1>
-    <p class="tagline">인터뷰 결과, 전원이 이미 업무 자동화 결과물을 갖고 있다.
-    부족한 것은 도구 사용법이 아니라 <em>동작 원리에 대한 이해</em>다. 교육 구성을 이에 맞게 변경한다.</p>
+    <p class="tagline">인터뷰 결과, 전원이 AI를 업무에 쓰고 있다. 활용 수준의 편차는 크지만,
+    부족한 것이 도구 사용법이 아니라 <em>동작 원리에 대한 이해</em>라는 점은 전원 공통이다. 교육 구성을 이에 맞게 변경한다.</p>
 
     <div class="hero-meta">
-      <span class="chip"><b>인터뷰</b> 2026.07.08 · 1:1</span>
-      <span class="chip"><b>완료</b> 6명 (1명 보강 예정)</span>
+      <span class="chip"><b>인터뷰</b> 2026.07.08–09 · 1:1</span>
+      <span class="chip"><b>대상</b> 9명 (1명 보강 예정)</span>
       <span class="chip"><b>결론</b> 교육 구성 변경</span>
     </div>
   </div>
@@ -446,23 +445,23 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
     <div class="exec-grid">
       <div class="exec-card reveal">
         <span class="e-num">사실 01</span>
-        <h3>전원이 자동화 결과물 보유</h3>
-        <p>데이터 수집, 엑셀 매칭, 문서 검수, 대시보드 제작 등 — 인터뷰한 전원이 자기 업무에서 만든 자동화 결과물이 있다. 조직 차원에서 자동화를 독려해 온 결과다.</p>
+        <h3>전원 사용 중 — 수준 편차는 크다</h3>
+        <p>완전 자동화(수집→발송 무인 동작)부터 대화 활용까지, <b>1~4단에 걸쳐 분포</b>한다. 조직 차원에서 자동화를 독려해 온 결과 상위 그룹의 결과물 수준이 특히 높다.</p>
       </div>
       <div class="exec-card reveal" style="--d:.08s">
         <span class="e-num">사실 02</span>
-        <h3>동작 원리 이해는 부족</h3>
-        <p>결과물은 나오지만 <b>어떤 과정으로 동작하는지 설명하기 어려운</b> 상태가 공통적이다. 오류 대응, 다른 업무 응용, 개선이 막히는 원인이다.</p>
+        <h3>동작 원리 이해는 전원 부족</h3>
+        <p>위치와 무관한 공통 패턴 — 상위 그룹은 <b>결과물의 동작 과정을 설명하기 어렵고</b>, 대화 그룹은 <b>세팅·규격화 개념이 없다.</b> 오류 대응, 응용, 개선이 막히는 원인이다.</p>
       </div>
       <div class="exec-card reveal" style="--d:.16s">
         <span class="e-num">결정 03</span>
         <h3>교육 구성 변경</h3>
-        <p>신규 실습 과제를 내지 않는다. <b>각자 이미 만든 것을 원리 수준에서 이해하고 개선</b>하는 방식으로 진행한다.</p>
+        <p>일괄 실습 과제를 내지 않는다. <b>공통 교육 2회(원리·세팅 중심) + 9월까지 개별 후속 지원</b>으로 각자 이미 하고 있는 것을 이해하고 개선한다.</p>
       </div>
     </div>
     <div class="verdict reveal" style="--d:.1s">
       <span class="v-lb">진단</span>
-      <p>결과물 수준은 높고, 그 결과물이 왜·어떻게 동작하는지에 대한 이해가 낮다. <b>이 차이를 줄이는 것이 이번 교육의 목표다.</b></p>
+      <p>편차가 커서 하나의 과제로 묶을 수 없고, 원리 이해 부족은 전원 공통이다. <b>공통 교육은 원리에, 개별 지원은 각자의 업무에 맞춘다.</b></p>
     </div>
   </div>
 </section>
@@ -472,8 +471,8 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker" style="color:var(--amber)">Current Status</span>
-      <h2>지금 어떻게 자동화하고 있나 — 5가지 유형</h2>
-      <p class="lead">인터뷰에서 확인된 자동화 사례를 유형별로 묶었다. 특정 개인이 아니라 <b>조직에서 확인된 방식</b>이다. 괄호는 AX 사다리 기준 단계.</p>
+      <h2>지금 어떻게 활용하고 있나 — 6가지 유형</h2>
+      <p class="lead">인터뷰에서 확인된 활용 사례를 유형별로 묶었다. 특정 개인이 아니라 <b>조직에서 확인된 방식</b>이다. 괄호는 AX 사다리 기준 단계.</p>
     </div>
     <div class="type-list">
 
@@ -507,13 +506,20 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
 
       <div class="type-card reveal" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B;--d:.24s">
         <div class="t-top"><span class="t-stage">1단 대화</span></div>
-        <h3>대화·프롬프팅 활용</h3>
-        <p>페르소나 설정, 기획서·보고서 초안, 이미지 생성 등 대화 기반 활용. <b>프로젝트·세팅 없이 대화창 단발 사용</b>이 대부분이라 개선 여지가 크다.</p>
-        <div class="t-tools"><span>클로드</span><span>GPT</span><span>이미지 생성 도구</span></div>
+        <h3>대화·프롬프팅 활용 <span style="font-size:11px;color:var(--faint);font-weight:600">— 가장 많은 인원</span></h3>
+        <p>보고서 수치 분석, 엑셀 양식 간 변환, 기획·아이디어, 콘텐츠 소개문, 시안 제작 등. <b>매번 파일을 올리고 지시를 반복 입력</b>하는 방식이라 세팅·규격화로 개선 여지가 가장 크다.</p>
+        <div class="t-tools"><span>클로드</span><span>GPT</span><span>Gemini</span><span>이미지 생성 도구</span></div>
+      </div>
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#98A1B0,#8B93A1);--c:#8B93A1;--d:.3s">
+        <div class="t-top"><span class="t-stage">1단 · 제한 활용</span></div>
+        <h3>검증 용도로만 제한 사용</h3>
+        <p>보안이 우려되는 데이터(정산·매출 등)는 AI에 주지 않고, <b>정제된 양식만 제공해 검증 용도로만</b> 사용. 판단 기준이 없어 활용 범위를 보수적으로 잡은 상태 — 가이드라인이 있으면 확대 가능.</p>
+        <div class="t-tools"><span>엑셀(직접)</span><span>AI(검증만)</span></div>
       </div>
 
     </div>
-    <p class="type-note reveal">※ 도구 사용 조합: 클로드(공통) + 용도별 GPT·이미지 생성 도구 병행. 클로드 코워크·코드까지 쓰는 경우부터 대화창만 쓰는 경우까지 폭이 넓다.</p>
+    <p class="type-note reveal">※ 도구 편차: 심화 트랙은 클로드(코워크·코드 포함) 중심, 기초 트랙은 GPT·Gemini 중심. 같은 원리가 적용되므로 교육은 도구 공통 원리를 기준으로 진행한다.</p>
   </div>
 </section>
 
@@ -522,31 +528,34 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker" style="color:var(--orange-d)">Diagnosis</span>
-      <h2>공통 패턴 — 결과물과 이해의 격차</h2>
-      <p class="lead">인터뷰 전원에서 같은 패턴이 확인됐다. <b>결과물 수준은 높고, 원리 이해 수준은 낮다.</b> 조직 평균으로 보면 아래와 같다.</p>
+      <h2>공통 패턴 — 활용과 이해의 격차</h2>
+      <p class="lead">활용 수준은 <b>1~4단에 넓게 퍼져 있지만, 원리 이해는 전원 0~2단</b>에 머문다. 위치와 무관하게 이해가 활용을 따라오지 못하는 패턴이 전원에게서 확인됐다.</p>
     </div>
 
     <div class="track-zone reveal">
-      <div class="track-title">AX 사다리 기준 · 조직 평균</div>
-      <div class="track">
-        <div class="gapfill"></div>
-        <div class="mk und"><span class="mk-chip">원리 이해 — 평균 1단 부근</span></div>
-        <div class="mk out"><span class="mk-chip">결과물 — 평균 3단 이상</span></div>
+      <div class="track-title">AX 사다리 기준 · 조직 분포</div>
+      <div class="range-row">
+        <span class="r-lb out">활용·결과물</span>
+        <div class="r-track"><div class="r-band out" style="left:25%;width:75%">1~4단 · 편차 큼</div></div>
+      </div>
+      <div class="range-row">
+        <span class="r-lb und">원리 이해</span>
+        <div class="r-track"><div class="r-band und" style="left:0;width:50%">0~2단 · 전원 낮음</div></div>
       </div>
       <div class="ticks">
         <span>0단 · 안 씀</span><span>1단 · 대화</span><span>2단 · 연결</span><span>3단 · 스킬</span><span>4단 · 자동화</span>
       </div>
-      <p class="track-cap">두 지점 사이 구간이 이번 교육이 다루는 범위다</p>
+      <p class="track-cap">두 분포의 차이가 이번 교육이 다루는 범위다</p>
     </div>
 
     <div class="gap-facts">
       <div class="gf reveal">
-        <span class="gf-lb">결과물</span>
-        <p>3~4단 수준의 자동화 산출물이 이미 조직 곳곳에 있다.</p>
+        <span class="gf-lb">활용</span>
+        <p>1~4단에 넓게 분포 — 사람 개입 없는 완전 자동화부터 대화 활용까지 편차가 크다.</p>
       </div>
       <div class="gf reveal" style="--d:.07s">
         <span class="gf-lb">이해</span>
-        <p>그 산출물이 어떤 과정으로 동작하는지 설명하기 어려운 경우가 대부분이다.</p>
+        <p>전원 0~2단 — 위치와 무관하게, 결과가 어떤 과정으로 나오는지 설명·응용하기 어려운 상태다.</p>
       </div>
       <div class="gf reveal" style="--d:.14s">
         <span class="gf-lb">원인</span>
@@ -570,7 +579,7 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker" style="color:var(--orange-d)">Constraints</span>
-      <h2>확인된 한계 — 기술·환경 제약 5가지</h2>
+      <h2>확인된 한계 — 기술·환경 제약 6가지</h2>
       <p class="lead">인터뷰에서 반복 확인된 제약들이다. 개인 역량과 무관한 <b>기술·환경의 현재 상태</b>이며, 각각 교육 또는 시스템으로 대응한다.</p>
     </div>
     <div class="limit-list">
@@ -605,9 +614,9 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
       <div class="limit reveal" style="--d:.15s">
         <span class="l-no">04</span>
         <div>
-          <h3>토큰·요금 한도에 도달한다</h3>
-          <p>사용량이 늘면서 요금제 한도에 도달하는 사례가 확인됐다. 비용 대비 효율이 관리 대상이 됐다.</p>
-          <p class="l-resp"><b>대응</b>작업별 모델 선택, 컨텍스트(읽히는 정보량) 관리로 절감 가능 — 교육 항목에 포함.</p>
+          <h3>도구·요금이 파편화되어 있다</h3>
+          <p>클로드·GPT·Gemini가 혼재하고, 요금제 한도 도달과 개인 결제 여력 문제가 함께 확인됐다. 교육 도구(클로드)와 실사용 도구가 다른 경우도 있다.</p>
+          <p class="l-resp"><b>대응</b>원리는 도구 공통 — 도구 불문 적용법 중심으로 교육하고, 작업별 모델 선택·컨텍스트 관리로 비용 절감.</p>
         </div>
       </div>
 
@@ -617,6 +626,15 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
           <h3>자동화가 개인 PC에 묶여 있다</h3>
           <p>지금의 자동화는 각자 PC에서만 동작한다. 팀 공유·인수인계가 어렵고, 만든 사람이 없으면 멈춘다.</p>
           <p class="l-resp"><b>대응</b>공용 웹 시스템(OMS)으로의 시스템화가 근본 대응 — 심화 트랙에서 개발·유지보수를 다룬다.</p>
+        </div>
+      </div>
+
+      <div class="limit reveal" style="--d:.25s">
+        <span class="l-no">06</span>
+        <div>
+          <h3>보안 기준이 없어 활용을 보수적으로 잡는다</h3>
+          <p>AI가 회사 데이터를 학습·유출하는지에 대한 판단 기준이 없어, 매출·정산 데이터는 아예 제공하지 않는 방식으로 활용 범위를 좁힌 사례가 확인됐다.</p>
+          <p class="l-resp"><b>대응</b>AI 학습·데이터 처리 정책을 사실 기준으로 정리한 가이드라인을 교육에 포함 — 넣어도 되는 것과 안 되는 것의 기준 제공(팀 공유).</p>
         </div>
       </div>
 
@@ -637,18 +655,20 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
       <div class="cmp before reveal">
         <span class="c-lb">BEFORE · 당초 계획</span>
         <h3>개념 → 예제 → 신규 실습 과제</h3>
-        <p>자동화를 처음 접한다는 전제로, 새 실습 과제를 부여해 처음부터 만들어 보게 하는 구성.</p>
+        <p>비슷한 수준을 전제로, 전원에게 실습 과제를 부여해 처음부터 만들어 보게 하는 구성.</p>
         <ul>
-          <li>이미 각자 실전 과제를 갖고 있어 중복</li>
-          <li>새 과제를 또 해도 원리를 모른 채 결과만 추가될 뿐</li>
+          <li>상위 그룹은 이미 실전 과제를 갖고 있어 중복</li>
+          <li>편차가 커서 하나의 과제 난이도로 묶을 수 없음</li>
+          <li>과제를 또 해도 원리를 모른 채 결과만 추가될 뿐</li>
         </ul>
       </div>
       <div class="cmp after reveal" style="--d:.08s">
         <span class="c-lb">AFTER · 변경안</span>
-        <h3>내 결과물 → 원리 이해 → 개선</h3>
-        <p>각자 이미 만든 결과물을 소재로 동작 원리를 이해하고, 세팅·스킬화·자동화로 한 단계 개선하는 구성.</p>
+        <h3>공통 교육 2회 + 개별 후속 지원</h3>
+        <p>공통 교육은 전원 해당되는 원리·세팅에 집중하고, 과제는 각자 업무에 맞춰 개별로 디벨롭한다.</p>
         <ul>
-          <li>AI·컴퓨터 동작 원리, 세팅, 프롬프팅, 스킬화, 봇 연결</li>
+          <li>공통 2회(회당 1~2시간): AI 동작 원리, 세팅, 프롬프팅, 스킬화, 봇, 보안 가이드라인</li>
+          <li>9월까지 상주 기간 개별 지원: 각자 만든 것을 DM·방문으로 함께 디벨롭</li>
           <li>심화 트랙은 공용 시스템(OMS) 개발·유지보수 병행</li>
         </ul>
       </div>
@@ -676,7 +696,8 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
             <tr><td class="diag">매번 같은 지시를 반복 입력</td><td class="arrow">→</td><td>스킬화 — 반복 작업을 호출 한 번으로 규격화</td></tr>
             <tr><td class="diag">사람이 시켜야만 동작</td><td class="arrow">→</td><td>자동화 — 스케줄 실행, 봇 연결</td></tr>
             <tr><td class="diag">자동화가 개인 PC에 종속</td><td class="arrow">→</td><td>시스템화 — 공용 웹 시스템(OMS) 개발·유지보수 <span style="color:var(--faint);font-size:12px">(심화)</span></td></tr>
-            <tr><td class="diag">토큰·요금 부담</td><td class="arrow">→</td><td>작업별 모델 선택, 컨텍스트 최적화</td></tr>
+            <tr><td class="diag">보안 기준 부재로 활용 제한</td><td class="arrow">→</td><td>AI 학습·데이터 보안 가이드라인 — 제공 가능/불가 기준</td></tr>
+            <tr><td class="diag">도구·요금 파편화</td><td class="arrow">→</td><td>도구 공통 원리, 작업별 모델 선택, 컨텍스트 최적화</td></tr>
             <tr><td class="diag">기술 한계 구간 혼재</td><td class="arrow">→</td><td>되는 것 / 안 되는 것 판별 기준</td></tr>
           </tbody>
         </table>
@@ -694,9 +715,10 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
     </div>
     <div class="next-list">
       <div class="next reveal"><span class="n-lb">보강</span><p>잔여 1명 인터뷰 보강 후 진단 확정. 리포트는 필요 시 업데이트한다.</p></div>
-      <div class="next reveal" style="--d:.05s"><span class="n-lb">전원</span><p><b>정렬 세션(AX 조직방향)</b>부터 시작 — 이후 원리·세팅·스킬화·봇 순서로 진행. 주차별 집합 교육, 회당 1시간 내외(일정은 협의로 확정).</p></div>
-      <div class="next reveal" style="--d:.1s"><span class="n-lb">심화</span><p>공용 웹 시스템(OMS) 개발·유지보수 실습 병행 — 화면 수정 등 작은 개선부터 직접 반영.</p></div>
-      <div class="next reveal" style="--d:.15s"><span class="n-lb">자료</span><p>교육 자료와 이 리포트는 아카이브 URL에 계속 축적·공유한다.</p></div>
+      <div class="next reveal" style="--d:.05s"><span class="n-lb">전원</span><p><b>공통 교육 2회</b> — 정렬(AX 조직방향)과 원리·세팅·스킬화·봇·보안 가이드라인. 집합, 회당 1~2시간, 오후 시간대(일정은 협의로 확정).</p></div>
+      <div class="next reveal" style="--d:.1s"><span class="n-lb">개별</span><p>교육 후 <b>9월까지 상주 기간 개별 후속 지원</b> — 각자 과제를 DM·방문으로 함께 디벨롭. 개인별 과제 제안은 교육 후 전달.</p></div>
+      <div class="next reveal" style="--d:.15s"><span class="n-lb">심화</span><p>공용 웹 시스템(OMS) 개발·유지보수 실습 병행 — 화면 수정 등 작은 개선부터 직접 반영.</p></div>
+      <div class="next reveal" style="--d:.2s"><span class="n-lb">자료</span><p>교육 자료와 이 리포트는 아카이브 URL에 계속 축적·공유한다.</p></div>
     </div>
   </div>
 </section>
@@ -712,7 +734,7 @@ footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
       </svg>
       CNTV+ AX JOURNEY
     </span>
-    <p>D1 · 진단 리포트 — 2026.07.08 인터뷰 · 내부 공유용</p>
+    <p>D1 · 진단 리포트 — 2026.07.08–09 인터뷰 · 내부 공유용</p>
   </div>
 </footer>
 
