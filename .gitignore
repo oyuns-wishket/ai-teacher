@@ -22,3 +22,6 @@ node_modules/
 *.tmp
 *.bak
 .vercel
+
+# Private (plaintext sources for encrypted pages — local only)
+materials/_private/

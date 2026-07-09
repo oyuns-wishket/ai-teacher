@@ -18,6 +18,14 @@
 - 플랜: `docs/plans/2026-07-08-cntv-d1-진단리포트.md` (상단 v2 개정 노트 참조, 원 플랜 Task 5·6 폐기됨).
 - 배포: `index.html`에 07 카드 추가됨. **push → GitHub Pages 자동 배포**(https://oyuns-wishket.github.io/ai-teacher/) + Vercel 프로젝트(`ai-teacher`)도 연결돼 있음.
 
+## 08 평가 페이지 (대외비 · 암호화)
+
+- `materials/08-cntv-ax-level-assessment.html` = **AES-256-GCM 암호화 배포본** (상급자 전용: 레벨 체계 0~5단 + 개인별 레벨·평가). index.html에 링크 없음 — URL 직접 전달.
+- 평문 소스·셸·빌더는 `materials/_private/`(**gitignore, 이 맥북 로컬 전용**): `08-src.html`, `shell.html`, `build.js`.
+- 수정 방법: `_private/08-src.html` 편집 → `node materials/_private/build.js materials/_private/08-src.html materials/08-cntv-ax-level-assessment.html <비밀번호>` → 커밋.
+- 비밀번호는 커밋·문서에 남기지 않음(사용자가 보관). 인증은 sessionStorage(브라우저 닫으면 재입력).
+- 레포 public 유지는 사용자 결정(위협 모델 = 참가자가 자기 평가 열람 방지 수준, 레포 접근 없음).
+
 ## 미해결·블로커
 
 - 박성희 실장 인터뷰 데이터 없음 — 리포트에는 "잔여 1명 보강 예정"으로만 표기(이름 미노출).
