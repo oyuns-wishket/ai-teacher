@@ -29,7 +29,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: main | head: f2ca396
-changed: notes/2026-06-29-claude-governance-learning.md 
+branch: main | head: 453539d
+changed: "docs/plans/2026-07-08-cntv-d1-\354\247\204\353\213\250\353\246\254\355\217\254\355\212\270.md" "materials/07-cntv-ax-d1-\354\247\204\353\213\250\353\246\254\355\217\254\355\212\270.html" notes/2026-06-29-claude-governance-learning.md 
 -->
