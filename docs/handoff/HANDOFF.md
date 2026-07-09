@@ -40,7 +40,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: main | head: 9443d3e
-changed: docs/handoff/HANDOFF.md notes/2026-06-29-claude-governance-learning.md 
+branch: main | head: 078f866
+changed: notes/2026-06-29-claude-governance-learning.md 
 -->
