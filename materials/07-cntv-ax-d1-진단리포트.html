@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D1 진단 리포트 — CNTV+ AX JOURNEY</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8F9FB;
+  --ink:#12161F;
+  --ink2:#2A3140;
+  --muted:#5C6470;
+  --faint:#8B93A1;
+  --line:#E5E8EE;
+  --card:#FFFFFF;
+  --amber:#F59E0B;
+  --amber-l:#F5B40B;
+  --orange:#F97316;
+  --orange-d:#EA580C;
+  --emerald:#10B981;
+  --emerald-d:#059669;
+  --blue:#3B82F6;
+  --violet:#8B5CF6;
+  --red:#DC2626;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --grad-common:linear-gradient(90deg,#F59E0B,#F97316);
+  --grad-adv:linear-gradient(90deg,#3B82F6,#8B5CF6);
+  --grad-basic:linear-gradient(90deg,#10B981,#059669);
+  --shadow-sm:0 1px 2px rgba(18,22,31,.05),0 4px 14px rgba(18,22,31,.05);
+  --shadow-md:0 2px 6px rgba(18,22,31,.06),0 14px 34px rgba(18,22,31,.09);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+::selection{background:rgba(249,115,22,.22)}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px}
+section{scroll-margin-top:86px}
+.mono{font-family:var(--mono)}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(248,249,251,.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:980px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;font-size:15px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand svg{display:block;flex:none}
+.brand .plus{background:var(--grad-common);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-links{display:flex;gap:4px}
+.nav-links a{
+  font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+  padding:7px 12px;border-radius:99px;transition:.2s;white-space:nowrap;
+}
+.nav-links a:hover{color:var(--ink);background:#EEF0F4}
+.prog{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);
+  border:1px solid rgba(249,115,22,.3);border-radius:99px;padding:5px 12px;white-space:nowrap;
+}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 8px}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.16em;
+  color:var(--orange-d);text-transform:uppercase;
+  padding:7px 14px;border:1px solid rgba(249,115,22,.35);border-radius:99px;
+  background:linear-gradient(90deg,rgba(245,158,11,.09),rgba(249,115,22,.09));
+  margin-bottom:22px;
+}
+.hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--grad-common);box-shadow:0 0 0 3px rgba(249,115,22,.18)}
+h1{font-size:clamp(36px,5.6vw,62px);font-weight:900;letter-spacing:-.035em;line-height:1.06}
+h1 .grad{
+  background:linear-gradient(92deg,#F5B40B 0%,#F59E0B 40%,#F97316 75%,#EA580C 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{margin-top:16px;font-size:clamp(16px,2.2vw,20px);font-weight:600;letter-spacing:-.015em;color:var(--ink2);max-width:760px;line-height:1.55}
+.tagline em{
+  font-style:normal;font-weight:800;
+  background:linear-gradient(90deg,#F59E0B,#EA580C);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);border-radius:99px;
+  padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--ink2);
+  box-shadow:var(--shadow-sm);
+}
+.chip b{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.08em}
+
+/* ---------- section frame ---------- */
+.sec{padding:76px 0 0}
+.sec-head{max-width:860px;margin-bottom:34px}
+.kicker{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:currentColor}
+h2{font-size:clamp(24px,3.2vw,36px);font-weight:900;letter-spacing:-.03em;line-height:1.14}
+.lead{margin-top:12px;font-size:16px;color:var(--muted);line-height:1.7}
+.lead b{color:var(--ink2);font-weight:800}
+
+/* ---------- exec summary ---------- */
+.exec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.exec-card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:26px 26px 24px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+}
+.exec-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.exec-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--g,var(--grad-common))}
+.exec-card .e-num{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint);
+}
+.exec-card h3{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px}
+.exec-card p{font-size:14px;color:var(--muted);line-height:1.7}
+.exec-card p b{color:var(--ink2);font-weight:700}
+
+.verdict{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:24px 28px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.verdict::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad-common)}
+.verdict .v-lb{
+  flex:none;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);border-radius:7px;padding:5px 10px;margin-top:3px;
+}
+.verdict p{font-size:15px;color:var(--ink2);line-height:1.7}
+.verdict p b{font-weight:800;color:var(--ink)}
+
+/* ---------- 자동화 현황 유형 ---------- */
+.type-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.type-card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:22px 24px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+}
+.type-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.type-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--g,var(--grad-common))}
+.t-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.t-stage{
+  font-family:var(--mono);font-size:10.5px;font-weight:800;letter-spacing:.06em;
+  color:#fff;background:var(--c,var(--amber));border-radius:6px;padding:3px 9px;
+}
+.type-card h3{font-size:16.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:6px}
+.type-card p{font-size:13.5px;color:var(--muted);line-height:1.65}
+.type-card p b{color:var(--ink2);font-weight:700}
+.t-tools{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.t-tools span{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--faint);
+  border:1px solid var(--line);border-radius:99px;padding:3px 10px;background:#FBFCFD;
+}
+.type-note{
+  margin-top:14px;font-size:13px;color:var(--faint);
+}
+
+/* ---------- gap track ---------- */
+.track-zone{
+  margin-top:6px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:30px 34px 26px;box-shadow:var(--shadow-sm);
+}
+.track-title{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint);
+  text-transform:uppercase;margin-bottom:66px;
+}
+.track{position:relative;height:14px;border-radius:99px;background:#EEF0F4;margin:0 6px}
+.track .gapfill{
+  position:absolute;top:0;bottom:0;left:25%;width:55%;
+  background:linear-gradient(90deg,rgba(139,147,161,.35),rgba(245,158,11,.55),rgba(249,115,22,.75));
+  border-radius:99px;
+}
+.mk{position:absolute;bottom:22px;transform:translateX(-50%);text-align:center;width:max-content}
+.mk .mk-chip{
+  display:inline-block;font-family:var(--mono);font-size:11px;font-weight:800;letter-spacing:.02em;
+  border-radius:8px;padding:5px 11px;white-space:nowrap;
+}
+.mk::after{content:"";display:block;width:2px;height:14px;margin:5px auto 0}
+.mk.und{left:25%}
+.mk.und .mk-chip{color:var(--ink2);background:#EEF0F4;border:1.5px solid #C9CFD9}
+.mk.und::after{background:#9AA3B2}
+.mk.out{left:80%}
+.mk.out .mk-chip{color:#fff;background:var(--grad-common)}
+.mk.out::after{background:var(--orange)}
+.ticks{display:flex;justify-content:space-between;margin:12px 6px 0}
+.ticks span{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--faint)}
+.track-cap{
+  margin-top:18px;text-align:center;font-size:13.5px;font-weight:700;color:var(--orange-d);
+}
+.track-cap .mono{font-size:11px;letter-spacing:.08em}
+
+.gap-facts{margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.gf{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+  box-shadow:var(--shadow-sm);
+}
+.gf .gf-lb{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);border-radius:7px;padding:4px 10px;margin-bottom:10px;
+}
+.gf p{font-size:13.5px;color:var(--ink2);line-height:1.65}
+.gf p b{font-weight:800}
+
+.why-box{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:24px 28px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.why-box::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#DC2626,#F97316)}
+.why-box h3{font-size:13px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin-bottom:12px}
+.why-box ul{list-style:none;display:grid;gap:8px}
+.why-box li{font-size:14px;color:var(--ink2);line-height:1.6;padding-left:18px;position:relative}
+.why-box li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--orange)}
+
+/* ---------- 한계 ---------- */
+.limit-list{display:grid;gap:12px}
+.limit{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:20px 24px;box-shadow:var(--shadow-sm);
+  display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:flex-start;
+}
+.limit .l-no{
+  width:36px;height:36px;border-radius:50%;border:2px solid var(--orange-d);
+  display:grid;place-items:center;font-family:var(--mono);font-weight:800;font-size:12px;color:var(--orange-d);
+  background:#fff;margin-top:2px;
+}
+.limit h3{font-size:15.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:4px}
+.limit p{font-size:13.5px;color:var(--muted);line-height:1.65}
+.limit .l-resp{
+  margin-top:8px;font-size:13px;color:var(--ink2);
+  background:#FBFCFD;border:1px solid #EEF0F4;border-radius:10px;padding:8px 12px;
+}
+.limit .l-resp b{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--emerald-d);margin-right:6px}
+
+/* ---------- compare ---------- */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmp{
+  border-radius:20px;padding:26px 28px;position:relative;overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow-sm);
+}
+.cmp.before{background:linear-gradient(180deg,rgba(220,38,38,.05),rgba(220,38,38,.02)),var(--card)}
+.cmp.after{background:linear-gradient(180deg,rgba(16,185,129,.06),rgba(16,185,129,.02)),var(--card)}
+.cmp::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.cmp.before::before{background:linear-gradient(180deg,#DC2626,#F97316)}
+.cmp.after::before{background:var(--grad-basic)}
+.cmp .c-lb{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:800;letter-spacing:.12em;
+  border-radius:7px;padding:4px 11px;color:#fff;margin-bottom:12px;
+}
+.cmp.before .c-lb{background:#DC2626}
+.cmp.after .c-lb{background:var(--emerald-d)}
+.cmp h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.cmp p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.cmp p b{color:var(--ink2);font-weight:700}
+.cmp ul{list-style:none;margin-top:12px;display:grid;gap:7px}
+.cmp li{font-size:13.5px;color:var(--ink2);padding-left:16px;position:relative;line-height:1.55}
+.cmp li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;border-radius:50%}
+.cmp.before li::before{background:#DC2626}
+.cmp.after li::before{background:var(--emerald-d)}
+
+.basis{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:22px 28px;box-shadow:var(--shadow-sm);
+  font-size:14.5px;color:var(--ink2);line-height:1.7;
+}
+.basis b{font-weight:800}
+.basis .b-lb{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);border-radius:7px;padding:4px 10px;margin-right:10px;
+}
+
+/* ---------- mapping table ---------- */
+.map-wrap{
+  margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--shadow-sm);overflow:hidden;
+}
+.map-wrap .m-head{
+  padding:20px 28px 0;
+}
+.map-wrap .m-head h3{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.map-wrap .m-head p{font-size:13.5px;color:var(--muted);margin-top:4px}
+.map-scroll{overflow-x:auto;padding:18px 28px 26px}
+table.map{width:100%;border-collapse:collapse;min-width:560px}
+table.map th{
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);text-align:left;padding:10px 14px;border-bottom:2px solid var(--line);
+}
+table.map td{
+  font-size:14px;color:var(--ink2);padding:13px 14px;border-bottom:1px solid #EEF0F4;
+  line-height:1.55;vertical-align:top;
+}
+table.map tr:last-child td{border-bottom:none}
+table.map td.diag{font-weight:700;color:var(--ink);width:42%}
+table.map td .arrow{color:var(--orange-d);font-weight:800;font-family:var(--mono)}
+
+/* ---------- 다음 일정 ---------- */
+.next-list{display:grid;gap:10px}
+.next{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:16px 22px;box-shadow:var(--shadow-sm);
+  display:flex;gap:14px;align-items:flex-start;
+}
+.next .n-lb{
+  flex:none;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  color:var(--orange-d);background:rgba(249,115,22,.1);border-radius:7px;padding:4px 10px;margin-top:3px;
+  min-width:64px;text-align:center;
+}
+.next p{font-size:14px;color:var(--ink2);line-height:1.6}
+.next p b{font-weight:800}
+
+/* ---------- footer ---------- */
+footer{margin-top:96px;border-top:1px solid var(--line);background:#FDFDFE}
+.foot-in{max-width:980px;margin:0 auto;padding:34px 28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+footer .f-brand{font-weight:800;font-size:14px;display:flex;align-items:center;gap:9px}
+footer p{font-size:12px;color:var(--faint);font-family:var(--mono)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .exec-grid{grid-template-columns:1fr}
+  .type-list{grid-template-columns:1fr}
+  .gap-facts{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .nav-links{display:none}
+  .hero{padding-top:44px}
+  .sec{padding-top:60px}
+  .track-zone{padding:26px 20px 22px}
+  .track-title{margin-bottom:72px}
+  .mk .mk-chip{font-size:9.5px;padding:4px 8px}
+  .limit{grid-template-columns:36px 1fr;gap:12px}
+  .limit .l-no{width:30px;height:30px;font-size:10.5px}
+  .map-scroll{padding:14px 18px 20px}
+}
+
+/* ---------- print (A4) ---------- */
+@media print{
+  @page{size:A4;margin:13mm}
+  body{background:#fff;font-size:12.5px}
+  nav{display:none}
+  .reveal{opacity:1 !important;transform:none !important;transition:none !important}
+  .hero{padding-top:6px}
+  h1{font-size:30px}
+  .tagline{font-size:14px}
+  .sec{padding-top:26px}
+  .sec-head{margin-bottom:16px}
+  h2{font-size:20px}
+  .lead{font-size:13px;margin-top:6px}
+  .exec-card,.verdict,.type-card,.track-zone,.gf,.why-box,.limit,.cmp,.basis,.map-wrap,.next{
+    box-shadow:none;border:1px solid #D8DCE4;break-inside:avoid;
+  }
+  .exec-grid{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .exec-card{padding:14px 16px}
+  .exec-card p{font-size:11.5px}
+  .type-list{grid-template-columns:1fr 1fr;gap:10px}
+  .type-card{padding:13px 16px}
+  .type-card p{font-size:11px}
+  .gap-facts{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .gf{padding:12px 14px}
+  .gf p{font-size:11px}
+  .limit{padding:12px 16px}
+  .limit p{font-size:11px}
+  .compare-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .cmp{padding:14px 16px}
+  .cmp p,.cmp li{font-size:11px}
+  table.map{min-width:0}
+  table.map td{font-size:11px;padding:8px 10px}
+  .next{padding:10px 14px}
+  .next p{font-size:11.5px}
+  #limits{break-before:page}
+  footer{margin-top:30px}
+  .foot-in{padding:16px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg1)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg1" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV<span class="plus">+</span>&nbsp;AX JOURNEY
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#summary">요약</a>
+        <a href="#status">현황</a>
+        <a href="#gap">진단</a>
+        <a href="#limits">한계</a>
+        <a href="#plan">교육 방향</a>
+      </div>
+      <span class="prog">D1 · 진단 리포트</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-kicker"><span class="dot"></span>CNTV+ AX JOURNEY · D1 진단 결과</div>
+    <h1>업무 인터뷰<br><span class="grad">진단 리포트</span></h1>
+    <p class="tagline">인터뷰 결과, 전원이 이미 업무 자동화 결과물을 갖고 있다.
+    부족한 것은 도구 사용법이 아니라 <em>동작 원리에 대한 이해</em>다. 교육 구성을 이에 맞게 변경한다.</p>
+
+    <div class="hero-meta">
+      <span class="chip"><b>인터뷰</b> 2026.07.08 · 1:1</span>
+      <span class="chip"><b>완료</b> 6명 (1명 보강 예정)</span>
+      <span class="chip"><b>결론</b> 교육 구성 변경</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ 30초 요약 ══════════════ -->
+<section class="sec" id="summary">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Summary</span>
+      <h2>30초 요약</h2>
+    </div>
+    <div class="exec-grid">
+      <div class="exec-card reveal">
+        <span class="e-num">사실 01</span>
+        <h3>전원이 자동화 결과물 보유</h3>
+        <p>데이터 수집, 엑셀 매칭, 문서 검수, 대시보드 제작 등 — 인터뷰한 전원이 자기 업무에서 만든 자동화 결과물이 있다. 조직 차원에서 자동화를 독려해 온 결과다.</p>
+      </div>
+      <div class="exec-card reveal" style="--d:.08s">
+        <span class="e-num">사실 02</span>
+        <h3>동작 원리 이해는 부족</h3>
+        <p>결과물은 나오지만 <b>어떤 과정으로 동작하는지 설명하기 어려운</b> 상태가 공통적이다. 오류 대응, 다른 업무 응용, 개선이 막히는 원인이다.</p>
+      </div>
+      <div class="exec-card reveal" style="--d:.16s">
+        <span class="e-num">결정 03</span>
+        <h3>교육 구성 변경</h3>
+        <p>신규 실습 과제를 내지 않는다. <b>각자 이미 만든 것을 원리 수준에서 이해하고 개선</b>하는 방식으로 진행한다.</p>
+      </div>
+    </div>
+    <div class="verdict reveal" style="--d:.1s">
+      <span class="v-lb">진단</span>
+      <p>결과물 수준은 높고, 그 결과물이 왜·어떻게 동작하는지에 대한 이해가 낮다. <b>이 차이를 줄이는 것이 이번 교육의 목표다.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 자동화 현황 ══════════════ -->
+<section class="sec" id="status">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--amber)">Current Status</span>
+      <h2>지금 어떻게 자동화하고 있나 — 5가지 유형</h2>
+      <p class="lead">인터뷰에서 확인된 자동화 사례를 유형별로 묶었다. 특정 개인이 아니라 <b>조직에서 확인된 방식</b>이다. 괄호는 AX 사다리 기준 단계.</p>
+    </div>
+    <div class="type-list">
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#F97316,#EA580C);--c:#EA580C">
+        <div class="t-top"><span class="t-stage">4단 자동화</span></div>
+        <h3>데이터 수집·발송 자동화</h3>
+        <p>브라우저 자동 조작과 스케줄러로 정기 데이터 수집부터 메일 발송까지 <b>사람 개입 없이</b> 동작. 담당 업무가 실제로 소거된 사례 포함.</p>
+        <div class="t-tools"><span>Python</span><span>작업 스케줄러</span><span>브라우저 자동화(RPA)</span></div>
+      </div>
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316;--d:.06s">
+        <div class="t-top"><span class="t-stage">3단 스킬</span></div>
+        <h3>엑셀 정리·매칭 자동화</h3>
+        <p>매크로와 매핑 테이블로 매일 반복되는 정리·대사 작업을 <b>클릭 한 번</b>으로 처리. 일 단위 반복 업무에 적용 중.</p>
+        <div class="t-tools"><span>엑셀 매크로</span><span>클로드</span><span>매핑 테이블</span></div>
+      </div>
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316;--d:.12s">
+        <div class="t-top"><span class="t-stage">3단 스킬</span></div>
+        <h3>문서 검수·메일 자동화</h3>
+        <p>규정 위반 표현을 탐지하고 수정요청 메일 초안까지 생성. 웹 도구로 만들어 <b>팀에 공유</b>한 사례.</p>
+        <div class="t-tools"><span>클로드</span><span>웹앱화</span></div>
+      </div>
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#F59E0B,#F97316);--c:#F97316;--d:.18s">
+        <div class="t-top"><span class="t-stage">3~4단</span></div>
+        <h3>대시보드·웹앱 제작</h3>
+        <p>엑셀 데이터를 올리면 분석 화면으로 보여주는 웹앱을 직접 제작. <b>외부 배포까지</b> 해 본 사례도 있다.</p>
+        <div class="t-tools"><span>클로드</span><span>배포 서비스</span></div>
+      </div>
+
+      <div class="type-card reveal" style="--g:linear-gradient(180deg,#F5B40B,#F59E0B);--c:#F59E0B;--d:.24s">
+        <div class="t-top"><span class="t-stage">1단 대화</span></div>
+        <h3>대화·프롬프팅 활용</h3>
+        <p>페르소나 설정, 기획서·보고서 초안, 이미지 생성 등 대화 기반 활용. <b>프로젝트·세팅 없이 대화창 단발 사용</b>이 대부분이라 개선 여지가 크다.</p>
+        <div class="t-tools"><span>클로드</span><span>GPT</span><span>이미지 생성 도구</span></div>
+      </div>
+
+    </div>
+    <p class="type-note reveal">※ 도구 사용 조합: 클로드(공통) + 용도별 GPT·이미지 생성 도구 병행. 클로드 코워크·코드까지 쓰는 경우부터 대화창만 쓰는 경우까지 폭이 넓다.</p>
+  </div>
+</section>
+
+<!-- ══════════════ 진단 (격차) ══════════════ -->
+<section class="sec" id="gap">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Diagnosis</span>
+      <h2>공통 패턴 — 결과물과 이해의 격차</h2>
+      <p class="lead">인터뷰 전원에서 같은 패턴이 확인됐다. <b>결과물 수준은 높고, 원리 이해 수준은 낮다.</b> 조직 평균으로 보면 아래와 같다.</p>
+    </div>
+
+    <div class="track-zone reveal">
+      <div class="track-title">AX 사다리 기준 · 조직 평균</div>
+      <div class="track">
+        <div class="gapfill"></div>
+        <div class="mk und"><span class="mk-chip">원리 이해 — 평균 1단 부근</span></div>
+        <div class="mk out"><span class="mk-chip">결과물 — 평균 3단 이상</span></div>
+      </div>
+      <div class="ticks">
+        <span>0단 · 안 씀</span><span>1단 · 대화</span><span>2단 · 연결</span><span>3단 · 스킬</span><span>4단 · 자동화</span>
+      </div>
+      <p class="track-cap">두 지점 사이 구간이 이번 교육이 다루는 범위다</p>
+    </div>
+
+    <div class="gap-facts">
+      <div class="gf reveal">
+        <span class="gf-lb">결과물</span>
+        <p>3~4단 수준의 자동화 산출물이 이미 조직 곳곳에 있다.</p>
+      </div>
+      <div class="gf reveal" style="--d:.07s">
+        <span class="gf-lb">이해</span>
+        <p>그 산출물이 어떤 과정으로 동작하는지 설명하기 어려운 경우가 대부분이다.</p>
+      </div>
+      <div class="gf reveal" style="--d:.14s">
+        <span class="gf-lb">원인</span>
+        <p>필요할 때마다 AI에 시켜 결과만 받아온 방식. <b>개인의 문제가 아니라 학습 순서의 문제다</b> — 원리를 배울 기회가 없었다.</p>
+      </div>
+    </div>
+
+    <div class="why-box reveal" style="--d:.1s">
+      <h3>이 격차를 줄여야 하는 이유</h3>
+      <ul>
+        <li>오류가 나도 원인을 찾지 못한다 — 만든 것을 고칠 수 없다.</li>
+        <li>비슷한 다른 업무에 응용하지 못한다 — 매번 처음부터 다시 만든다.</li>
+        <li>만든 사람이 없으면 유지되지 않는다 — 개인 결과물로 끝나고 조직 자산이 되지 못한다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 한계 ══════════════ -->
+<section class="sec" id="limits">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Constraints</span>
+      <h2>확인된 한계 — 기술·환경 제약 5가지</h2>
+      <p class="lead">인터뷰에서 반복 확인된 제약들이다. 개인 역량과 무관한 <b>기술·환경의 현재 상태</b>이며, 각각 교육 또는 시스템으로 대응한다.</p>
+    </div>
+    <div class="limit-list">
+
+      <div class="limit reveal">
+        <span class="l-no">01</span>
+        <div>
+          <h3>국내 메신저는 AI 연동이 안 된다</h3>
+          <p>네이트온·카톡·위챗은 AI 연결 규격(MCP)을 제공하지 않는다. 구글·마이크로소프트·슬랙 계열은 제공한다.</p>
+          <p class="l-resp"><b>대응</b>AI가 보낼 내용을 텍스트로 산출해 복사·붙여넣기. 장기적으로는 연동 가능한 도구(슬랙 등) 중심으로 이동.</p>
+        </div>
+      </div>
+
+      <div class="limit reveal" style="--d:.05s">
+        <span class="l-no">02</span>
+        <div>
+          <h3>사내 시스템·금융 데이터는 직접 접근이 안 된다</h3>
+          <p>ERP 내부 데이터베이스와 은행 데이터는 AI가 직접 가져올 수 없다. 접근 권한이 없기 때문이다.</p>
+          <p class="l-resp"><b>대응</b>화면 자동 조작(RPA)으로 다운로드하는 방식이 현실적 상한. 금융 자동화는 보안 리스크가 커 권장하지 않음.</p>
+        </div>
+      </div>
+
+      <div class="limit reveal" style="--d:.1s">
+        <span class="l-no">03</span>
+        <div>
+          <h3>모델 자체의 한계 영역이 있다</h3>
+          <p>영상 검수처럼 현재 AI 모델이 처리하기 어려운 영역이 있다. 시도 후 한계를 확인한 사례가 있다.</p>
+          <p class="l-resp"><b>대응</b>되는 것과 안 되는 것을 판별하는 기준을 교육에서 다룬다. 안 되는 영역에 시간을 쓰지 않는 것도 역량이다.</p>
+        </div>
+      </div>
+
+      <div class="limit reveal" style="--d:.15s">
+        <span class="l-no">04</span>
+        <div>
+          <h3>토큰·요금 한도에 도달한다</h3>
+          <p>사용량이 늘면서 요금제 한도에 도달하는 사례가 확인됐다. 비용 대비 효율이 관리 대상이 됐다.</p>
+          <p class="l-resp"><b>대응</b>작업별 모델 선택, 컨텍스트(읽히는 정보량) 관리로 절감 가능 — 교육 항목에 포함.</p>
+        </div>
+      </div>
+
+      <div class="limit reveal" style="--d:.2s">
+        <span class="l-no">05</span>
+        <div>
+          <h3>자동화가 개인 PC에 묶여 있다</h3>
+          <p>지금의 자동화는 각자 PC에서만 동작한다. 팀 공유·인수인계가 어렵고, 만든 사람이 없으면 멈춘다.</p>
+          <p class="l-resp"><b>대응</b>공용 웹 시스템(OMS)으로의 시스템화가 근본 대응 — 심화 트랙에서 개발·유지보수를 다룬다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 교육 방향 ══════════════ -->
+<section class="sec" id="plan">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--emerald-d)">Direction</span>
+      <h2>교육 방향 — 무엇이 바뀌나</h2>
+      <p class="lead">당초 계획은 "자동화 경험이 없다"는 전제였다. 인터뷰 결과 전제가 틀렸으므로 구성을 바꾼다.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="cmp before reveal">
+        <span class="c-lb">BEFORE · 당초 계획</span>
+        <h3>개념 → 예제 → 신규 실습 과제</h3>
+        <p>자동화를 처음 접한다는 전제로, 새 실습 과제를 부여해 처음부터 만들어 보게 하는 구성.</p>
+        <ul>
+          <li>이미 각자 실전 과제를 갖고 있어 중복</li>
+          <li>새 과제를 또 해도 원리를 모른 채 결과만 추가될 뿐</li>
+        </ul>
+      </div>
+      <div class="cmp after reveal" style="--d:.08s">
+        <span class="c-lb">AFTER · 변경안</span>
+        <h3>내 결과물 → 원리 이해 → 개선</h3>
+        <p>각자 이미 만든 결과물을 소재로 동작 원리를 이해하고, 세팅·스킬화·자동화로 한 단계 개선하는 구성.</p>
+        <ul>
+          <li>AI·컴퓨터 동작 원리, 세팅, 프롬프팅, 스킬화, 봇 연결</li>
+          <li>심화 트랙은 공용 시스템(OMS) 개발·유지보수 병행</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="basis reveal" style="--d:.1s">
+      <span class="b-lb">근거</span>
+      인터뷰에서 확인된 기대수준도 같은 방향이다 — <b>"당장의 해결법이 아니라, 원리를 이해해서 필요할 때 스스로 응용·해결하는 수준."</b>
+      원리는 도구가 바뀌어도 동일하므로, 한 번 이해하면 이후 어떤 도구가 나와도 같은 방식으로 적용할 수 있다.
+    </div>
+
+    <div class="map-wrap reveal" style="--d:.12s">
+      <div class="m-head">
+        <h3>진단 → 교육 구성 연결</h3>
+        <p>이 리포트의 진단 항목이 교육에서 다루는 내용과 아래처럼 연결된다.</p>
+      </div>
+      <div class="map-scroll">
+        <table class="map">
+          <thead>
+            <tr><th>진단된 상태</th><th></th><th>교육에서 다루는 내용</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="diag">동작 원리 이해 부족</td><td class="arrow">→</td><td>AI·LLM 동작 원리, 컴퓨터 기초(서버·데이터베이스·코드 관리)</td></tr>
+            <tr><td class="diag">세팅 없이 대화창 단발 사용</td><td class="arrow">→</td><td>클로드 세팅, 프로젝트 구조, 컨텍스트 관리</td></tr>
+            <tr><td class="diag">매번 같은 지시를 반복 입력</td><td class="arrow">→</td><td>스킬화 — 반복 작업을 호출 한 번으로 규격화</td></tr>
+            <tr><td class="diag">사람이 시켜야만 동작</td><td class="arrow">→</td><td>자동화 — 스케줄 실행, 봇 연결</td></tr>
+            <tr><td class="diag">자동화가 개인 PC에 종속</td><td class="arrow">→</td><td>시스템화 — 공용 웹 시스템(OMS) 개발·유지보수 <span style="color:var(--faint);font-size:12px">(심화)</span></td></tr>
+            <tr><td class="diag">토큰·요금 부담</td><td class="arrow">→</td><td>작업별 모델 선택, 컨텍스트 최적화</td></tr>
+            <tr><td class="diag">기술 한계 구간 혼재</td><td class="arrow">→</td><td>되는 것 / 안 되는 것 판별 기준</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 다음 일정 ══════════════ -->
+<section class="sec" id="next">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker" style="color:var(--orange-d)">Next</span>
+      <h2>다음 일정</h2>
+    </div>
+    <div class="next-list">
+      <div class="next reveal"><span class="n-lb">보강</span><p>잔여 1명 인터뷰 보강 후 진단 확정. 리포트는 필요 시 업데이트한다.</p></div>
+      <div class="next reveal" style="--d:.05s"><span class="n-lb">전원</span><p><b>정렬 세션(AX 조직방향)</b>부터 시작 — 이후 원리·세팅·스킬화·봇 순서로 진행. 주차별 집합 교육, 회당 1시간 내외(일정은 협의로 확정).</p></div>
+      <div class="next reveal" style="--d:.1s"><span class="n-lb">심화</span><p>공용 웹 시스템(OMS) 개발·유지보수 실습 병행 — 화면 수정 등 작은 개선부터 직접 반영.</p></div>
+      <div class="next reveal" style="--d:.15s"><span class="n-lb">자료</span><p>교육 자료와 이 리포트는 아카이브 URL에 계속 축적·공유한다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="foot-in">
+    <span class="f-brand">
+      <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 15 H11 C14 15 15 14 15 11 V7" stroke="url(#bg2)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+        <circle cx="15" cy="6" r="3.2" fill="#fff" stroke="#12161F" stroke-width="2.4"/>
+        <defs><linearGradient id="bg2" x1="3" y1="15" x2="15" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+      </svg>
+      CNTV+ AX JOURNEY
+    </span>
+    <p>D1 · 진단 리포트 — 2026.07.08 인터뷰 · 내부 공유용</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
