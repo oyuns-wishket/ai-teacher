@@ -48,7 +48,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: main | head: b828c81
+branch: main | head: f01ae02
 changed: notes/2026-06-29-claude-governance-learning.md 
 -->
