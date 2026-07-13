@@ -1,5 +1,18 @@
 # HANDOFF — ai-teacher
 
+## Next actions
+
+- Hermes 교육자료(`materials/09-hermes-개인비서-개발허브.html`)의 내용·표현을 검토하고, 승인 시 commit/push한다.
+
+## Decisions & context
+
+- Hermes는 모델 재학습이 아니라 skills·memory·curator를 이용한 운영 학습 루프로 설명했다.
+- victory 사례는 Slack token, ID, OAuth 값 없이 구조·안전 경계만 교육용으로 기록했다.
+
+## Open items & blockers
+
+- Hermes 프로그램 업데이트는 운영 중인 개인비서 gateway 안정성을 위해 본 교육자료 범위에 포함하지 않았다.
+
 > 마지막 갱신: 2026-07-09 퇴근 시점 (D1 마일스톤 종료 — 07 톤 완화·"인터뷰 리포트" 개칭, 08 확정, index에 08 카드 추가, 슬랙 문안 작성, 이해도 퀴즈 통과)
 
 ## 다음 액션

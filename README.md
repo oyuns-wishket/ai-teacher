@@ -45,6 +45,7 @@ ai-teacher/
 | 02 | [CLAUDE.md 세팅 가이드](materials/02-claude-md-세팅-가이드.html) | 로딩 메커니즘(4계층/concatenate/재귀), import(@), 라인 수 최적화, 작성 원칙, 안티패턴, 템플릿, 검증·반복 |
 | 03 | [Hook 완전 정복](materials/03-hook-완전정복.html) | 하네스 엔지니어링, Hook 원리, 프레임워크별 비교, Next.js 실전 구현 |
 | 04 | [하네스 엔지니어링 실전 워크숍](materials/04-하네스-엔지니어링-실전-워크숍.html) | 개념~세팅~사례~보안 핸즈온 |
+| 09 | [Hermes 실전 운영 — 개인비서에서 개발 허브까지](materials/09-hermes-개인비서-개발허브.html) | Hermes의 역할·도입 이유·활용 사례·설치·Slack Bot 연동·개발 profile·자가관리·안전 운영 |
 
 ## 커리큘럼 로드맵
 
