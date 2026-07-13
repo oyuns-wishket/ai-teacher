@@ -67,7 +67,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: main | head: f01ae02
-changed: notes/2026-06-29-claude-governance-learning.md 
+branch: feat/hermes-learning-material | head: a4ddb3f
+changed: 
 -->
