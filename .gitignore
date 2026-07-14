@@ -25,3 +25,7 @@ node_modules/
 
 # Private (plaintext sources for encrypted pages — local only)
 materials/_private/
+
+# 발표 원고 (도메인 노출 금지 — 로컬 전용)
+curriculum/cntv-공통교육-1일차-원고.md
+curriculum/cntv-공통교육-1일차-원고.html
