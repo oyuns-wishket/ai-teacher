@@ -75,7 +75,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: feat/hermes-learning-material | head: ec44cfb
-changed: 
+branch: feat/hermes-learning-material | head: 57fdf6b
+changed: "curriculum/cntv-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250-\354\233\220\352\263\240.md" "materials/10-cntv-ax-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250.html" 
 -->
