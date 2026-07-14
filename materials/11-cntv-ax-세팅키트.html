@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNTV+ AX 세팅 키트 — 다운로드 & 시작 가이드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafafa; --surface:#fff; --text:#1a1a2e; --text-secondary:#555;
+    --accent:#2563eb; --accent-light:#dbeafe; --accent-dark:#1d4ed8;
+    --green:#059669; --green-light:#d1fae5; --orange:#d97706; --orange-light:#fef3c7;
+    --red:#dc2626; --red-light:#fee2e2; --purple:#7c3aed; --purple-light:#ede9fe;
+    --border:#e5e7eb; --code-bg:#1e293b; --code-text:#e2e8f0;
+    --mono:'JetBrains Mono','Fira Code',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.8; font-size:16px;}
+  .container{max-width:960px;margin:0 auto;padding:0 24px}
+
+  /* Hero */
+  .hero{background:linear-gradient(135deg,#1e293b,#0f172a); color:#fff; padding:72px 0 96px; position:relative; overflow:hidden;}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 380px at 82% -10%,rgba(37,99,235,.28),transparent 70%);}
+  .hero .container{position:relative}
+  .hero .tag{display:inline-block;font-size:14px;font-weight:700;letter-spacing:.12em;color:#93c5fd;
+    background:rgba(37,99,235,.2);padding:7px 16px;border-radius:999px;margin-bottom:22px;font-family:var(--mono)}
+  .hero h1{font-size:44px;font-weight:800;line-height:1.3;letter-spacing:-.02em;word-break:keep-all}
+  .hero p{font-size:19px;color:#cbd5e1;margin-top:18px;word-break:keep-all;max-width:640px}
+
+  /* download hero card */
+  .dl-hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    margin-top:-52px;padding:32px 34px;box-shadow:0 10px 40px rgba(15,23,42,.1);
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:2}
+  .dl-hero h2{font-size:23px;font-weight:800}
+  .dl-hero p{font-size:16px;color:var(--text-secondary);margin-top:6px}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;
+    font-size:17px;font-weight:700;padding:15px 28px;border-radius:12px;text-decoration:none;white-space:nowrap;
+    transition:background .15s}
+  .btn:hover{background:var(--accent-dark)}
+  .btn.small{font-size:14px;padding:9px 16px;background:var(--accent-light);color:var(--accent-dark)}
+  .btn.small:hover{background:#bfdbfe}
+
+  section{padding:52px 0}
+  h2.sec{font-size:30px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+  .sec-sub{font-size:17px;color:var(--text-secondary);margin-bottom:28px}
+
+  /* 세 층 카드 */
+  .layers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+  .layer{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 24px;border-top:4px solid}
+  .layer .k{font-size:14px;font-weight:800;font-family:var(--mono);margin-bottom:8px}
+  .layer h3{font-size:21px;font-weight:800;margin-bottom:10px}
+  .layer p{font-size:15.5px;color:var(--text-secondary);word-break:keep-all}
+  .layer code{font-family:var(--mono);font-size:13px;background:#f1f5f9;padding:2px 7px;border-radius:5px;color:var(--accent-dark)}
+
+  /* 파일 트리 */
+  .tree{background:var(--code-bg);border-radius:14px;padding:28px 30px;font-family:var(--mono);
+    font-size:15px;line-height:2;color:var(--code-text);white-space:pre;overflow-x:auto}
+  .tree .folder{color:#60a5fa;font-weight:700}
+  .tree .file{color:#f8fafc}
+  .tree .desc{color:#4ade80;font-style:italic;font-size:13px}
+
+  /* 경로 카드 */
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .path-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px}
+  .path-card .os{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .path-card pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:9px;
+    font-family:var(--mono);font-size:13.5px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+
+  /* 코드블록 */
+  pre.code{background:var(--code-bg);color:var(--code-text);padding:20px 22px;border-radius:12px;
+    font-family:var(--mono);font-size:14.5px;line-height:1.9;overflow-x:auto;margin:14px 0}
+  pre.code .c{color:#94a3b8}
+  pre.code .cmd{color:#a5f3fc}
+
+  /* 파일 목록 다운로드 */
+  .files{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .file-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;border-bottom:1px solid var(--border)}
+  .file-row:last-child{border-bottom:none}
+  .file-row .info{min-width:0}
+  .file-row .name{font-weight:700;font-size:16px;font-family:var(--mono)}
+  .file-row .what{font-size:14px;color:var(--text-secondary);margin-top:2px;word-break:keep-all}
+  .file-row .lv{font-size:12px;font-weight:800;font-family:var(--mono);padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .lv-rule{background:var(--accent-light);color:var(--accent-dark)}
+  .lv-know{background:var(--green-light);color:var(--green)}
+  .lv-state{background:var(--orange-light);color:var(--orange)}
+  .lv-guide{background:var(--purple-light);color:var(--purple)}
+
+  .info-box{border-radius:12px;padding:20px 24px;margin:20px 0;font-size:15.5px;word-break:keep-all}
+  .info-box.warn{background:var(--orange-light);border-left:4px solid var(--orange)}
+  .info-box.tip{background:var(--green-light);border-left:4px solid var(--green)}
+  .info-box b{font-weight:800}
+
+  ol.steps{margin:14px 0 0 0;padding-left:0;list-style:none;counter-reset:s}
+  ol.steps li{counter-increment:s;position:relative;padding:12px 0 12px 44px;font-size:16.5px;border-bottom:1px dashed var(--border)}
+  ol.steps li:last-child{border-bottom:none}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:10px;width:30px;height:30px;
+    background:var(--accent-light);color:var(--accent-dark);border-radius:9px;display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-family:var(--mono)}
+  ol.steps b{color:var(--accent-dark)}
+
+  footer{border-top:1px solid var(--border);padding:32px 0;color:#94a3b8;font-size:14px;text-align:center}
+  a.back{color:var(--accent);text-decoration:none;font-weight:600;font-size:15px}
+
+  @media (max-width:768px){
+    .layers,.paths{grid-template-columns:1fr}
+    .hero h1{font-size:32px}
+    .dl-hero{flex-direction:column;align-items:flex-start}
+  }
+  @media print{.hero{background:#1e293b}.btn{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <span class="tag">CNTV+ AX · 일반 교육자료</span>
+    <h1>AX 세팅 키트</h1>
+    <p>클로드 코워크에게 "우리 회사"를 알려주는 기본 폴더. 받아서 대괄호 <code style="font-family:var(--mono)">[ ]</code>만 채우면, 코워크가 내 일을 아는 동료가 됩니다.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="dl-hero">
+    <div>
+      <h2>📦 전체 키트 한 번에 받기</h2>
+      <p>폴더 구조 + 템플릿 8종 + 실습용 샘플 엑셀 (.zip · Windows/Mac 공통)</p>
+    </div>
+    <a class="btn" href="setup-kit/cntv-ax-세팅키트.zip" download>⬇ 세팅 키트 전체 다운로드</a>
+  </div>
+</div>
+
+<!-- 세 층 -->
+<section>
+  <div class="container">
+    <h2 class="sec">무엇을 심는가 — 세 층</h2>
+    <p class="sec-sub">교육에서 배운 "심는다"의 세 층을 폴더로 만들어 둔 것입니다.</p>
+    <div class="layers">
+      <div class="layer" style="border-top-color:var(--accent)">
+        <div class="k" style="color:var(--accent)">① 규칙 · AI의 성격</div>
+        <h3>항상 적용되는 것</h3>
+        <p>내가 누구고, 우리 회사 규칙은 뭔지. <code>CLAUDE.md</code> · <code>rules/</code></p>
+      </div>
+      <div class="layer" style="border-top-color:var(--green)">
+        <div class="k" style="color:var(--green)">② 지식 · AI의 기억</div>
+        <h3>참조하는 재료</h3>
+        <p>원본 엑셀·양식·잘 된 예시. <code>재료/</code> 폴더에 넣기.</p>
+      </div>
+      <div class="layer" style="border-top-color:var(--orange)">
+        <div class="k" style="color:var(--orange)">③ 상태 · AI의 근황</div>
+        <h3>진행의 지도</h3>
+        <p>뭐가 결정됐고, 어디까지 왔나. <code>진행노트.md</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 폴더 구조 -->
+<section style="background:#f4f6f9">
+  <div class="container">
+    <h2 class="sec">폴더 구조</h2>
+    <p class="sec-sub">업무가 여러 개면 <code style="font-family:var(--mono)">정산-업무</code>를 복사해 늘리면 됩니다. 규칙은 가까운 것이 우선.</p>
+    <div class="tree"><span class="folder">AI-작업폴더/</span>                     <span class="desc">← 루트 (모든 업무 공통)</span>
+├── <span class="file">CLAUDE.md</span>                   <span class="desc">← 공통 규칙: 나 · 회사 · 말투</span>
+└── <span class="folder">정산-업무/</span>                   <span class="desc">← 업무 하나당 폴더 하나</span>
+    ├── <span class="file">CLAUDE.md</span>               <span class="desc">← 이 업무만의 규칙</span>
+    ├── <span class="folder">rules/</span>                  <span class="desc">← 규칙이 길어지면 주제별로</span>
+    │   ├── <span class="file">양식.md</span>
+    │   ├── <span class="file">용어.md</span>
+    │   └── <span class="file">금지사항.md</span>
+    ├── <span class="folder">재료/</span>                    <span class="desc">← 원본 엑셀 · 양식 · 예시</span>
+    │   └── <span class="file">일계표_샘플.xlsx</span>       <span class="desc">← 실습용 (가상 데이터)</span>
+    └── <span class="file">진행노트.md</span>              <span class="desc">← 상태(지도)</span></div>
+  </div>
+</section>
+
+<!-- 경로 -->
+<section>
+  <div class="container">
+    <h2 class="sec">어디에 두나 — Windows / Mac</h2>
+    <p class="sec-sub">찾기 쉬운 문서 폴더를 권합니다. <code style="font-family:var(--mono)">[내이름]</code>은 실제 사용자명으로.</p>
+    <div class="paths">
+      <div class="path-card">
+        <div class="os">🪟 Windows</div>
+        <pre>C:\Users\[내이름]\Documents\AI-작업폴더</pre>
+        <p style="font-size:14px;color:var(--text-secondary);margin-top:10px">탐색기 주소창에 <code style="font-family:var(--mono)">%USERPROFILE%\Documents</code></p>
+      </div>
+      <div class="path-card">
+        <div class="os"> Mac</div>
+        <pre>/Users/[내이름]/Documents/AI-작업폴더</pre>
+        <p style="font-size:14px;color:var(--text-secondary);margin-top:10px">Finder → 이동 → <code style="font-family:var(--mono)">~/Documents</code></p>
+      </div>
+    </div>
+    <div class="info-box warn">⚠️ <b>Google Drive · iCloud · Dropbox 같은 자동 동기화 폴더 안에는 두지 마세요.</b> 동기화가 파일을 건드리는 순간 폴더가 꼬일 수 있습니다. (원본 데이터만 클라우드에, 작업 폴더는 별도로.)</div>
+  </div>
+</section>
+
+<!-- 개별 다운로드 -->
+<section style="background:#f4f6f9">
+  <div class="container">
+    <h2 class="sec">파일 하나씩 받기</h2>
+    <p class="sec-sub">전체 zip이 편하지만, 필요한 것만 골라 받을 수도 있습니다.</p>
+    <div class="files">
+      <div class="file-row">
+        <div class="info"><div class="name">📖 README.md</div><div class="what">시작 안내 — 구조·경로·채우는 순서</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-guide">가이드</span><a class="btn small" href="setup-kit/cntv-ax-세팅키트/README.md" download>받기</a></div>
+      </div>
+      <div class="file-row">
+        <div class="info"><div class="name">CLAUDE.md <span style="color:#94a3b8">(루트)</span></div><div class="what">공통 규칙 — 나 · 회사 · 말투</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-rule">규칙</span><a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/CLAUDE.md" download>받기</a></div>
+      </div>
+      <div class="file-row">
+        <div class="info"><div class="name">정산-업무/CLAUDE.md</div><div class="what">업무별 규칙 — 이 업무는 무엇, 결과물 형식</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-rule">규칙</span><a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/CLAUDE.md" download>받기</a></div>
+      </div>
+      <div class="file-row">
+        <div class="info"><div class="name">rules/양식.md · 용어.md · 금지사항.md</div><div class="what">쪼갠 규칙 — 형식·용어사전·가드레일</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-rule">규칙</span>
+          <a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/rules/양식.md" download>양식</a>
+          <a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/rules/용어.md" download>용어</a>
+          <a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/rules/금지사항.md" download>금지</a>
+        </div>
+      </div>
+      <div class="file-row">
+        <div class="info"><div class="name">📊 일계표_샘플.xlsx</div><div class="what">실습용 매출 데이터 (가상) — 대시보드 만들기 재료</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-know">지식</span><a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/재료/일계표_샘플.xlsx" download>받기</a></div>
+      </div>
+      <div class="file-row">
+        <div class="info"><div class="name">진행노트.md</div><div class="what">상태(지도) — 결정 · 진행 · 남은 일</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="lv lv-state">상태</span><a class="btn small" href="setup-kit/cntv-ax-세팅키트/AI-작업폴더/정산-업무/진행노트.md" download>받기</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 어떻게 구성했나 -->
+<section>
+  <div class="container">
+    <h2 class="sec">어떻게 구성했나</h2>
+    <p class="sec-sub">받으면 바로 돌아가게 CNTV+ 예시로 채워뒀습니다. <code style="font-family:var(--mono)">[ ]</code> 표시된 개인정보만 본인 걸로 바꾸면 끝.</p>
+    <ol class="steps">
+      <li><b>루트 CLAUDE.md</b> — 코워크가 일하는 방식(인터뷰 → 레퍼런스 → 노트 → 확인 → 암묵지 수집, 이탈 시 재확인) + 회사·말투</li>
+      <li><b>정산-업무/CLAUDE.md</b> — 일계표 데이터 구조와 결과물 규칙(실매출·마진 기준, 채널별·카테고리별)</li>
+      <li><b>rules/</b> — 양식(날짜·금액·채널명 통일) · 용어(실매출·FM4·세일코리아넷 등) · 금지사항(가드레일)</li>
+      <li><b>재료/</b> — 실습용 <b>일계표_샘플.xlsx</b>(가상 데이터). 여기에 실제 원본을 넣으면 된다</li>
+      <li><b>진행노트.md</b> — 결정·진행·남은 일을 적는 "지도". 코워크가 근황을 이어받는다</li>
+    </ol>
+    <div class="info-box tip" style="margin-top:20px">💡 일하다 <b>"이건 매번 말하네"</b> 싶은 규칙이 나오면 — 코워크가 먼저 <b>"CLAUDE.md에 저장할까요?"</b>라고 물어봅니다. 승인하면 스스로 적습니다.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a class="back" href="../index.html">← 교육자료 홈으로</a>
+    <p style="margin-top:14px">CNTV+ AX JOURNEY · 위시켓 · 실습용 샘플은 전부 가상 데이터입니다.</p>
+  </div>
+</footer>
+
+</body>
+</html>
