@@ -71,7 +71,8 @@
 
 
 
+
 <!-- AUTO-CRUMB
-branch: feat/hermes-learning-material | head: c1d5e46
-changed: "curriculum/cntv-ax-\354\213\244\355\226\211\353\205\270\355\212\270.md" "curriculum/cntv-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250-\354\233\220\352\263\240.md" docs/handoff/HANDOFF.md "materials/10-cntv-ax-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250.html" 
+branch: feat/hermes-learning-material | head: 86c21e7
+changed: "curriculum/cntv-ax-\354\213\244\355\226\211\353\205\270\355\212\270.md" "curriculum/cntv-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250-\354\233\220\352\263\240.md" index.html "materials/10-cntv-ax-\352\263\265\355\206\265\352\265\220\354\234\241-1\354\235\274\354\260\250.html" "materials/11-cntv-ax-\354\204\270\355\214\205\355\202\244\355\212\270.html" materials/demo-data/ materials/setup-kit/ 
 -->
