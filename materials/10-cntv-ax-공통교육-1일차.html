@@ -1223,7 +1223,7 @@
   <h1 class="rv">한 문장으로, <span class="hl">배포까지 논스톱</span></h1>
   <div class="bubble rv" style="max-width:none;">얼마 전, 클로드에게 딱 이렇게만 시켰습니다 —<br>
   <span class="em">"축의금 장부 만들건데, 총액 나오게 하고 이름·금액 입력하면 저장되게, 누구 축의금인지 라벨링도. 편의기능도 알아서. <strong>DB부터 배포까지 무질문 자율주행으로 완료해.</strong>"</span></div>
-  <p class="sub rv" style="margin-top:26px;">이 한 문장으로 — 실제 사이트가 나왔습니다. <span style="font-family:var(--mono); font-size:18px; color:var(--accent);">gift-ledger-nine.vercel.app</span></p>
+  <p class="sub rv" style="margin-top:26px;">이 한 문장으로 — 실제 사이트가 나왔습니다. <a href="https://gift-ledger-nine.vercel.app/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-weight:800; color:var(--accent); text-decoration:none; border-bottom:2px solid var(--accent-light); padding-bottom:2px;">🔗 축의금 장부</a></p>
   <div class="grid g3" style="margin-top:22px;">
     <div class="card rv"><div class="no">내가 안 한 말</div><h3>"코드는 개인 레포에"</h3><p>안 시켰지만 알아서. <strong>난 늘 개인 레포를 쓰니까.</strong></p></div>
     <div class="card rv"><div class="no">내가 안 한 말</div><h3>"DB는 Supabase, 그 계정으로"</h3><p>안 시켰지만 알아서. <strong>이미 인증해둔 계정이 있으니까.</strong></p></div>
@@ -1242,20 +1242,28 @@
 </section>
 
 <!-- 68 -->
-<section class="slide" data-part="세팅 · 실습 프로젝트">
-  <div class="kicker rv">프로젝트 하나, 같이 해봅니다</div>
-  <h1 class="rv">엑셀 표로 <span class="hl">대시보드 현황판</span> 만들기</h1>
-  <div class="flow rv">
-    <div class="f-box"><h4>① 폴더 준비</h4><p>대시보드/ 폴더에<br>매출 엑셀 넣기</p></div>
-    <div class="arr">→</div>
-    <div class="f-box"><h4>② 규칙 한 줄</h4><p>CLAUDE.md에 "채널별·월별,<br>우리 팀 용어로"</p></div>
-    <div class="arr">→</div>
-    <div class="f-box"><h4>③ 한 문장 지시</h4><p>"이 엑셀로 채널별 매출<br>현황 대시보드 만들어줘"</p></div>
-    <div class="arr">→</div>
-    <div class="f-box"><h4>④ 코워크가 일한다</h4><p>엑셀 읽고 → 집계 →<br>현황판을 폴더에 저장</p></div>
+<section class="slide" data-part="오늘 공유할 산출물">
+  <div class="kicker rv">오늘 공유할 산출물</div>
+  <h1 class="rv">원리를 담은 <span class="hl">세팅 예시</span>, 참고하세요</h1>
+  <p class="sub rv" style="margin-top:12px;">방금까지 말한 "심는다"를 <strong>가장 간단한 형태</strong>로 폴더에 담아 뒀습니다. 정답이 아니라 — <strong>이렇게 시작하면 된다</strong>는 참고용 뼈대입니다.</p>
+  <div class="chatmock" style="margin-top:20px; align-items:flex-start;">
+    <div class="file-tree rv" style="flex:0 0 500px; font-size:16px; line-height:1.85; margin-top:0;"><span class="folder">AI-작업폴더/</span>
+├── <span class="file">CLAUDE.md</span>          <span class="desc">← 규칙: 나·회사·일하는 방식</span>
+└── <span class="folder">정산-업무/</span>
+    ├── <span class="file">CLAUDE.md</span>      <span class="desc">← 이 업무 규칙</span>
+    ├── <span class="folder">rules/</span>         <span class="desc">← 양식·용어·금지사항</span>
+    ├── <span class="folder">재료/</span>          <span class="desc">← 엑셀 넣는 곳 (샘플 포함)</span>
+    └── <span class="file">진행노트.md</span>    <span class="desc">← 상태(지도)</span></div>
+    <div>
+      <p class="sub rv" style="margin-top:0;">참고해서 시작하는 법 —</p>
+      <div class="stmt-list" style="margin-top:14px;">
+        <div class="stmt rv"><div class="n">1</div><p>받아서 폴더째 두고, 코워크로 연다</p></div>
+        <div class="stmt rv"><div class="n">2</div><p><code style="font-family:var(--mono);">[ ]</code> 부분만 내 정보로 채운다</p></div>
+        <div class="stmt rv"><div class="n">3</div><p><b>재료/</b>에 엑셀 넣고 → "채널별 매출 대시보드 만들어줘"</p></div>
+      </div>
+    </div>
   </div>
-  <p class="sub rv">그리고 다음 달 — 새 엑셀을 넣고 <strong>"지난번처럼"</strong> 한마디면 끝입니다. 세팅이 있으니까요.<br>
-  다음 시간엔 이 "지난번처럼"을 <strong>스킬로 박제</strong>해서, 호출 한 번으로 만듭니다.</p>
+  <p class="sub rv" style="margin-top:26px;">👉 <a href="http://100.73.227.81:8899/materials/11-cntv-ax-세팅키트.html" target="_blank" rel="noopener" style="font-weight:800; color:var(--accent); text-decoration:none; border-bottom:2px solid var(--accent-light); padding-bottom:2px;">🔗 AX 세팅 키트 — 다운로드</a>  <span style="color:#94a3b8; font-size:20px;">(전체 zip · 파일 하나씩 · 실습용 샘플 엑셀 포함)</span></p>
 </section>
 
 <!-- 69 -->
